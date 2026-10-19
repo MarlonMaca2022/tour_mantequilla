@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 145.88 26.86">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ee7631;
+        font-family: ProximaNova-Extrabld, 'Proxima Nova';
+        font-size: 22.09px;
+      }
+
+      .cls-2 {
+        letter-spacing: -.08em;
+      }
+    </style>
+  </defs>
+  <g id="Capa_1" data-name="Capa 1">
+    <text class="cls-1" transform="translate(0 18.4)"><tspan x="0" y="0">1</tspan><tspan class="cls-2" x="9.87" y="0">.</tspan><tspan x="14.14" y="0">750 m.s.n.m.</tspan></text>
+  </g>
+</svg>

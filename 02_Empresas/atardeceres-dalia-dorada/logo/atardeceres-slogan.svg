@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_3" data-name="Capa 3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 406.45 70.05">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ee7631;
+        font-family: LustStencil-Display, 'Lust Stencil';
+        font-size: 29.19px;
+      }
+
+      .cls-2 {
+        fill: #56bbac;
+        font-family: ProximaNova-ExtrabldIt, 'Proxima Nova';
+        font-size: 29.14px;
+        font-style: italic;
+      }
+    </style>
+  </defs>
+  <g id="Capa_1" data-name="Capa 1">
+    <g>
+      <text class="cls-1" transform="translate(0 24.81)"><tspan x="0" y="0" xml:space="preserve"> Primera fila al atardecer</tspan></text>
+      <text class="cls-2" transform="translate(9.67 59.36)"><tspan x="0" y="0" xml:space="preserve"> Front-row seat to the sunset</tspan></text>
+    </g>
+  </g>
+</svg>

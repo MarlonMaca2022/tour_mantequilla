@@ -1,0 +1,676 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tour Mantequilla: dirección de diseño</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:wght@700;800&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* paleta */
+  --cal:#FBFCFA; --montana:#1E2B45; --bruma:#5E6F8C; --corredor:#A3231B; --atardecer:#E9A23B;
+  --gris-fondo:#F1F3F6; --linea:#DCE0E6;
+  --estado-ok:#2F7D3A; --whatsapp:#1E7A45;
+  /* aliados: solo en su fila */
+  --cabras:#E8B828; --bonne:#2E8C9A; --florida:#7A4E86;
+  /* notas de pendientes (no son parte del diseño) */
+  --nota-bg:#FFF4B8; --nota-borde:#8A6D00; --nota-texto:#4A3B00;
+  /* tipo: escala única 15/18/22/28/36/44 */
+  --serif:"Alegreya",Georgia,serif; --sans:"Alegreya Sans",system-ui,sans-serif;
+  --t-xs:.9375rem; --t-s:1.125rem; --t-m:1.375rem; --t-l:1.75rem; --t-xl:2.25rem; --t-xxl:2.75rem;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-padding-bottom:84px}
+body{margin:0;background:#EEF0F2;color:var(--montana);font-family:var(--sans);font-size:var(--t-s);line-height:1.55}
+img{display:block;max-width:100%;height:auto}
+h1,h2,h3{font-family:var(--serif);line-height:1.12;margin:0;font-weight:700}
+p{margin:0}
+a{color:inherit}
+/* foco: montaña sobre claro, cal sobre oscuro (3:1 o más en ambos) */
+:focus-visible{outline:3px solid var(--montana);outline-offset:2px;box-shadow:0 0 0 6px var(--atardecer)}
+.oscuro :focus-visible{outline-color:var(--cal)}
+
+/* ---------- Documento (moodboard) ---------- */
+.doc{max-width:1120px;margin:0 auto;padding:48px 16px 24px}
+.doc-cabecera h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800;max-width:16ch}
+.doc-cabecera p{color:var(--bruma);margin-top:12px;max-width:62ch}
+.doc section{margin-top:56px}
+.doc h2{font-size:var(--t-l);margin-bottom:8px}
+.doc .intro{max-width:62ch;margin-bottom:24px}
+
+.cambios{background:#fff;border:1px solid var(--linea);border-left:4px solid var(--montana);border-radius:0 4px 4px 0;padding:18px 20px;margin-top:28px;max-width:80ch}
+.cambios h2{font-size:var(--t-m);margin-bottom:6px}
+.cambios ul{margin:6px 0 0;padding-left:20px;font-size:var(--t-xs)}
+.cambios li{margin:3px 0}
+
+.idea{background:var(--montana);color:var(--cal);border-radius:6px;padding:32px 24px;display:grid;gap:20px}
+.idea h2{color:var(--cal);font-size:clamp(1.8rem,4.5vw,2.6rem);max-width:20ch}
+.idea p{max-width:60ch;color:#D5DBE6}
+.dia{height:56px;border-radius:4px;background:linear-gradient(90deg,var(--cal) 0%,#F6EBD3 30%,var(--atardecer) 58%,#8C4C6A 78%,var(--montana) 100%);box-shadow:inset 0 0 0 1px #ffffff33}
+.dia-etiquetas{display:flex;justify-content:space-between;font-size:var(--t-xs);color:#B9C3D4;margin-top:-12px}
+
+.collage{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.collage figure{margin:0;position:relative;overflow:hidden;border-radius:4px;background:#ccd}
+.collage img{width:100%;height:100%;object-fit:cover;aspect-ratio:3/4}
+.collage .ancha{grid-column:span 2}
+.collage .ancha img{aspect-ratio:16/10}
+.collage figcaption{position:absolute;inset:auto 0 0 0;padding:24px 10px 8px;font-size:.85rem;color:#fff;background:linear-gradient(transparent,rgba(20,28,45,.85))}
+@media (min-width:760px){
+  .collage{grid-template-columns:repeat(4,1fr)}
+  .collage .alta{grid-row:span 2}
+  .collage .alta img{aspect-ratio:auto}
+}
+
+.paleta{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.color{border:1px solid var(--linea);border-radius:4px;overflow:hidden;background:#fff}
+.color .muestra{height:88px}
+.color div:last-child{padding:10px 12px;font-size:var(--t-xs)}
+.color strong{display:block;font-family:var(--serif);font-size:var(--t-s)}
+.color code{color:var(--bruma)}
+.aliados-colores{margin-top:20px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;font-size:var(--t-xs)}
+.aliados-colores span{display:inline-flex;align-items:center;gap:8px}
+.aliados-colores i{width:28px;height:10px;border-radius:2px;display:inline-block}
+.regla{margin-top:14px;font-size:var(--t-xs);color:var(--bruma);max-width:70ch}
+
+.tipos{display:grid;gap:16px}
+@media (min-width:760px){.tipos{grid-template-columns:1.2fr 1fr}}
+.tipo{background:#fff;border:1px solid var(--linea);border-radius:4px;padding:24px}
+.tipo .grande{font-family:var(--serif);font-weight:800;font-size:var(--t-xxl);line-height:1.05}
+.tipo .media{font-family:var(--serif);font-weight:700;font-size:var(--t-l);margin-top:12px}
+.tipo .cuerpo{margin-top:12px;max-width:52ch}
+.tipo small{display:block;color:var(--bruma);margin-top:14px;font-size:var(--t-xs)}
+
+/* placa de logo: mismo tamaño para los tres, logo en contain */
+.placa{width:88px;height:88px;flex:none;background:#fff;border-radius:12px;padding:6px;display:grid;place-items:center;box-shadow:0 0 0 1px var(--linea)}
+.placa img{width:100%;height:100%;object-fit:contain}
+.placas{display:flex;flex-wrap:wrap;gap:20px;align-items:center;background:#fff;border:1px solid var(--linea);border-radius:4px;padding:24px}
+.placas p{flex:1 1 260px;font-size:var(--t-xs)}
+
+.principios{display:grid;gap:12px;padding:0;margin:0;list-style:none}
+@media (min-width:760px){.principios{grid-template-columns:1fr 1fr}}
+.principios li{background:#fff;border-left:4px solid var(--montana);padding:14px 16px;border-radius:0 4px 4px 0}
+.principios strong{font-family:var(--serif);font-size:var(--t-s);display:block}
+
+/* ---------- Notas de pendientes ---------- */
+.falta{display:inline-block;background:var(--nota-bg);color:var(--nota-texto);border:1.5px dashed var(--nota-borde);border-radius:3px;padding:1px 7px;font-family:var(--sans);font-size:.8125rem;font-weight:700;line-height:1.5;vertical-align:middle}
+.falta.bloque{display:block;padding:8px 10px;font-weight:500}
+
+/* ---------- Wireframe ---------- */
+.wf{max-width:1120px;margin:24px auto 64px;padding:0 16px}
+.fila{display:grid;grid-template-columns:minmax(0,390px);justify-content:center;gap:0 40px}
+@media (min-width:860px){.fila{grid-template-columns:390px minmax(0,1fr);justify-content:start}}
+.tel{background:var(--cal);border-left:10px solid #1a1f29;border-right:10px solid #1a1f29;position:relative;overflow:hidden}
+.fila:first-child .tel{border-top:10px solid #1a1f29;border-radius:36px 36px 0 0}
+.fila.ultima .tel{border-bottom:10px solid #1a1f29;border-radius:0 0 36px 36px}
+.notas{padding:20px 0 28px;font-size:var(--t-xs)}
+@media (max-width:859px){.notas{background:#fff;padding:16px;border:1px solid var(--linea);border-radius:4px;margin:12px 0 28px}}
+.notas h3{font-size:var(--t-m);margin-bottom:6px}
+.notas ul{margin:8px 0 0;padding-left:18px}
+.notas li{margin:4px 0}
+.notas .nuevo{font-weight:700;color:var(--corredor)}
+
+.s{padding:40px 20px}
+.s h2{font-size:var(--t-xl);margin-bottom:12px}
+.s .lead{color:var(--bruma);margin-bottom:20px}
+.s.gris{background:var(--gris-fondo)}
+
+.btn{display:flex;align-items:center;justify-content:center;min-height:52px;padding:0 22px;border-radius:999px;background:var(--corredor);color:#fff;font-weight:700;font-size:var(--t-s);text-decoration:none;border:0;font-family:var(--sans);cursor:pointer;text-align:center}
+
+/* cabecera mínima */
+.cab-sitio{position:absolute;top:0;left:0;right:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;color:#fff;background:linear-gradient(rgba(20,28,45,.7),rgba(20,28,45,0))}
+.cab-sitio strong{font-family:var(--serif);font-size:var(--t-s)}
+.cab-sitio a{display:inline-flex;align-items:center;min-height:44px;padding:0 4px;font-weight:700;font-size:var(--t-xs)}
+
+/* hero */
+.hero{position:relative;background:var(--montana);color:#fff}
+.hero .foto{position:relative}
+.hero .foto img{width:100%;aspect-ratio:4/3;max-height:42svh;object-fit:cover;object-position:50% 88%}
+.hero .foto::after{content:"";position:absolute;inset:auto 0 0 0;height:35%;background:linear-gradient(180deg,rgba(30,43,69,0),var(--montana))}
+.hero .contenido{position:relative;z-index:1;padding:0 20px 24px;margin-top:-40px;display:grid;gap:10px}
+.hero h1{font-size:var(--t-xl);font-weight:800;color:#fff}
+.hero .sub{font-size:var(--t-s);color:#EEF1F6}
+.hero .linea-fechas{font-weight:700;font-size:var(--t-s)}
+.hero .datos{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:baseline}
+.hero .precio{font-family:var(--serif);font-weight:800;font-size:var(--t-l)}
+.hero .btn{margin-top:4px}
+.credito{position:absolute;bottom:10px;right:10px;z-index:1;font-size:.8125rem;color:#fff;background:rgba(20,28,45,.78);padding:2px 8px;border-radius:3px}
+.hero .credito{bottom:auto;top:62px}
+
+/* datos clave */
+.claves{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--linea);margin:0;padding:0;list-style:none}
+.claves li{background:var(--cal);padding:14px 16px;display:grid;gap:2px}
+.claves .k{font-size:var(--t-xs);color:var(--bruma)}
+.claves .v{font-weight:700}
+.claves svg{width:22px;height:22px;stroke:var(--montana);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;margin-bottom:4px}
+
+/* el día (degradado estático; la última parada es un bloque de noche propio) */
+.dia-s{padding:40px 0 0;background:linear-gradient(180deg,var(--cal) 0%,#F6EBD3 40%,#EFC27A 100%)}
+.dia-s>h2,.dia-s>.lead,.dia-s>.falta{margin-left:20px;margin-right:20px}
+.dia-s>h2{font-size:var(--t-xl);margin-bottom:12px}
+.paradas{list-style:none;margin:24px 0 0;padding:0 20px;counter-reset:p}
+.parada{position:relative;padding:0 0 32px 44px}
+.parada::before{counter-increment:p;content:counter(p) / "";position:absolute;left:0;top:0;width:30px;height:30px;border-radius:50%;background:var(--montana);color:var(--cal);font-family:var(--serif);font-weight:800;display:grid;place-items:center;font-size:1rem}
+.parada::after{content:"";position:absolute;left:14px;top:34px;bottom:4px;width:2px;background:currentColor;opacity:.25}
+.parada:last-child::after{display:none}
+.parada h3{font-size:var(--t-m)}
+.parada .quien{font-size:var(--t-xs);font-weight:700;margin:2px 0 8px}
+.parada img{border-radius:4px;margin-top:12px;aspect-ratio:3/2;object-fit:cover;width:100%}
+.parada .falta.bloque{margin-top:10px}
+.parada.noche{color:var(--cal);margin:0 -20px;padding:120px 20px 44px 64px;background:linear-gradient(180deg,#EFC27A 0,#C77E5A 50px,#5B4366 105px,var(--montana) 170px)}
+.parada.noche::before{background:var(--atardecer);color:var(--montana);left:20px;top:120px}
+.sin-foto{margin-top:12px;aspect-ratio:3/2;border-radius:4px;border:2px dashed currentColor;opacity:.6;display:grid;place-items:center;text-align:center;padding:16px;font-size:var(--t-xs)}
+
+/* fechas */
+.fechas{display:grid;gap:12px;list-style:none;margin:0;padding:0}
+.fecha{border:1.5px solid var(--linea);border-radius:6px;padding:16px;display:grid;gap:10px;background:#fff}
+.fecha .cab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.fecha h3{font-size:var(--t-m)}
+.fecha .detalle{font-size:var(--t-xs);color:var(--bruma)}
+.fecha .precio-f{font-weight:700}
+.estado{font-weight:700;font-size:var(--t-xs);display:inline-flex;align-items:center;gap:6px}
+.estado::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--estado-ok)}
+.fecha.agotada{background:var(--gris-fondo)}
+.fecha.agotada .estado{color:var(--bruma)}
+.fecha.agotada .estado::before{background:var(--bruma)}
+.fecha .salida{display:inline-flex;align-items:center;min-height:44px;font-weight:700;color:var(--montana)}
+.confianza{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:2px;font-size:var(--t-xs)}
+.confianza a{display:inline-flex;align-items:center;min-height:44px}
+
+/* aliados compactos */
+.aliados{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.aliado{display:grid;grid-template-columns:88px 1fr;gap:14px;align-items:start;background:#fff;border-radius:6px;padding:16px;box-shadow:0 0 0 1px var(--linea);border-top:6px solid var(--c)}
+.aliado h3{font-size:var(--t-m);margin-bottom:4px}
+.aliado p{font-size:var(--t-xs)}
+
+/* incluye */
+.listas{display:grid;gap:20px}
+.listas h3{font-size:var(--t-m);margin-bottom:8px}
+.listas ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.listas li{padding-left:28px;position:relative}
+.listas .si li::before{content:"✓" / "";position:absolute;left:0;color:var(--estado-ok);font-weight:700}
+.listas .no li::before{content:"✕" / "";position:absolute;left:2px;color:var(--bruma);font-weight:700}
+
+/* faq */
+.faq details{border-top:1px solid var(--linea)}
+.faq details:last-child{border-bottom:1px solid var(--linea)}
+.faq summary{list-style:none;cursor:pointer;padding:14px 36px 14px 0;font-weight:700;position:relative;min-height:52px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+" / "";position:absolute;right:4px;top:10px;font-size:1.5rem;font-weight:500;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details>div{padding:0 0 16px}
+
+/* pie */
+.pie{background:var(--montana);color:var(--cal);text-align:center;padding:40px 20px}
+.pie .placas-pie{display:flex;justify-content:center;gap:12px;margin-bottom:20px}
+.pie .placa{width:80px;height:80px;box-shadow:none}
+.pie p{color:#C9D1DE;font-size:var(--t-xs)}
+.pie nav{display:flex;flex-wrap:wrap;justify-content:center;gap:0 12px;margin-top:12px;font-size:var(--t-xs)}
+.pie nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 6px}
+.pie .btn.wa{background:var(--whatsapp);margin:20px auto 0;max-width:280px}
+
+.barra{position:sticky;bottom:0;z-index:5;background:#fff;box-shadow:0 -1px 0 var(--linea);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px}
+.barra .precio{font-family:var(--serif);font-weight:800;font-size:var(--t-m);line-height:1}
+.barra small{display:block;color:var(--bruma);font-size:.8125rem;margin-top:3px}
+.barra .btn{flex:1;min-height:48px}
+.estados-barra{display:grid;gap:8px;margin-top:10px}
+.estados-barra .barra{position:static;border:1px solid var(--linea);border-radius:6px;box-shadow:none;padding:8px 10px}
+.estados-barra .btn{min-height:40px;font-size:var(--t-xs)}
+
+/* ---------- Escritorio ---------- */
+.escritorio{max-width:1120px;margin:0 auto 96px;padding:0 16px}
+.nav-frame{border:10px solid #1a1f29;border-top-width:34px;border-radius:12px;background:var(--cal);overflow:hidden;position:relative}
+.nav-frame::before{content:"";position:absolute;top:-22px;left:8px;width:42px;height:10px;background:radial-gradient(circle,#ff5f57 4px,transparent 5px) 0 0/14px 10px repeat-x}
+.d-hero{display:grid;grid-template-columns:1fr;background:var(--montana);color:#fff}
+@media (min-width:860px){.d-hero{grid-template-columns:5fr 6fr;min-height:520px}}
+.d-hero img{width:100%;height:100%;object-fit:cover;object-position:50% 85%;max-height:520px}
+.d-hero .contenido{padding:48px clamp(20px,5vw,64px);display:grid;align-content:center;gap:12px;max-width:640px}
+.d-hero h1{font-size:clamp(2.2rem,4vw,3.4rem);font-weight:800;color:#fff}
+.d-fechas{max-width:640px;margin:0 auto;padding:48px 20px}
+.d-fechas h2{font-size:var(--t-xl);margin-bottom:16px}
+@media (min-width:860px){.d-fechas .fechas{grid-template-columns:repeat(3,1fr)}.d-fechas{max-width:960px}}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="doc">
+  <header class="doc-cabecera">
+    <h1>Tour Mantequilla, dirección de diseño</h1>
+    <p>Borrador 2 del 19 de octubre de 2026 para validar con Julio. Arriba, el moodboard; después, el wireframe móvil sección por sección, y al final un boceto de escritorio. Lo que está en amarillo con borde punteado es contenido que todavía no tenemos y no se inventa.</p>
+  </header>
+
+  <aside class="cambios" aria-labelledby="cambios-t">
+    <h2 id="cambios-t">Qué cambió frente al borrador 1</h2>
+    <p>Pasó por auditoría de heurísticas (33 Softux) y revisión de diseño UI/UX. Cambios aplicados:</p>
+    <ul>
+      <li>Las fechas suben: ahora van justo después del recorrido, no después de los aliados.</li>
+      <li>Nueva franja de datos clave bajo el hero: duración, punto de encuentro, fechas y cupo.</li>
+      <li>Hero más corto para que precio y botón quepan en el primer pantallazo; el título es la promesa y el nombre del tour pasa a subtítulo.</li>
+      <li>«Quiénes te reciben» se compacta en tres filas sin foto grande: las fotos ya están en el recorrido.</li>
+      <li>Logos en placas cuadradas iguales en vez de círculos (el círculo le cortaba la cinta al de La Florida) y recortados para que llenen lo mismo.</li>
+      <li>Fechas con precio por persona, salida por WhatsApp cuando una fecha está agotada y estados de la barra cuando se agotan fechas.</li>
+      <li>La Florida pasa de rojo a violeta de atardecer: el rojo queda solo para pagar.</li>
+      <li>Foco visible que cumple AA en fondos claros y oscuros, escala tipográfica única, texto a 18 px, ajustes de accesibilidad.</li>
+      <li>El degradado del día queda estático (sin efecto de scroll): más simple en Elementor.</li>
+    </ul>
+  </aside>
+
+  <section class="idea" aria-labelledby="idea-t">
+    <h2 id="idea-t">Un día en el pueblo, de la bienvenida al atardecer</h2>
+    <p>El tour termina en el mirador de La Florida viendo caer la tarde sobre Armenia Mantequilla. La página cuenta el recorrido en ese mismo orden, y el fondo de «Lo que vas a vivir» pasa de la luz de cal del mediodía al azul de la montaña de noche. Ese es el único gesto fuerte; el resto es sobrio para que manden las fotos y las tres marcas.</p>
+    <div class="dia" role="img" aria-label="Degradado del día: de blanco cal a dorado de atardecer a azul de noche"></div>
+    <div class="dia-etiquetas" aria-hidden="true"><span>Bienvenida</span><span>Mediodía</span><span>Atardecer</span><span>Noche</span></div>
+  </section>
+
+  <section aria-labelledby="fotos-t">
+    <h2 id="fotos-t">Lo que ya tenemos en fotos</h2>
+    <p class="intro">Todas reales, de las carpetas de cada aliado. La paleta sale de aquí: el blanco de las paredes, el rojo de los corredores y la torre, el azul de las capas de montaña.</p>
+    <div class="collage">
+      <figure class="alta"><img src="../assets/fotos-web/finca-mirador-la-florida/la-florida-02-10-43-19.webp" width="853" height="1280" loading="lazy" alt="Grupo sentado en el prado frente al atardecer en La Florida"><figcaption>La Florida 02, el hero</figcaption></figure>
+      <figure><img src="../assets/fotos-web/finca-mirador-la-florida/la-florida-01-10-43-18.webp" width="912" height="1368" loading="lazy" alt="Capas de montañas azules entre la bruma"><figcaption>La Florida 01, de aquí sale el azul montaña</figcaption></figure>
+      <figure><img src="../assets/fotos-web/cafe-cabras/cabras-02-chemex-en-sala.webp" width="1271" height="1571" loading="lazy" alt="Chemex con filtro en la sala de Café Cabras"><figcaption>Cabras 02, taller de métodos</figcaption></figure>
+      <figure class="alta"><img src="../assets/fotos-web/finca-mirador-la-florida/la-florida-04-10-45-52.webp" width="1000" height="1407" loading="lazy" alt="Silueta de la iglesia contra un atardecer rojo y morado"><figcaption>La Florida 04, el atardecer</figcaption></figure>
+      <figure><img src="../assets/fotos-web/cafe-cabras/cabras-05-licor-botella-copas.webp" width="1440" height="1801" loading="lazy" alt="Botella de licor de café Cabras con dos copas"><figcaption>Cabras 05, bienvenida</figcaption></figure>
+      <figure><img src="../assets/fotos-web/finca-mirador-la-florida/la-florida-05-10-46-04.webp" width="1067" height="1600" loading="lazy" alt="Horno de barro encendido con leña"><figcaption>La Florida 05, horno de barro</figcaption></figure>
+      <figure class="ancha"><img src="../assets/fotos-web/finca-mirador-la-florida/la-florida-10-10.43.17.webp" width="1600" height="1065" loading="lazy" alt="Casa campesina de corredor rojo con jardín y arcoíris"><figcaption>La Florida 10, foto de Alex Betancure, el rojo corredor</figcaption></figure>
+      <figure class="ancha"><img src="../assets/fotos-web/bonne-nature/bonne-nature-02-foto-general-quesos.webp" width="2000" height="1333" loading="lazy" alt="Quesos artesanales de Bonne Nature"><figcaption>Bonne Nature 02, los quesos</figcaption></figure>
+    </div>
+  </section>
+
+  <section aria-labelledby="paleta-t">
+    <h2 id="paleta-t">Paleta</h2>
+    <p class="intro">Neutra y propia del pueblo, como recomienda el brief. El rojo se reserva para reservar: si algo es rojo, se puede tocar para pagar.</p>
+    <div class="paleta">
+      <div class="color"><div class="muestra" style="background:var(--cal);box-shadow:inset 0 -1px 0 var(--linea)"></div><div><strong>Cal</strong><code>#FBFCFA</code><br>Fondo. Las paredes encaladas.</div></div>
+      <div class="color"><div class="muestra" style="background:var(--montana)"></div><div><strong>Montaña</strong><code>#1E2B45</code><br>Texto, foco y fondos de noche.</div></div>
+      <div class="color"><div class="muestra" style="background:var(--bruma)"></div><div><strong>Bruma</strong><code>#5E6F8C</code><br>Texto secundario y líneas.</div></div>
+      <div class="color"><div class="muestra" style="background:var(--corredor)"></div><div><strong>Corredor</strong><code>#A3231B</code><br>Solo botones de reserva.</div></div>
+      <div class="color"><div class="muestra" style="background:var(--atardecer)"></div><div><strong>Atardecer</strong><code>#E9A23B</code><br>Degradado del día y halo de foco.</div></div>
+      <div class="color"><div class="muestra" style="background:var(--estado-ok)"></div><div><strong>Estado ok</strong><code>#2F7D3A</code><br>«Hay cupos» y chulos.</div></div>
+      <div class="color"><div class="muestra" style="background:var(--whatsapp)"></div><div><strong>WhatsApp</strong><code>#1E7A45</code><br>Solo el botón de WhatsApp.</div></div>
+    </div>
+    <div class="aliados-colores">
+      <strong>Cada aliado pone su color en su fila:</strong>
+      <span><i style="background:var(--cabras)"></i>Café Cabras <code>#E8B828</code></span>
+      <span><i style="background:var(--bonne)"></i>Bonne Nature <code>#2E8C9A</code></span>
+      <span><i style="background:var(--florida)"></i>La Florida <code>#7A4E86</code></span>
+    </div>
+    <p class="regla">Prohibido: Bruma sobre el dorado del degradado (3:1, no pasa AA) y cualquier rojo que no sea un botón de reserva.</p>
+  </section>
+
+  <section aria-labelledby="tipo-t">
+    <h2 id="tipo-t">Tipografía</h2>
+    <div class="tipos">
+      <div class="tipo">
+        <div class="grande">Café, queso y atardecer</div>
+        <div class="media">Lo que vas a vivir</div>
+        <small>Alegreya 800 solo para el título principal y el precio; 700 para el resto de títulos. Huerta Tipográfica, Argentina: tipografía latinoamericana con raíz caligráfica, cálida sin ser folclórica.</small>
+      </div>
+      <div class="tipo">
+        <p class="cuerpo">Luz Marina aprendió el oficio quesero en queserías del campo cerca de Grenoble y en 2014 volvió a Armenia Mantequilla a compartirlo con su pueblo.</p>
+        <small>Alegreya Sans 400, 18 px, interlineado 1,55. Escala única: 15, 18, 22, 28, 36, 44.</small>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="placas-t">
+    <h2 id="placas-t">Los tres logos</h2>
+    <div class="placas">
+      <div class="placa"><img src="../assets/logos/cafe-cabras-cafe.webp" width="594" height="600" alt="Logo de Café Cabras"></div>
+      <div class="placa"><img src="../assets/logos/bonne-nature.webp" width="600" height="600" alt="Logo de Bonne Nature"></div>
+      <div class="placa"><img src="../assets/logos/la-florida.webp" width="573" height="600" alt="Logo de Mirador La Florida"></div>
+      <p>Placa blanca del mismo tamaño para los tres, con cada logo recortado al borde y centrado; mínimo 80 px. Se usa una sola versión de Cabras (café). El de La Florida es una ilustración muy cargada: a este tamaño la cinta con el nombre apenas se lee. <span class="falta">Pedir a La Florida una versión simple (solo la cinta con el nombre) y PNG transparente</span></p>
+    </div>
+  </section>
+
+  <section aria-labelledby="prin-t">
+    <h2 id="prin-t">Principios</h2>
+    <ul class="principios">
+      <li><strong>Una sola acción</strong>Todo empuja a reservar una fecha. Precio y botón en el primer pantallazo, y una barra fija abajo.</li>
+      <li><strong>Gente antes que paisaje</strong>El hero es un grupo viviendo el atardecer, no una postal vacía.</li>
+      <li><strong>Nada inventado</strong>Sin contadores de cupos ni prueba social. Cada dato con fuente; lo que falta se ve como falta.</li>
+      <li><strong>Hablar como en el pueblo</strong>Frases cortas, cálidas y concretas. Sin «experiencia única e inolvidable».</li>
+    </ul>
+  </section>
+
+  <section style="margin-bottom:0">
+    <h2>Wireframe móvil</h2>
+    <p class="intro">A 390 px, con el contenido real que tenemos. A la derecha (o debajo, en celular), por qué cada sección es así y qué le falta. Lo marcado <span class="nuevo" style="font-weight:700;color:var(--corredor)">nuevo</span> viene de las auditorías.</p>
+  </section>
+</div>
+
+<main class="wf">
+
+  <!-- 1 HERO -->
+  <div class="fila">
+    <div class="tel">
+      <header class="cab-sitio oscuro">
+        <strong><span class="falta">Nombre del tour</span></strong>
+        <a href="#fechas">Fechas</a>
+      </header>
+      <section class="hero oscuro" aria-labelledby="h1">
+        <div class="foto">
+          <img src="../assets/fotos-web/finca-mirador-la-florida/la-florida-02-10-43-19.webp" width="853" height="1280" fetchpriority="high" alt="Grupo sentado en el prado mirando el atardecer en Finca Mirador La Florida">
+          <span class="credito">Foto: <span class="falta">autor</span></span>
+        </div>
+        <div class="contenido">
+          <h1 id="h1">Café, queso y atardecer en Armenia Mantequilla</h1>
+          <p class="sub">Tour Mantequilla, con tres casas del pueblo, a dos horas de Medellín.</p>
+          <p class="linea-fechas"><span class="falta">Las 3 fechas, p. ej. «Sáb 8, sáb 22 de nov y sáb 6 de dic»</span></p>
+          <div class="datos">
+            <span class="precio">$440.000</span>
+            <span class="falta">¿por persona? ¿incluye impuestos?</span>
+          </div>
+          <a class="btn" href="#fechas">Ver fechas y reservar</a>
+        </div>
+      </section>
+    </div>
+    <div class="notas">
+      <h3>1. Hero</h3>
+      <p>Foto 02 de La Florida, recortada en 4:3 (máximo 42 % de la pantalla) para que título, fechas, precio y botón quepan en el primer pantallazo de un celular de 667 px.</p>
+      <ul>
+        <li><span class="nuevo">Nuevo:</span> el título es la promesa; el nombre del tour pasa a subtítulo y a la cabecera mínima, con un enlace a Fechas.</li>
+        <li><span class="nuevo">Nuevo:</span> el botón dice «Ver fechas y reservar» porque eso es lo que hace: baja a las fechas.</li>
+        <li><span class="nuevo">Nuevo:</span> línea reservada para las 3 fechas; ya tiene su espacio en el diseño.</li>
+        <li><span class="falta">Original en alta de la foto 02</span> hoy mide 853 px; un celular de alta densidad pide ~1.170 px. Bloqueante para el hero final.</li>
+        <li>Hay personas en la foto: falta autorización de imagen (pendiente #14).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 2 DATOS CLAVE -->
+  <div class="fila">
+    <div class="tel">
+      <ul class="claves" aria-label="Datos clave del tour">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="k">Duración</span><span class="v"><span class="falta">Por confirmar</span></span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span class="k">Punto de encuentro</span><span class="v"><span class="falta">Por confirmar</span></span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg><span class="k">Fechas</span><span class="v">3 fechas</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="9" r="3"/><circle cx="17" cy="10" r="2.3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 20c0-2.5 1-4.5 3.5-4.5S22 17.5 22 20"/></svg><span class="k">Grupo</span><span class="v"><span class="falta">Hasta N personas</span></span></li>
+      </ul>
+    </div>
+    <div class="notas">
+      <h3>2. Datos clave <span class="nuevo">(nuevo)</span></h3>
+      <p>Lo primero que pregunta alguien que sale desde Medellín: cuánto dura, dónde nos vemos, cuándo y con cuánta gente. Cuatro casillas, íconos de línea simples.</p>
+      <ul><li><span class="falta">Duración, punto de encuentro y cupo máximo por fecha</span> (pendiente #3 de Jhon).</li></ul>
+    </div>
+  </div>
+
+  <!-- 3 EL DÍA -->
+  <div class="fila">
+    <div class="tel">
+      <section class="dia-s" aria-labelledby="dia-t">
+        <h2 id="dia-t">Lo que vas a vivir</h2>
+        <p class="lead">Tres casas del pueblo te abren la puerta, de la bienvenida al atardecer.</p>
+        <span class="falta">Orden de las paradas 2 a 4 por confirmar con Jhon</span>
+        <ol class="paradas" role="list">
+          <li class="parada">
+            <h3>Bienvenida con licor de café</h3>
+            <p class="quien">Café Cabras</p>
+            <p>Arrancas con una copa del licor artesanal de café de la casa.</p>
+            <img src="../assets/fotos-web/cafe-cabras/cabras-05-licor-botella-copas.webp" width="1440" height="1801" loading="lazy" alt="Botella de licor de café Cabras con dos copas con hielo">
+            <span class="falta bloque">Verificar registro y venta del licor antes de publicar (pendiente #7)</span>
+          </li>
+          <li class="parada">
+            <h3>Taller de métodos</h3>
+            <p class="quien">Café Cabras</p>
+            <p>Preparas el mismo café de varias maneras y pruebas cómo cambia la taza con cada método.</p>
+            <img src="../assets/fotos-web/cafe-cabras/cabras-02-chemex-en-sala.webp" width="1271" height="1571" loading="lazy" alt="Chemex con filtro y personas al fondo">
+          </li>
+          <li class="parada">
+            <h3>Almuerzo de fiambres</h3>
+            <p class="quien">Café Cabras</p>
+            <p>Comida casera servida en fiambres, a la manera tradicional, para comer en grupo.</p>
+            <div class="sin-foto">No hay foto del almuerzo.<br>Pedir a Café Cabras.</div>
+          </li>
+          <li class="parada">
+            <h3>Quesería artesanal</h3>
+            <p class="quien">Bonne Nature</p>
+            <p>Quesos de receta francesa con ají, achiote, pimientas y hierbas de la cocina colombiana.</p>
+            <img src="../assets/fotos-web/bonne-nature/bonne-nature-02-foto-general-quesos.webp" width="2000" height="1333" loading="lazy" alt="Quesos artesanales de Bonne Nature">
+            <span class="falta bloque">¿Qué hace el visitante aquí? ¿Cata, visita a la quesería o ambas?</span>
+          </li>
+          <li class="parada noche oscuro">
+            <h3>Horno de leña y atardecer</h3>
+            <p class="quien">Finca Mirador La Florida</p>
+            <p>Arepas de yuca y pan de masa madre del horno de barro, y la tarde cayendo sobre Armenia Mantequilla desde el mirador.</p>
+            <img src="../assets/fotos-web/finca-mirador-la-florida/la-florida-04-10-45-52.webp" width="1000" height="1407" loading="lazy" alt="Atardecer rojo y morado detrás de la torre de la iglesia">
+          </li>
+        </ol>
+      </section>
+    </div>
+    <div class="notas">
+      <h3>3. Lo que vas a vivir</h3>
+      <p>El gesto fuerte de la página. El fondo va de cal a dorado y la última parada, el atardecer, cae en un bloque de noche. Aquí sí van números porque es un recorrido con orden.</p>
+      <ul>
+        <li><span class="nuevo">Nuevo:</span> fotos en 3:2 (antes 4:3) para acortar la sección.</li>
+        <li><span class="nuevo">Nuevo:</span> degradado estático, sin efecto de scroll. En Elementor: un contenedor con degradado y otro para el bloque de noche; los números van como título dentro de un círculo, sin CSS especial.</li>
+        <li><span class="falta">Duración del tour y horarios</span> si es de un día, el título puede ser «Tres casas, un solo día».</li>
+        <li><span class="falta">Foto del almuerzo de fiambres</span> (pendiente #15)</li>
+        <li>No se dice «leche cruda» ni «sin conservantes» hasta tener soporte (pendiente #6).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4 FECHAS -->
+  <div class="fila">
+    <div class="tel">
+      <section class="s gris" id="fechas" aria-labelledby="fec-t">
+        <h2 id="fec-t">Elige tu fecha</h2>
+        <p class="lead">Escoges la fecha, pagas en línea y te llega la confirmación al correo.</p>
+        <ul class="fechas">
+          <li class="fecha">
+            <div class="cab"><h3><span class="falta">Sáb 8 de nov</span></h3><span class="estado">Hay cupos</span></div>
+            <p class="detalle"><span class="falta">Hora de salida</span> <span class="precio-f">$440.000 por persona</span></p>
+            <a class="btn" href="#">Reservar el sáb 8 de nov</a>
+          </li>
+          <li class="fecha">
+            <div class="cab"><h3><span class="falta">Sáb 22 de nov</span></h3><span class="estado">Hay cupos</span></div>
+            <p class="detalle"><span class="falta">Hora de salida</span> <span class="precio-f">$440.000 por persona</span></p>
+            <a class="btn" href="#">Reservar el sáb 22 de nov</a>
+          </li>
+          <li class="fecha agotada">
+            <div class="cab"><h3><span class="falta">Sáb 6 de dic</span></h3><span class="estado">Sin cupos</span></div>
+            <p>Esta fecha ya no tiene cupos.</p>
+            <a class="salida" href="#">¿Querías esta fecha? Escríbenos por WhatsApp</a>
+          </li>
+        </ul>
+        <ul class="confianza">
+          <li>Pagas con <span class="falta">tarjeta o PSE</span></li>
+          <li>Te llega la confirmación y el comprobante al correo</li>
+          <li><a href="#">Política de cancelación</a></li>
+          <li><a href="#">¿Dudas? Escríbenos por WhatsApp</a></li>
+        </ul>
+      </section>
+    </div>
+    <div class="notas">
+      <h3>4. Fechas</h3>
+      <p>Tres tarjetas, cada una con su botón: un producto o variación de WooCommerce por fecha.</p>
+      <ul>
+        <li><span class="nuevo">Nuevo:</span> va justo después del recorrido (antes estaba a ~7 pantallas del inicio).</li>
+        <li><span class="nuevo">Nuevo:</span> cada fecha dice hora y precio por persona, y el botón nombra la fecha («Reservar el sáb 8 de nov»).</li>
+        <li><span class="nuevo">Nuevo:</span> la fecha agotada no parece botón y ofrece una salida: WhatsApp con la fecha en el mensaje. Sin lista de espera inventada.</li>
+        <li><span class="nuevo">Nuevo:</span> debajo, cómo se paga, qué llega al correo, cancelación y WhatsApp.</li>
+        <li><strong>Para decidir con Julio:</strong> ¿dónde se elige cuántas personas? Propuesta: el botón lleva a la página del producto de WooCommerce, que ya trae cantidad. Alternativa: selector −/+ en la tarjeta.</li>
+        <li>Las fechas y la fecha agotada son <strong>de ejemplo</strong>. En el sitio las dibuja el shortcode heredado <code>tour_dates</code>: el estilo de esta tarjeta hay que pasarlo al CSS del child theme.</li>
+        <li><span class="falta">Las 3 fechas, cupo por fecha, pasarela y medios de pago</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5 ALIADOS -->
+  <div class="fila">
+    <div class="tel">
+      <section class="s" aria-labelledby="ali-t">
+        <h2 id="ali-t">Quiénes te reciben</h2>
+        <p class="lead">Tres negocios de Armenia Mantequilla que se juntaron para armar este día.</p>
+        <ul class="aliados">
+          <li class="aliado" style="--c:var(--cabras)">
+            <div class="placa"><img src="../assets/logos/cafe-cabras-cafe.webp" width="594" height="600" loading="lazy" alt=""></div>
+            <div><h3>Café Cabras</h3><p>Café de origen que nació en un kiosco de la plaza del pueblo. Caterine y Fernando hacen catas, talleres y encuentros alrededor de la taza.</p></div>
+          </li>
+          <li class="aliado" style="--c:var(--bonne)">
+            <div class="placa"><img src="../assets/logos/bonne-nature.webp" width="600" height="600" loading="lazy" alt=""></div>
+            <div><h3>Bonne Nature</h3><p>Quesería de la familia Mejía Mejía. Luz Marina aprendió el oficio cerca de Grenoble y desde 2014 hace quesos colombo-franceses en su pueblo.</p></div>
+          </li>
+          <li class="aliado" style="--c:var(--florida)">
+            <div class="placa"><img src="../assets/logos/la-florida.webp" width="573" height="600" loading="lazy" alt=""></div>
+            <div><h3>Finca Mirador La Florida</h3><p>Casa antioqueña con vista a las montañas del Suroeste y el Occidente, huerta de aromáticas, bosque nativo sembrado y horno de barro.</p></div>
+          </li>
+        </ul>
+      </section>
+    </div>
+    <div class="notas">
+      <h3>5. Quiénes te reciben</h3>
+      <p>Tres filas iguales: placa de logo de 88 px, nombre y dos líneas. El borde de arriba lleva el color de cada marca, como el zócalo pintado de las casas.</p>
+      <ul>
+        <li><span class="nuevo">Nuevo:</span> sin foto grande (las fotos de cada casa ya están en el recorrido) y debajo de las fechas, no antes.</li>
+        <li><span class="nuevo">Nuevo:</span> la foto 10 de La Florida sale de aquí: traía la firma quemada y además nuestra etiqueta de crédito, y el crédito salía dos veces.</li>
+        <li><span class="falta">¿Hay más empresas?</span> El diseño aguanta 4 o 5 filas sin cambiar.</li>
+        <li>Café Cabras: no se usa «trazabilidad real» ni «pequeños productores» hasta tener una finca para citar.</li>
+        <li>La Florida: falta confirmar si se publica «Finca Mirador La Florida» o «Mirador La Florida», como dice su logo.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 6 INCLUYE -->
+  <div class="fila">
+    <div class="tel">
+      <section class="s gris" aria-labelledby="inc-t">
+        <h2 id="inc-t">Qué incluye</h2>
+        <span class="falta bloque" style="margin-bottom:16px">Todo esto sale de los textos de los aliados. Falta que Jhon confirme qué cubren los $440.000.</span>
+        <div class="listas">
+          <div class="si">
+            <h3>Incluye</h3>
+            <ul>
+              <li>Copa de bienvenida con licor de café</li>
+              <li>Taller de métodos de preparación</li>
+              <li>Almuerzo de fiambres</li>
+              <li><span class="falta">¿Degustación de quesos?</span></li>
+              <li><span class="falta">¿Comida del horno de barro?</span></li>
+            </ul>
+          </div>
+          <div class="no">
+            <h3>No incluye</h3>
+            <ul>
+              <li><span class="falta">¿Transporte desde Medellín?</span></li>
+              <li><span class="falta">¿Bebidas adicionales y compras en las tiendas?</span></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="notas">
+      <h3>6. Qué incluye y qué no</h3>
+      <p>Dos listas cortas, con chulo y equis. Es la sección que más reduce preguntas por WhatsApp antes de pagar.</p>
+      <ul><li><span class="falta">Contenido completo</span> sección marcada ⛔ en el brief.</li></ul>
+    </div>
+  </div>
+
+  <!-- 7 LLEGAR -->
+  <div class="fila">
+    <div class="tel">
+      <section class="s" aria-labelledby="lle-t">
+        <h2 id="lle-t">Cómo llegar y qué llevar</h2>
+        <p>Armenia Mantequilla queda en el suroccidente antioqueño, a unas dos horas de Medellín.</p>
+        <span class="falta bloque" style="margin-top:14px">Punto de encuentro, hora de salida y si hay transporte</span>
+        <span class="falta bloque" style="margin-top:10px">Botón «Abrir en Google Maps» (enlace, no mapa incrustado: carga más rápido)</span>
+        <span class="falta bloque" style="margin-top:10px">Qué llevar. Sugerencia para validar: abrigo para el atardecer y zapatos para caminar</span>
+      </section>
+    </div>
+    <div class="notas">
+      <h3>7. Cómo llegar y qué llevar</h3>
+      <p>Bloque corto de texto con un botón de mapa. La sugerencia de qué llevar es una propuesta, no un dato: no se publica sin validarla con los aliados.</p>
+    </div>
+  </div>
+
+  <!-- 8 FAQ -->
+  <div class="fila">
+    <div class="tel">
+      <section class="s gris faq" aria-labelledby="faq-t">
+        <h2 id="faq-t">Preguntas frecuentes</h2>
+        <details><summary>¿Cómo pago y qué recibo?</summary><div><span class="falta">Medios de pago y qué llega al correo</span></div></details>
+        <details><summary>¿Puedo cancelar o cambiar de fecha?</summary><div><span class="falta">Política de cancelación</span></div></details>
+        <details><summary>¿Puedo ir solo o en grupo?</summary><div><span class="falta">Mínimo y máximo por reserva</span></div></details>
+        <details><summary>¿Pueden ir niños?</summary><div><span class="falta">Edad mínima y qué reciben los menores en la bienvenida con licor</span></div></details>
+        <details><summary>¿Es accesible para personas con movilidad reducida?</summary><div><span class="falta">Accesibilidad de cada parada</span></div></details>
+        <details><summary>¿Qué pasa si llueve?</summary><div><span class="falta">Plan de lluvia, sobre todo para el atardecer</span></div></details>
+      </section>
+    </div>
+    <div class="notas">
+      <h3>8. Preguntas frecuentes</h3>
+      <p>Acordeón nativo, se abre con toque o teclado; cada pregunta mide al menos 52 px de alto.</p>
+      <ul><li><span class="nuevo">Nuevo:</span> «¿Cómo pago y qué recibo?» y «¿Puedo ir solo o en grupo?».</li></ul>
+    </div>
+  </div>
+
+  <!-- 9 PIE -->
+  <div class="fila ultima">
+    <div class="tel">
+      <footer class="pie oscuro">
+        <div class="placas-pie">
+          <div class="placa"><img src="../assets/logos/cafe-cabras-cafe.webp" width="594" height="600" loading="lazy" alt="Café Cabras"></div>
+          <div class="placa"><img src="../assets/logos/bonne-nature.webp" width="600" height="600" loading="lazy" alt="Bonne Nature"></div>
+          <div class="placa"><img src="../assets/logos/la-florida.webp" width="573" height="600" loading="lazy" alt="Mirador La Florida"></div>
+        </div>
+        <p>Café Cabras, Bonne Nature y Finca Mirador La Florida.<br>Armenia Mantequilla, Antioquia.</p>
+        <a class="btn wa" href="#">Escríbenos por WhatsApp</a>
+        <p style="margin-top:8px"><span class="falta">Número de WhatsApp y quién responde</span></p>
+        <nav aria-label="Legal"><a href="#">Términos y condiciones</a><a href="#">Datos personales</a><a href="#">Cancelación</a></nav>
+      </footer>
+      <div class="barra" role="region" aria-label="Reservar">
+        <div><span class="precio">$440.000</span><small>por persona, 3 fechas</small></div>
+        <a class="btn" href="#fechas">Ver fechas</a>
+      </div>
+    </div>
+    <div class="notas">
+      <h3>9. Pie y barra fija</h3>
+      <p>Las tres placas del mismo tamaño y centradas: el único lugar centrado de la página. Botón de WhatsApp verde porque la gente llega desde WhatsApp y quiere volver ahí con dudas.</p>
+      <ul>
+        <li><strong>Barra fija:</strong> en el sitio aparece apenas el hero sale de pantalla, se queda pegada abajo y <span class="nuevo">se oculta mientras la sección de fechas está a la vista</span> (para no duplicar botones). Respeta la zona segura del iPhone y la página deja espacio abajo para que no tape el foco ni el pie.</li>
+        <li><span class="nuevo">Nuevo:</span> la barra cambia según los cupos (Elementor por condición de stock de WooCommerce):
+          <div class="estados-barra" aria-label="Estados de la barra">
+            <div class="barra"><div><span class="precio">$440.000</span><small>por persona, 3 fechas</small></div><span class="btn">Ver fechas</span></div>
+            <div class="barra"><div><span class="precio">$440.000</span><small>por persona, 2 fechas con cupo</small></div><span class="btn">Ver fechas</span></div>
+            <div class="barra"><div><span class="precio" style="font-size:1rem">Sin cupos por ahora</span><small>avísame de nuevas fechas</small></div><span class="btn" style="background:var(--whatsapp)">Escríbenos por WhatsApp</span></div>
+          </div>
+          Lo mismo para el botón del hero cuando no queda ninguna fecha.
+        </li>
+        <li><span class="falta">¿M&amp;T Consulting aparece en el pie?</span></li>
+        <li><span class="falta">Textos legales</span> términos, datos y cancelación (pendiente del brief).</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<section class="escritorio" aria-labelledby="esc-t">
+  <div class="doc" style="padding:0 0 20px">
+    <h2 id="esc-t">Boceto de escritorio <span class="nuevo" style="font-size:1rem;color:var(--corredor)">(nuevo)</span></h2>
+    <p class="intro">Solo hero y fechas, para fijar cómo crece la página. Foto a la izquierda y texto a la derecha: así la foto de 853 px no se estira a 1440. El resto de secciones va en una columna de 640 px centrada.</p>
+  </div>
+  <div class="nav-frame" aria-label="Boceto de escritorio">
+    <div class="d-hero oscuro">
+      <img src="../assets/fotos-web/finca-mirador-la-florida/la-florida-02-10-43-19.webp" width="853" height="1280" loading="lazy" alt="Grupo frente al atardecer en La Florida">
+      <div class="contenido">
+        <h1>Café, queso y atardecer en Armenia Mantequilla</h1>
+        <p class="sub" style="color:#EEF1F6">Tour Mantequilla, con tres casas del pueblo, a dos horas de Medellín.</p>
+        <p style="font-weight:700"><span class="falta">Las 3 fechas</span></p>
+        <p><span style="font-family:var(--serif);font-weight:800;font-size:var(--t-l)">$440.000</span> <span class="falta">¿por persona?</span></p>
+        <a class="btn" href="#fechas" style="justify-self:start">Ver fechas y reservar</a>
+      </div>
+    </div>
+    <div class="d-fechas">
+      <h2>Elige tu fecha</h2>
+      <ul class="fechas">
+        <li class="fecha"><div class="cab"><h3><span class="falta">Sáb 8 de nov</span></h3><span class="estado">Hay cupos</span></div><p class="detalle"><span class="precio-f">$440.000 por persona</span></p><a class="btn" href="#">Reservar el sáb 8 de nov</a></li>
+        <li class="fecha"><div class="cab"><h3><span class="falta">Sáb 22 de nov</span></h3><span class="estado">Hay cupos</span></div><p class="detalle"><span class="precio-f">$440.000 por persona</span></p><a class="btn" href="#">Reservar el sáb 22 de nov</a></li>
+        <li class="fecha agotada"><div class="cab"><h3><span class="falta">Sáb 6 de dic</span></h3><span class="estado">Sin cupos</span></div><p>Esta fecha ya no tiene cupos.</p><a class="salida" href="#">¿Querías esta fecha? Escríbenos</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+</body>
+</html>
