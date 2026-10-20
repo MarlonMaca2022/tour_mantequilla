@@ -25,6 +25,10 @@ El equipo eligió tres de las cuatro propuestas. Quedó fuera la «ruta que se d
   - Dice «próxima salida 5 de diciembre · Quedan 15 cupos». Sale del motor: la primera fecha con cupo y lo que queda (`tm_render_barra()`).
   - Si la fecha se agota, pasa a la siguiente. Si no hay ninguna con cupo, no aparece.
   - No aparece sobre el hero, en Fechas ni en la escena.
+- **Datos clave (Duración, Salida, Fechas, Grupo):** se arman con el scroll, una tarjeta tras otra y en este orden: el ícono se dibuja, la tarjeta sube, aparecen la etiqueta y el valor y se pinta el divisor.
+  - En escritorio van de izquierda a derecha; en móvil, fila por fila.
+  - Se deshacen al subir.
+  - Si se entra a mitad de página (por ejemplo, en `/#fechas`), ya están completos.
 - **Sin JS o con movimiento reducido:** nada de esto corre. Las fotos se ven completas y el texto sin partir.
 - **Medido:** el botón del hero termina en 540 px en 375×667 y 360×667, sin desborde horizontal. Los fps reales quedan pendientes en un equipo de verdad, porque el Chrome automatizado limita el rAF a 1 fps.
 

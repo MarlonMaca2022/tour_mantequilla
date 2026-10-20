@@ -236,6 +236,25 @@
     var ins = c.querySelector('.inset'); if (ins) gsap.fromTo(ins, { y: 60 }, { y: -50, ease: 'none', scrollTrigger: st });
   });
 
+  // datos clave: cada tarjeta se arma con el scroll (ícono que se dibuja, tarjeta, etiqueta, valor y divisor).
+  // escritorio de izquierda a derecha; móvil fila por fila (2×2)
+  var claves = document.querySelectorAll('.claves li');
+  claves.forEach(function (li) {
+    li.querySelectorAll('svg path, svg circle, svg rect').forEach(function (s) { s.setAttribute('pathLength', '1'); s.style.strokeDasharray = '1'; });
+  });
+  mm.add({ desk: '(min-width: 900px)', movil: '(max-width: 899px)' }, function (ctx) {
+    var linea = getComputedStyle(claves[0]).borderRightColor;
+    var tl = gsap.timeline({ defaults: { ease: 'power2.out' }, scrollTrigger: { trigger: '.claves', start: 'top bottom', end: 'top 35%', scrub: 0.6 } });
+    claves.forEach(function (li, i) {
+      var t = ctx.conditions.desk ? i * 0.25 : Math.floor(i / 2) * 0.4 + (i % 2) * 0.15;
+      tl.fromTo(li.querySelectorAll('svg path, svg circle, svg rect'), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.5 }, t)
+        .fromTo(li, { opacity: 0, y: 40, borderColor: 'rgba(0,0,0,0)' }, { opacity: 1, y: 0, borderColor: linea, duration: 0.5 }, t)
+        .fromTo(li.querySelector('.k'), { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35 }, t + 0.2)
+        .fromTo(li.querySelector('.v'), { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.4 }, t + 0.3);
+    });
+    return function () { tl.scrollTrigger && tl.scrollTrigger.kill(); tl.revert(); };
+  });
+
   // fotos con cortina: se destapan atadas al scroll mientras el zoom se asienta (1.25 → 1).
   // el clip compensa la escala: el marco visible nunca crece más allá de la foto
   document.querySelectorAll('.revela').forEach(function (img) {
