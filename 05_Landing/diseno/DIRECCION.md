@@ -1,5 +1,34 @@
 # Dirección de diseño — Landing Tour Mantequilla
 
+## Borrador 6 · 2026-10-21 · el día en el cielo (motion)
+Lo pidió el equipo: transiciones más sorprendentes «como Dalia», con un sol que acompaña todo el recorrido, nubes, pájaros y que termine en luna. Decisiones: el hero no se fija, y solo hay cielo, sin ilustraciones por parada. Todo es ilustración SVG con GSAP: no hay video ni fotos retocadas, y el sol nunca va encima de una foto.
+- **Recorrido:** una capa de cielo fija (`.cielo-pista` > `.cielo-dia`, sticky) va detrás de las paradas.
+  - El sol sale del horizonte a la izquierda en la mañana, llega a lo alto al mediodía y baja al centro en la tarde. Cambia de color con la hora.
+  - Hay nubes en 3 profundidades, cada una a su velocidad; las de adelante van apareciendo.
+  - Cruza una bandada en cada cambio de parada.
+- **Relevo:** el sol del recorrido termina con su centro en el borde inferior de la sección y el de la escena empieza con su centro en el borde superior. Es el mismo punto y el mismo tamaño (medido: 0 px de diferencia), así que se lee como un solo sol.
+- **Escena del atardecer** (pin de 2 pantallas en escritorio y 1,4 en móvil): el sol se esconde del todo tras la cordillera, las nubes pasan de durazno a violeta, una bandada vuelve a la montaña y la luna sale tras la cordillera con las estrellas.
+- **Cierre:** luz de luna, una luna pequeña y estrellas.
+- **Fechas, aliados, incluye y FAQ:** sin cielo, para no distraer de la reserva.
+- **Sin JS o con movimiento reducido:** sol al mediodía, nubes quietas, sin pájaros, y la escena final con la luna.
+- **Móvil:** sin la capa de nubes lejanas. El botón del hero sigue en el primer pantallazo (termina en 548 px en 375×667).
+- **Contraste:** el texto que pasa sobre el sol o las nubes no baja de 4,85:1. Se midió cruzando la posición del texto con la del sol y las nubes cada 60 px de scroll; no es un muestreo de píxeles.
+- **Pendiente:** medir los fps en un celular real. En la pestaña de prueba el navegador frena las animaciones y la medida no sirvió.
+
+## Borrador 5 · 2026-10-21 · titular nuevo
+El H1 del borrador 4 era largo, sonaba a lista y no emocionaba. El subtítulo de los «cuatro vecinos te abren su casa» sonaba mal (equipo, 21 oct). Se rehízo la mesa de los seis lentes con estas reglas:
+- Máximo 10 palabras, que se lea en 2 s en el estand.
+- Criterio de Julio: «qué tienes para mí».
+- Ninguna empresa con más peso: no se usa «Primera fila al atardecer», que es el lema de Atardeceres.
+- Solo verdades con fuente.
+
+| Lugar | Texto |
+|---|---|
+| H1 (elegido por el equipo, finalista 1) | Tu día en Armenia Mantequilla, de la primera taza al último sol |
+| Subtítulo | Te recogemos en Medellín para un día de café de origen, quesos artesanales y atardecer en la montaña. Grupos de 15. |
+
+Finalistas descartadas: «El día termina cuando se va el sol» (la más poética, pero no dice qué ni dónde) y «Armenia Mantequilla, un pueblo que se prueba» (llama la atención en el estand, pero «se prueba» puede no entenderse). Este H1 es también el titular del estand y del QR (pendiente #31).
+
 ## Borrador 4 · 2026-10-19 · mensaje y microcopy
 Sale de una mesa de seis lentes de expertos (Hormozi, Donald Miller, CRO, Seth Godin, Cialdini + Eyal y Monge Malo). El acta completa, en tablas, está en el plan `~/.claude/plans/al-final-se-debe-immutable-corbato.md`.
 

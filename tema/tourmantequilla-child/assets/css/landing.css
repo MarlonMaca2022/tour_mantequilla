@@ -140,7 +140,7 @@ html.limpio .falta{display:none!important}
 .cielo--ocaso{background:linear-gradient(180deg,#5B4366 0%,#C77E5A 55%,#E9A23B 90%)}
 .cielo--noche{background:linear-gradient(180deg,#0F1729 0%,#1E2B45 55%,#3A3456 100%)}
 .estrellas{position:absolute;inset:0 0 40% 0;background-image:radial-gradient(1.5px 1.5px at 12% 18%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 28% 8%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 46% 22%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 63% 12%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 78% 26%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 90% 9%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 36% 33%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 70% 36%,#fff 50%,transparent 51%);opacity:.85}
-.sol{position:absolute;left:50%;top:44%;width:min(34vw,220px);aspect-ratio:1;margin-left:calc(min(34vw,220px) / -2);border-radius:50%;background:radial-gradient(circle,#FFF3D6 0%,#FBD07A 55%,#F1A447 100%);box-shadow:0 0 80px 30px rgba(251,208,122,.45);transform:translateY(38%);will-change:transform}
+.sol{position:absolute;left:50%;top:44%;width:min(34vw,220px);aspect-ratio:1;margin-left:calc(min(34vw,220px) / -2);border-radius:50%;background:radial-gradient(circle,#FFF3D6 0%,#FBD07A 55%,#F1A447 100%);box-shadow:0 0 80px 30px rgba(251,208,122,.45);transform:translateY(75%);will-change:transform}
 .cordillera{position:absolute;left:0;right:0;bottom:0;width:100%;height:62%}
 .cordillera path{vector-effect:non-scaling-stroke}
 .velo{position:absolute;inset:0;background:rgba(10,16,30,.35);pointer-events:none}
@@ -285,6 +285,35 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
 @media (min-width:900px){.velo-texto{height:62%;background:linear-gradient(180deg,rgba(12,18,34,0) 0%,rgba(12,18,34,.55) 35%,rgba(12,18,34,.72) 100%)}}
 @media (max-width:899px){.escena .num{display:none}.escena h2{font-size:clamp(2.1rem,9vw,3rem)}.escena .copy{gap:10px}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}.js .revela{clip-path:none;opacity:1;transform:none}}
+
+/* ---------- borrador 6: el día en el cielo (solo ilustración, nunca sobre fotos) ---------- */
+/* recorrido: capa de cielo fija detrás de las paradas; sin JS queda el sol de mediodía */
+.recorrido{position:relative}
+.recorrido .contenedor{position:relative;z-index:1}
+/* la pista cubre todo el recorrido; el cielo se queda fijo dentro de ella y se suelta justo al final de la parada 03 */
+.cielo-pista{position:absolute;inset:0;overflow:clip;pointer-events:none;z-index:0}
+.cielo-dia{position:sticky;top:0;height:100svh;overflow:hidden;
+  --sol-a:#FFFBEA;--sol-b:#FFE066;--sol-c:#FFC93C;--sol-glow:rgba(255,205,70,.6);--nube:#FFFFFF;--ave:#1E2B45}
+.nubes svg{filter:drop-shadow(0 6px 10px rgba(30,43,69,.10))}
+.astro-sol{position:absolute;left:0;top:0;width:min(34vw,220px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,var(--sol-a) 0%,var(--sol-b) 55%,var(--sol-c) 100%);box-shadow:0 0 80px 30px var(--sol-glow);transform:translate(calc(42vw - 50%),12svh) scale(.8);will-change:transform}
+.nubes{position:absolute;left:0;right:0;top:0;height:200%;color:var(--nube)}
+.nubes svg,.nubes-escena svg{position:absolute;display:block;height:auto}
+.nubes.lejos{opacity:.5}.nubes.medio{opacity:.75}.nubes.cerca{opacity:.92}
+.js .nubes{will-change:transform}
+.bandada,.aves-escena{position:absolute;left:0;top:0;width:clamp(120px,16vw,200px);color:var(--ave);opacity:0;will-change:transform}
+.bandada use,.aves-escena use{transform-box:fill-box;transform-origin:50% 70%;animation:aleteo .42s ease-in-out infinite alternate}
+.bandada use:nth-child(2n),.aves-escena use:nth-child(2n){animation-duration:.5s}
+.bandada use:nth-child(3n),.aves-escena use:nth-child(3n){animation-delay:-.2s}
+@keyframes aleteo{to{transform:scaleY(.3)}}
+@media (max-width:899px){.nubes.lejos{display:none}}
+/* escena del atardecer: nubes que se oscurecen, aves que vuelven y la luna (estado final sin JS) */
+.nubes-escena{position:absolute;left:0;right:0;top:4%;height:46%;color:var(--nube-e,#3B3A5C)}
+.aves-escena{width:clamp(110px,14vw,170px);color:#141A2E}
+.luna{position:absolute;right:12%;top:12%;width:clamp(56px,9vw,96px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 38% 36%,#FFFFFF 0%,#EEF1F8 45%,#C9D1E4 100%);box-shadow:0 0 60px 18px rgba(205,218,255,.28)}
+/* cierre: luz de luna */
+.cierre .resplandor{right:-18vw;top:-34vw;bottom:auto;background:radial-gradient(circle,rgba(214,226,255,.30) 0%,rgba(150,170,230,.12) 40%,rgba(30,43,69,0) 70%)}
+.cierre .luna{right:8%;top:16%;width:clamp(44px,6vw,72px)}
+.cierre .estrellas{opacity:.55}
 
 /* ---------- sitio WordPress ---------- */
 .admin-bar .cab{top:32px}

@@ -44,8 +44,8 @@ $precio = tm_precio();
       <span class="credito doc-pendiente">Foto: <span class="falta">autor</span></span>
     </div>
     <div class="copy">
-      <h1 id="h1">Reserva tu día de café, queso y atardecer en Armenia Mantequilla</h1>
-      <p class="sub">Te recogemos en Medellín - Grupos de 15 personas</p>
+      <h1 id="h1">Tu día en Armenia Mantequilla, de la primera taza al último sol</h1>
+      <p class="sub">Te recogemos en Medellín para un día de café de origen, quesos artesanales y atardecer en la montaña. Grupos de 15.</p>
       <p class="valor">Incluye almuerzo, taller de café y taller de quesos <span class="falta">confirmar qué cubre el precio</span></p>
       <p class="precio"><strong><?php echo esc_html($precio); ?></strong><span>por persona <span class="falta">¿impuestos incluidos?</span></span></p>
       <p class="fechas-linea">Salidas en fines de semana de diciembre <span class="falta">las fechas se definen en el motor de reservas (#26)</span></p>
@@ -71,6 +71,33 @@ $precio = tm_precio();
 
   <!-- RECORRIDO -->
   <section class="seccion recorrido" id="recorrido" aria-labelledby="rec-t">
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+      <symbol id="nube-a" viewBox="0 0 200 90"><g fill="currentColor"><circle cx="55" cy="58" r="28"/><circle cx="95" cy="40" r="36"/><circle cx="140" cy="55" r="30"/><circle cx="170" cy="66" r="20"/><rect x="27" y="58" width="163" height="28" rx="14"/></g></symbol>
+      <symbol id="nube-b" viewBox="0 0 160 70"><g fill="currentColor"><circle cx="45" cy="45" r="25"/><circle cx="85" cy="32" r="30"/><circle cx="120" cy="46" r="22"/><rect x="20" y="44" width="125" height="24" rx="12"/></g></symbol>
+      <symbol id="ave" viewBox="0 0 24 10"><path d="M1 7 Q6 1 12 7 Q18 1 23 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    </svg>
+    <div class="cielo-pista" aria-hidden="true"><div class="cielo-dia">
+      <div class="nubes lejos">
+        <svg viewBox="0 0 200 90" style="left:6%;top:9%;width:170px"><use href="#nube-a"/></svg>
+        <svg viewBox="0 0 160 70" style="left:62%;top:20%;width:130px"><use href="#nube-b"/></svg>
+        <svg viewBox="0 0 200 90" style="left:30%;top:58%;width:150px"><use href="#nube-a"/></svg>
+        <svg viewBox="0 0 160 70" style="left:80%;top:76%;width:120px"><use href="#nube-b"/></svg>
+      </div>
+      <div class="astro-sol"></div>
+      <div class="nubes medio">
+        <svg viewBox="0 0 160 70" style="left:-4%;top:30%;width:220px"><use href="#nube-b"/></svg>
+        <svg viewBox="0 0 200 90" style="left:70%;top:6%;width:240px"><use href="#nube-a"/></svg>
+        <svg viewBox="0 0 160 70" style="left:44%;top:46%;width:200px"><use href="#nube-b"/></svg>
+        <svg viewBox="0 0 200 90" style="left:8%;top:84%;width:230px"><use href="#nube-a"/></svg>
+      </div>
+      <div class="nubes cerca">
+        <svg viewBox="0 0 200 90" style="left:72%;top:36%;width:330px"><use href="#nube-a"/></svg>
+        <svg viewBox="0 0 160 70" style="left:-10%;top:62%;width:300px"><use href="#nube-b"/></svg>
+        <svg viewBox="0 0 200 90" style="left:58%;top:88%;width:340px"><use href="#nube-a"/></svg>
+      </div>
+      <svg class="bandada" viewBox="0 0 200 80"><use href="#ave" x="0" y="34" width="26" height="11"/><use href="#ave" x="34" y="18" width="22" height="9"/><use href="#ave" x="62" y="40" width="28" height="12"/><use href="#ave" x="98" y="10" width="20" height="8"/><use href="#ave" x="120" y="30" width="24" height="10"/><use href="#ave" x="156" y="22" width="18" height="8"/></svg>
+      <svg class="bandada" viewBox="0 0 200 80"><use href="#ave" x="10" y="20" width="22" height="9"/><use href="#ave" x="44" y="38" width="28" height="12"/><use href="#ave" x="80" y="14" width="20" height="8"/><use href="#ave" x="112" y="34" width="26" height="11"/><use href="#ave" x="150" y="24" width="22" height="9"/></svg>
+    </div></div>
     <div class="contenedor">
       <h2 id="rec-t">Lo que vas a vivir</h2>
       <p class="lead">Llegar a un pueblo no es lo mismo que conocerlo. Este día lo arman quienes viven ahí: de la mañana en el mirador a la tarde que cae en una finca cafetera. <span class="falta">Orden de paradas según Julio; la transcripción dice otro (pendiente #23)</span></p>
@@ -136,6 +163,13 @@ $precio = tm_precio();
       </svg>
       <div class="velo" aria-hidden="true"></div>
       <div class="sol" aria-hidden="true"></div>
+      <div class="luna" aria-hidden="true"></div>
+      <div class="nubes-escena" aria-hidden="true">
+        <svg viewBox="0 0 200 90" style="left:4%;top:18%;width:min(30vw,260px)"><use href="#nube-a"/></svg>
+        <svg viewBox="0 0 160 70" style="left:64%;top:4%;width:min(26vw,220px)"><use href="#nube-b"/></svg>
+        <svg viewBox="0 0 160 70" style="left:38%;top:52%;width:min(22vw,190px)"><use href="#nube-b"/></svg>
+      </div>
+      <svg class="aves-escena" viewBox="0 0 200 80" aria-hidden="true"><use href="#ave" x="0" y="30" width="24" height="10"/><use href="#ave" x="36" y="16" width="20" height="8"/><use href="#ave" x="66" y="36" width="26" height="11"/><use href="#ave" x="104" y="12" width="18" height="8"/><use href="#ave" x="130" y="28" width="22" height="9"/></svg>
       <div class="velo-texto" aria-hidden="true"></div>
       <div class="copy">
         <span class="num" aria-hidden="true">04</span>
@@ -253,6 +287,8 @@ $precio = tm_precio();
   <!-- CIERRE -->
   <section class="seccion cierre oscuro" aria-labelledby="cie-t">
     <div class="resplandor" aria-hidden="true"></div>
+    <div class="estrellas" aria-hidden="true"></div>
+    <div class="luna" aria-hidden="true"></div>
     <div class="contenedor">
       <h2 id="cie-t">Elige tu fecha</h2>
       <p class="lead">Un día para comer, aprender y ver caer la tarde con gente de aquí. <?php echo esc_html($precio); ?> por persona, salidas en fines de semana de diciembre, grupos de 15 personas.</p>

@@ -66,7 +66,8 @@
   gsap.registerPlugin(ScrollTrigger);
   var mm = gsap.matchMedia();
   mm.add({ desk: '(min-width: 900px)', movil: '(max-width: 899px)' }, function (ctx) {
-    var largo = ctx.conditions.desk ? 1.6 : 1.1; // menos recorrido en móvil
+    var largo = ctx.conditions.desk ? 2 : 1.4; // menos recorrido en móvil; incluye la salida de la luna
+    var esc = document.querySelector('.escena'), solE = esc.querySelector('.sol');
     var tl = gsap.timeline({
       defaults: { ease: 'none' },
       scrollTrigger: {
@@ -77,16 +78,25 @@
     });
     // se anima el contenido de la escena, nunca la sección fijada.
     // fromTo con valores finales explícitos: el estado final coincide con el CSS (sin JS se ve así)
+    // el sol arranca con su centro en el borde superior de la escena: ahí lo deja el sol del recorrido (relevo sin salto)
     tl.fromTo('.cielo--ocaso', { opacity: 0 }, { opacity: 1, duration: 0.45 }, 0)
       .fromTo('.cielo--noche', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0.45)
-      .fromTo('.estrellas', { opacity: 0 }, { opacity: 0.85, duration: 0.25 }, 0.7)
-      .fromTo('.sol', { yPercent: -150 }, { yPercent: 38, duration: 0.85 }, 0)
+      .fromTo('.escena .estrellas', { opacity: 0 }, { opacity: 0.85, duration: 0.25 }, 0.7)
+      .fromTo(solE, { y: function () { return -(esc.offsetHeight * 0.44) - solE.offsetHeight / 2; }, yPercent: 0 }, { y: 0, yPercent: 75, duration: 0.85 }, 0)
       .fromTo('.velo', { opacity: 0 }, { opacity: 1, duration: 0.6 }, 0.35)
       .fromTo('.cordillera .c4', { yPercent: 6 }, { yPercent: 0, duration: 1 }, 0)
       .fromTo('.cordillera .c3', { yPercent: 4 }, { yPercent: 0, duration: 1 }, 0)
       .fromTo('.cordillera .c2', { yPercent: 2 }, { yPercent: 0, duration: 1 }, 0)
-      .fromTo('.velo-texto', { opacity: 0 }, { opacity: 1, duration: 0.15 }, 0.8)
-      .fromTo('.escena .copy > *', { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.03, duration: 0.18 }, 0.84);
+      // nubes: del durazno de la tarde al violeta de la noche, derivando despacio
+      .fromTo('.nubes-escena', { xPercent: -4, '--nube-e': '#F3B98A' }, { xPercent: 6, '--nube-e': '#3B3A5C', duration: 1.05 }, 0)
+      // una bandada vuelve hacia la montaña mientras cae el sol
+      .fromTo('.aves-escena', { x: function () { return esc.clientWidth * 1.05; }, y: function () { return esc.clientHeight * 0.18; }, opacity: 0 },
+        { x: function () { return esc.clientWidth * 0.3; }, y: function () { return esc.clientHeight * 0.48; }, opacity: 1, duration: 0.45 }, 0.15)
+      .to('.aves-escena', { opacity: 0, duration: 0.12 }, 0.55)
+      // y sale la luna desde detrás de la cordillera
+      .fromTo('.escena .luna', { yPercent: 260, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.4 }, 0.68)
+      .fromTo('.velo-texto', { opacity: 0 }, { opacity: 1, duration: 0.15 }, 0.95)
+      .fromTo('.escena .copy > *', { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.03, duration: 0.18 }, 0.99);
     // con teclado: si el foco llega a la escena antes de que termine, se salta al final para que el botón se vea
     function alFinal() { var st = tl.scrollTrigger; if (st && st.progress < 0.98) { window.scrollTo({ top: st.end, behavior: 'instant' }); tl.progress(1); } }
     var btnEscena = document.querySelector('.escena .btn'); btnEscena.addEventListener('focus', alFinal);
@@ -138,6 +148,45 @@
        .set(rec, { backgroundColor: '#9C5530', color: tonos[i].tx }, 0.5)
        .to(rec, { backgroundColor: tonos[i].bg, ease: 'none', duration: 0.5 }, 0.5);
     }
+  });
+
+  // ---------- el día en el cielo: el sol acompaña el recorrido, nubes por profundidad, pájaros entre paradas ----------
+  var cielo = rec.querySelector('.cielo-dia'), astro = cielo.querySelector('.astro-sol');
+  var diaP = { p: 0 };
+  function pintarSol() { // sale del horizonte a la izquierda, cima al mediodía y baja al centro, donde lo recibe la escena
+    var w = cielo.clientWidth, h = cielo.clientHeight, s = astro.offsetWidth, p = diaP.p;
+    gsap.set(astro, { x: w * (0.12 + 0.38 * p) - s / 2, y: h - h * 0.82 * Math.sin(Math.PI * p) - s / 2, scale: 0.55 + 0.45 * p * p });
+  }
+  gsap.to(diaP, { p: 1, ease: 'none', onUpdate: pintarSol, scrollTrigger: { trigger: rec, start: 'top top', end: 'bottom bottom', scrub: 0.6 } });
+  pintarSol();
+  ScrollTrigger.addEventListener('refresh', pintarSol);
+  // color de la hora: mañana (al cargar) → mediodía (parada 2) → tarde (parada 3, igual al sol de la escena)
+  var horas = [
+    { '--sol-a': '#FFF8E6', '--sol-b': '#FFDF8A', '--sol-c': '#FFC266', '--sol-glow': 'rgba(255,196,110,.55)', '--nube': '#FFFFFF', '--ave': '#1E2B45' },
+    { '--sol-a': '#FFFBEA', '--sol-b': '#FFE066', '--sol-c': '#FFC93C', '--sol-glow': 'rgba(255,205,70,.6)', '--nube': '#FFFFFF', '--ave': '#1E2B45' },
+    { '--sol-a': '#FFF3D6', '--sol-b': '#FBD07A', '--sol-c': '#F1A447', '--sol-glow': 'rgba(251,208,122,.45)', '--nube': '#A65C38', '--ave': '#2A140C' }
+  ];
+  gsap.set(cielo, horas[0]);
+  [1, 2].forEach(function (i) {
+    if (!capsRec[i]) return;
+    gsap.fromTo(cielo, horas[i - 1], Object.assign({}, horas[i], { ease: 'none', immediateRender: false, scrollTrigger: { trigger: capsRec[i], start: 'top 85%', end: 'top 35%', scrub: true } }));
+  });
+  // nubes: cada profundidad sube a su velocidad (lejos lento, cerca rápido) y deriva un poco
+  [['lejos', 4, -9, -4], ['medio', 10, -22, 5], ['cerca', 20, -48, -9]].forEach(function (c) {
+    gsap.fromTo(cielo.querySelector('.nubes.' + c[0]), { yPercent: c[1], xPercent: 0 },
+      { yPercent: c[2], xPercent: c[3], ease: 'none', scrollTrigger: { trigger: rec, start: 'top bottom', end: 'bottom top', scrub: true } });
+  });
+  // las nubes de adelante van saliendo según avanzas
+  gsap.fromTo(cielo.querySelectorAll('.nubes.cerca svg'), { scale: 1.25, opacity: 0 },
+    { scale: 1, opacity: 1, ease: 'none', stagger: 0.3, scrollTrigger: { trigger: rec, start: 'top 60%', end: 'center center', scrub: true } });
+  // pájaros: una bandada cruza en cada cambio de parada (01→02 de izquierda a derecha, 02→03 de vuelta)
+  var bandadas = cielo.querySelectorAll('.bandada');
+  [[1, -0.3, 0.6, 1.1, 0.22], [2, 1.1, 0.35, -0.35, 0.55]].forEach(function (b, i) {
+    var el = bandadas[i], cap = capsRec[b[0]]; if (!el || !cap) return;
+    gsap.timeline({ scrollTrigger: { trigger: cap, start: 'top bottom', end: 'top 15%', scrub: 0.8, invalidateOnRefresh: true } })
+      .fromTo(el, { x: function () { return cielo.clientWidth * b[1]; }, y: function () { return cielo.clientHeight * b[2]; }, opacity: 0 },
+        { x: function () { return cielo.clientWidth * b[3]; }, y: function () { return cielo.clientHeight * b[4]; }, opacity: 1, ease: 'none', duration: 1 }, 0)
+      .to(el, { opacity: 0, duration: 0.15 }, 0.85);
   });
 
   // títulos de sección: revelado por palabra
