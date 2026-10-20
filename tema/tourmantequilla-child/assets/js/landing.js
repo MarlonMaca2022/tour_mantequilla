@@ -14,7 +14,7 @@
   var barra = document.querySelector('.barra');
   var heroVisible = true, fechasVisible = false, escenaVisible = false;
   // la barra no aparece sobre el hero, ni en Fechas (ya hay botones), ni durante la escena del atardecer (taparía su botón)
-  function pintarBarra() { barra.classList.toggle('visible', !heroVisible && !fechasVisible && !escenaVisible); }
+  function pintarBarra() { if (barra) barra.classList.toggle('visible', !heroVisible && !fechasVisible && !escenaVisible); }
   new IntersectionObserver(function (e) {
     heroVisible = e[0].isIntersecting;
     cab.classList.toggle('solida', !heroVisible);
@@ -26,11 +26,12 @@
   // prototipo: los enlaces que todavía no tienen destino no mueven la página
   document.querySelectorAll('a[href="#"]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); }); });
 
-  // revelado de fotos
+  // revelado de fotos: con GSAP va la cortina atada al scroll (más abajo); esto queda de respaldo
+  var conGsap = !reduce && window.gsap && window.ScrollTrigger;
   var io = new IntersectionObserver(function (es) {
     es.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add('visto'); io.unobserve(x.target); } });
   }, { rootMargin: '0px 0px -10% 0px' });
-  document.querySelectorAll('.revela').forEach(function (el) { reduce ? el.classList.add('visto') : io.observe(el); });
+  document.querySelectorAll('.revela').forEach(function (el) { reduce ? el.classList.add('visto') : conGsap || io.observe(el); });
 
 
 
@@ -64,6 +65,16 @@
   // atardecer: escena atada al scroll. Sin JS o con movimiento reducido queda en su estado final (CSS)
   if (reduce || !window.gsap || !window.ScrollTrigger) { document.querySelector('.franja').classList.add('estatica'); return; }
   gsap.registerPlugin(ScrollTrigger);
+
+  // scroll con inercia, solo con mouse: en táctil el scroll nativo ya tiene inercia y no se toca
+  var lenis = null;
+  if (window.Lenis && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    lenis = new Lenis({ lerp: 0.1, anchors: { offset: -72 } }); // mismo margen que scroll-padding-top
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+    gsap.ticker.lagSmoothing(0);
+  }
+
   var mm = gsap.matchMedia();
   mm.add({ desk: '(min-width: 900px)', movil: '(max-width: 899px)' }, function (ctx) {
     var largo = ctx.conditions.desk ? 2 : 1.4; // menos recorrido en móvil; incluye la salida de la luna
@@ -102,7 +113,7 @@
       .fromTo('.velo-texto', { opacity: 0 }, { opacity: 1, duration: 0.15 }, 0.95)
       .fromTo('.escena .copy > *', { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.03, duration: 0.18 }, 0.99);
     // con teclado: si el foco llega a la escena antes de que termine, se salta al final para que el botón se vea
-    function alFinal() { var st = tl.scrollTrigger; if (st && st.progress < 0.98) { window.scrollTo({ top: st.end, behavior: 'instant' }); tl.progress(1); } }
+    function alFinal() { var st = tl.scrollTrigger; if (st && st.progress < 0.98) { lenis ? lenis.scrollTo(st.end, { immediate: true }) : window.scrollTo({ top: st.end, behavior: 'instant' }); tl.progress(1); } }
     var btnEscena = document.querySelector('.escena .btn'); btnEscena.addEventListener('focus', alFinal);
     return function () { btnEscena.removeEventListener('focus', alFinal); tl.scrollTrigger && tl.scrollTrigger.kill(); tl.kill(); };
   });
@@ -122,7 +133,24 @@
   gsap.timeline({ defaults: { ease: ease } })
     .from('.hero .foto img', { scale: 1.12, duration: 1.6, ease: 'power2.out' }, 0)
     .from(hl, { yPercent: 105, duration: 0.9, stagger: 0.05 }, 0.1)
-    .from('.hero .copy > :not(h1)', { opacity: 0, y: 14, duration: 0.6, stagger: 0.06 }, 0.35);
+    .from('.hero .copy > :not(h1)' + (window.SplitText ? ':not(.sub)' : ''), { opacity: 0, y: 14, duration: 0.6, stagger: 0.06 }, 0.45);
+
+  // párrafos: entran línea por línea con máscara. autoSplit vuelve a partir si cambia el ancho o cargan las fuentes
+  function porLineas(el, deCarga) {
+    SplitText.create(el, {
+      type: 'lines', mask: 'lines', linesClass: 'ln', autoSplit: true,
+      onSplit: function (self) {
+        return gsap.from(self.lines, deCarga
+          ? { yPercent: 100, duration: 0.8, stagger: 0.08, ease: ease, delay: 0.3 }
+          : { yPercent: 100, duration: 0.8, stagger: 0.08, ease: ease, scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
+      }
+    });
+  }
+  if (window.SplitText) {
+    gsap.registerPlugin(SplitText);
+    porLineas(document.querySelector('.hero .sub'), true);
+    document.querySelectorAll('.seccion .lead, .capitulo .texto').forEach(function (el) { porLineas(el, false); });
+  }
   // hero: la foto se queda atrás al bajar
   gsap.to('.hero .foto img', { yPercent: 10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 
@@ -201,11 +229,28 @@
 
   // capítulos: texto entra; números, foto e inserto se mueven a distinta velocidad (profundidad)
   document.querySelectorAll('.capitulo').forEach(function (c) {
-    gsap.from(c.querySelectorAll('.quien, .anfitrion, .texto, .falta'), { opacity: 0, y: 16, duration: 0.6, ease: ease, stagger: 0.06, scrollTrigger: { trigger: c, start: 'top 80%', once: true } });
+    gsap.from(c.querySelectorAll('.quien, .anfitrion, .falta' + (window.SplitText ? '' : ', .texto')), { opacity: 0, y: 16, duration: 0.6, ease: ease, stagger: 0.06, scrollTrigger: { trigger: c, start: 'top 80%', once: true } });
     var st = { trigger: c, start: 'top bottom', end: 'bottom top', scrub: true };
     gsap.fromTo(c.querySelector('.num'), { y: 40 }, { y: -40, ease: 'none', scrollTrigger: st });
     var m = c.querySelector('.medios'); if (m) gsap.fromTo(m, { y: 30 }, { y: -30, ease: 'none', scrollTrigger: st });
     var ins = c.querySelector('.inset'); if (ins) gsap.fromTo(ins, { y: 60 }, { y: -50, ease: 'none', scrollTrigger: st });
+  });
+
+  // fotos con cortina: se destapan atadas al scroll mientras el zoom se asienta (1.25 → 1).
+  // el clip compensa la escala: el marco visible nunca crece más allá de la foto
+  document.querySelectorAll('.revela').forEach(function (img) {
+    var desdeLado = img.classList.contains('inset'); // la pequeña entra de lado para no calcar a la grande
+    img.classList.add('cortina');
+    var v = { p: 0 };
+    function pintar() {
+      var s = 1.25 - 0.25 * v.p, b = (1 - 1 / s) * 50, abre = (100 - 2 * b) * (1 - v.p) + b; // b = borde que cubre la escala
+      gsap.set(img, { scale: s }); // GSAP la combina con el y del parallax del inserto
+      img.style.clipPath = desdeLado
+        ? 'inset(' + b + '% ' + b + '% ' + b + '% ' + abre + '% round 4px)'
+        : 'inset(' + abre + '% ' + b + '% ' + b + '% ' + b + '% round 4px)';
+    }
+    pintar();
+    gsap.to(v, { p: 1, ease: 'power2.out', onUpdate: pintar, scrollTrigger: { trigger: img, start: desdeLado ? 'top 82%' : 'top 92%', end: desdeLado ? 'top 35%' : 'top 45%', scrub: 0.6 } });
   });
 
   // fechas y aliados: entran escalonados; el zócalo de color se pinta

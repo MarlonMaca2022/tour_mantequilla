@@ -229,13 +229,17 @@ html.limpio .falta{display:none!important}
 .pie nav{display:flex;flex-wrap:wrap;gap:0 14px;margin-top:16px;font-size:var(--t-xs)}
 .pie nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 4px}
 
-/* barra fija (móvil) */
-.barra{position:fixed;left:0;right:0;bottom:0;z-index:25;background:#fff;box-shadow:0 -1px 0 var(--linea),0 -8px 24px rgba(30,43,69,.08);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;transform:translateY(110%);transition:transform .35s var(--ease)}
+/* barra de reserva: borde a borde en móvil, píldora flotante en escritorio. Fecha y cupos salen del motor */
+.barra{position:fixed;left:0;right:0;bottom:0;z-index:25;background:#fff;box-shadow:0 -1px 0 var(--linea),0 -8px 24px rgba(30,43,69,.08);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;transform:translateY(130%);transition:transform .55s cubic-bezier(.34,1.45,.64,1)}
 .barra.visible{transform:none}
 .barra .precio{font-family:var(--serif);font-weight:800;font-size:var(--t-m);line-height:1}
 .barra small{display:block;color:var(--bruma);font-size:.8125rem;margin-top:3px}
+.barra .cupos{color:var(--montana);font-weight:700}
 .barra .btn{flex:1;min-height:48px}
-@media (min-width:900px){.barra{display:none}}
+@media (min-width:900px){
+  .barra{left:auto;right:24px;bottom:24px;border-radius:999px;padding:8px 8px 8px 26px;gap:20px;box-shadow:0 0 0 1px var(--linea),0 18px 40px rgba(30,43,69,.18)}
+  .barra .btn{flex:none;min-height:52px}
+}
 .no-js .barra{transform:none}
 
 
@@ -264,6 +268,16 @@ html.limpio .falta{display:none!important}
 .cierre .contenedor{position:relative;z-index:1}
 .cierre .resplandor{position:absolute;right:-12vw;bottom:-30vw;width:70vw;max-width:760px;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(251,208,122,.55) 0%,rgba(233,162,59,.25) 40%,rgba(30,43,69,0) 70%);pointer-events:none}
 .btn{will-change:transform}
+/* borrador 7: scroll con inercia (Lenis, solo con mouse), líneas con máscara, fotos con cortina */
+html.lenis,html.lenis body{height:auto}
+html.lenis{scroll-behavior:auto}
+.lenis.lenis-stopped{overflow:clip}
+.lenis.lenis-smooth iframe{pointer-events:none}
+.ln-mask{padding-bottom:.12em;margin-bottom:-.12em}
+.js .revela.cortina{opacity:1;transition:none}
+main{overflow-x:clip} /* el zoom de la cortina (1.25) no debe abrir scroll horizontal en móvil; clip no rompe sticky ni pin */
+/* móvil: la barra corta (solo fecha y cupos), para no tapar más pantalla */
+@media (max-width:899px){.barra .largo{display:none}.barra .btn{flex:none;padding:0 20px}}
 
 /* ---------- borrador 4: mensaje ---------- */
 .hero .valor{font-size:var(--t-xs);color:#E3E8F0;font-weight:500}

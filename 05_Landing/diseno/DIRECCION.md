@@ -1,5 +1,33 @@
 # Dirección de diseño — Landing Tour Mantequilla
 
+## Borrador 7 · 2026-10-20 · motion de nivel Awwwards
+Lo pidió Julio después de ver el sitio en Hostinger: inspirarse en Awwwards y sumar animaciones más profesionales.
+
+**Qué se revisó:**
+- los listados de [Travel](https://www.awwwards.com/websites/travel/), [Food & Drink](https://www.awwwards.com/websites/food-drink/), [GSAP](https://www.awwwards.com/websites/gsap/) y [Scrolling](https://www.awwwards.com/websites/scrolling/);
+- en vivo, [MontRural](https://mont-rural.emblematica.agency) (Honorable Mention, 21 sep 2026), una masía rural con titular editorial, texto que entra por líneas, una hiedra que crece y un «Book now» flotante;
+- Santioni Spirits (Site of the Day, 5 oct 2026), que no se pudo abrir desde el navegador de pruebas.
+
+El equipo eligió tres de las cuatro propuestas. Quedó fuera la «ruta que se dibuja».
+
+- **Scroll con inercia (Lenis 1.1.20):** solo con mouse. En pantallas táctiles queda el scroll nativo.
+  - Las anclas se deslizan y respetan los 72 px de la cabecera.
+  - El salto con teclado al botón de la escena sigue funcionando.
+  - El relevo del sol sigue en 1 px.
+- **Fotos con cortina:** cada foto de las paradas se destapa de abajo hacia arriba, atada al scroll, mientras su zoom baja de 1.25 a 1.
+  - La foto pequeña entra desde la derecha.
+  - El recorte compensa la escala, así que el marco nunca crece.
+  - `main{overflow-x:clip}` evita que el zoom abra scroll horizontal en móvil.
+- **Párrafos línea por línea (SplitText de GSAP 3.13):** el subtítulo del hero, los `.lead` y los textos de cada parada.
+  - Se vuelven a partir solos si cambia el ancho o cargan las fuentes.
+  - El lector de pantalla lee el párrafo entero.
+- **Barra de reserva con datos reales:** en escritorio es una píldora flotante abajo a la derecha; en móvil va de borde a borde, en versión corta.
+  - Dice «próxima salida 5 de diciembre · Quedan 15 cupos». Sale del motor: la primera fecha con cupo y lo que queda (`tm_render_barra()`).
+  - Si la fecha se agota, pasa a la siguiente. Si no hay ninguna con cupo, no aparece.
+  - No aparece sobre el hero, en Fechas ni en la escena.
+- **Sin JS o con movimiento reducido:** nada de esto corre. Las fotos se ven completas y el texto sin partir.
+- **Medido:** el botón del hero termina en 540 px en 375×667 y 360×667, sin desborde horizontal. Los fps reales quedan pendientes en un equipo de verdad, porque el Chrome automatizado limita el rAF a 1 fps.
+
 ## Borrador 6 · 2026-10-21 · el día en el cielo (motion)
 Lo pidió el equipo: transiciones más sorprendentes «como Dalia», con un sol que acompaña todo el recorrido, nubes, pájaros y que termine en luna. Decisiones: el hero no se fija, y solo hay cielo, sin ilustraciones por parada. Todo es ilustración SVG con GSAP: no hay video ni fotos retocadas, y el sol nunca va encima de una foto.
 - **Recorrido:** una capa de cielo fija (`.cielo-pista` > `.cielo-dia`, sticky) va detrás de las paradas.

@@ -310,10 +310,7 @@ $precio = tm_precio();
   </div>
 </footer>
 
-<div class="barra" role="region" aria-label="Reservar">
-  <div><span class="precio"><?php echo esc_html($precio); ?></span><small>por persona · diciembre</small></div>
-  <a class="btn" href="#fechas" data-evento="barra_reservar_fecha">Reservar mi fecha</a>
-</div>
+<?php tm_render_barra(); ?>
 
 <?php wp_footer(); ?>
 </body>

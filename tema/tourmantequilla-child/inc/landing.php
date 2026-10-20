@@ -94,11 +94,44 @@ add_action('wp_enqueue_scripts', function () {
     }
     wp_enqueue_style('tm-fuentes', 'https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,700;0,800;1,700&family=Alegreya+Sans:wght@400;500;700&display=swap', array(), null);
     wp_enqueue_style('tm-landing', $uri . '/assets/css/landing.css', array(), filemtime($dir . '/assets/css/landing.css'));
-    wp_enqueue_script('gsap', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js', array(), null, true);
-    wp_enqueue_script('gsap-st', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js', array('gsap'), null, true);
-    wp_enqueue_script('tm-landing', $uri . '/assets/js/landing.js', array('gsap-st'), filemtime($dir . '/assets/js/landing.js'), true);
+    wp_enqueue_script('gsap', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js', array(), null, true);
+    wp_enqueue_script('gsap-st', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js', array('gsap'), null, true);
+    wp_enqueue_script('gsap-split', 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js', array('gsap'), null, true);
+    wp_enqueue_script('lenis', 'https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js', array(), null, true);
+    wp_enqueue_script('tm-landing', $uri . '/assets/js/landing.js', array('gsap-st', 'gsap-split', 'lenis'), filemtime($dir . '/assets/js/landing.js'), true);
     wp_localize_script('tm-landing', 'tmTour', array('precio' => tm_tour() ? (float) tm_tour()->get_price() : 0));
 }, 20);
+
+/**
+ * Barra flotante de reserva: precio, próxima salida con cupo y cupos que quedan, del motor.
+ * Sin fechas con cupo no se imprime (nada de escasez inventada).
+ */
+function tm_render_barra()
+{
+    $tour = tm_tour();
+    if (!$tour || !function_exists('dd_tour_future_dates')) {
+        return;
+    }
+    $proxima = null;
+    foreach (dd_tour_future_dates($tour->get_id()) as $e) {
+        if (dd_tour_remaining($e) > 0) {
+            $proxima = $e;
+            break;
+        }
+    }
+    if (!$proxima) {
+        return;
+    }
+    $rem = dd_tour_remaining($proxima);
+    // "Sábado 5 de diciembre" → "5 de diciembre": en la barra no cabe el día de la semana
+    $dia = preg_replace('/^\S+\s+/u', '', tm_fecha_larga($proxima['date']));
+    ?>
+<div class="barra" role="region" aria-label="Reservar">
+  <div><span class="precio"><?php echo esc_html(tm_precio($tour)); ?></span><small><span class="largo">por persona · próxima salida </span><?php echo esc_html($dia); ?></small><small class="cupos"><?php echo esc_html(sprintf(_n('Queda %d cupo', 'Quedan %d cupos', $rem, 'tourmantequilla'), $rem)); ?></small></div>
+  <a class="btn" href="#fechas" data-evento="barra_reservar_fecha">Reservar mi fecha</a>
+</div>
+<?php
+}
 
 /**
  * Sección "Elige tu fecha": una tarjeta por fecha futura, con estado real del motor

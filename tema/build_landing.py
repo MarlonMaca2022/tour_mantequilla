@@ -24,6 +24,10 @@ assert n == 1, 'bloque de fechas'
 body, n = re.subn(r'      <p style="margin-top:16px"><span class="falta">Fechas de ejemplo.*?</p>\n', '', body, flags=re.S)
 assert n == 1, 'nota de fechas de ejemplo'
 
+# Barra flotante: fecha y cupos reales del motor
+body, n = re.subn(r'<div class="barra" .*?\n</div>\n', '<?php tm_render_barra(); ?>\n', body, flags=re.S)
+assert n == 1, 'barra'
+
 # Botón de pendientes: solo para el equipo
 body, n = re.subn(r'(      <button class="toggle-falta".*?</button>\n)',
                   r"      <?php if (tm_ver_pendientes()) : ?>\n\1      <?php endif; ?>\n", body, flags=re.S)

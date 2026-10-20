@@ -241,13 +241,17 @@ html.limpio .falta{display:none!important}
 .pie nav{display:flex;flex-wrap:wrap;gap:0 14px;margin-top:16px;font-size:var(--t-xs)}
 .pie nav a{display:inline-flex;align-items:center;min-height:44px;padding:0 4px}
 
-/* barra fija (móvil) */
-.barra{position:fixed;left:0;right:0;bottom:0;z-index:25;background:#fff;box-shadow:0 -1px 0 var(--linea),0 -8px 24px rgba(30,43,69,.08);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;transform:translateY(110%);transition:transform .35s var(--ease)}
+/* barra de reserva: borde a borde en móvil, píldora flotante en escritorio. Fecha y cupos salen del motor */
+.barra{position:fixed;left:0;right:0;bottom:0;z-index:25;background:#fff;box-shadow:0 -1px 0 var(--linea),0 -8px 24px rgba(30,43,69,.08);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:12px;transform:translateY(130%);transition:transform .55s cubic-bezier(.34,1.45,.64,1)}
 .barra.visible{transform:none}
 .barra .precio{font-family:var(--serif);font-weight:800;font-size:var(--t-m);line-height:1}
 .barra small{display:block;color:var(--bruma);font-size:.8125rem;margin-top:3px}
+.barra .cupos{color:var(--montana);font-weight:700}
 .barra .btn{flex:1;min-height:48px}
-@media (min-width:900px){.barra{display:none}}
+@media (min-width:900px){
+  .barra{left:auto;right:24px;bottom:24px;border-radius:999px;padding:8px 8px 8px 26px;gap:20px;box-shadow:0 0 0 1px var(--linea),0 18px 40px rgba(30,43,69,.18)}
+  .barra .btn{flex:none;min-height:52px}
+}
 .no-js .barra{transform:none}
 
 
@@ -276,6 +280,16 @@ html.limpio .falta{display:none!important}
 .cierre .contenedor{position:relative;z-index:1}
 .cierre .resplandor{position:absolute;right:-12vw;bottom:-30vw;width:70vw;max-width:760px;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(251,208,122,.55) 0%,rgba(233,162,59,.25) 40%,rgba(30,43,69,0) 70%);pointer-events:none}
 .btn{will-change:transform}
+/* borrador 7: scroll con inercia (Lenis, solo con mouse), líneas con máscara, fotos con cortina */
+html.lenis,html.lenis body{height:auto}
+html.lenis{scroll-behavior:auto}
+.lenis.lenis-stopped{overflow:clip}
+.lenis.lenis-smooth iframe{pointer-events:none}
+.ln-mask{padding-bottom:.12em;margin-bottom:-.12em}
+.js .revela.cortina{opacity:1;transition:none}
+main{overflow-x:clip} /* el zoom de la cortina (1.25) no debe abrir scroll horizontal en móvil; clip no rompe sticky ni pin */
+/* móvil: la barra corta (solo fecha y cupos), para no tapar más pantalla */
+@media (max-width:899px){.barra .largo{display:none}.barra .btn{flex:none;padding:0 20px}}
 
 /* ---------- borrador 4: mensaje ---------- */
 .hero .valor{font-size:var(--t-xs);color:#E3E8F0;font-weight:500}
@@ -640,12 +654,14 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
 </footer>
 
 <div class="barra" role="region" aria-label="Reservar">
-  <div><span class="precio">$440.000</span><small>por persona · diciembre</small></div>
+  <div><span class="precio">$440.000</span><small><span class="largo">por persona · próxima salida </span>5 de diciembre</small><small class="cupos">Quedan 15 cupos</small></div>
   <a class="btn" href="#fechas" data-evento="barra_reservar_fecha">Reservar mi fecha</a>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/SplitText.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
 <script>
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -663,7 +679,7 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
   var barra = document.querySelector('.barra');
   var heroVisible = true, fechasVisible = false, escenaVisible = false;
   // la barra no aparece sobre el hero, ni en Fechas (ya hay botones), ni durante la escena del atardecer (taparía su botón)
-  function pintarBarra() { barra.classList.toggle('visible', !heroVisible && !fechasVisible && !escenaVisible); }
+  function pintarBarra() { if (barra) barra.classList.toggle('visible', !heroVisible && !fechasVisible && !escenaVisible); }
   new IntersectionObserver(function (e) {
     heroVisible = e[0].isIntersecting;
     cab.classList.toggle('solida', !heroVisible);
@@ -675,11 +691,12 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
   // prototipo: los enlaces que todavía no tienen destino no mueven la página
   document.querySelectorAll('a[href="#"]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); }); });
 
-  // revelado de fotos
+  // revelado de fotos: con GSAP va la cortina atada al scroll (más abajo); esto queda de respaldo
+  var conGsap = !reduce && window.gsap && window.ScrollTrigger;
   var io = new IntersectionObserver(function (es) {
     es.forEach(function (x) { if (x.isIntersecting) { x.target.classList.add('visto'); io.unobserve(x.target); } });
   }, { rootMargin: '0px 0px -10% 0px' });
-  document.querySelectorAll('.revela').forEach(function (el) { reduce ? el.classList.add('visto') : io.observe(el); });
+  document.querySelectorAll('.revela').forEach(function (el) { reduce ? el.classList.add('visto') : conGsap || io.observe(el); });
 
 
 
@@ -693,6 +710,16 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
   // atardecer: escena atada al scroll. Sin JS o con movimiento reducido queda en su estado final (CSS)
   if (reduce || !window.gsap || !window.ScrollTrigger) { document.querySelector('.franja').classList.add('estatica'); return; }
   gsap.registerPlugin(ScrollTrigger);
+
+  // scroll con inercia, solo con mouse: en táctil el scroll nativo ya tiene inercia y no se toca
+  var lenis = null;
+  if (window.Lenis && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    lenis = new Lenis({ lerp: 0.1, anchors: { offset: -72 } }); // mismo margen que scroll-padding-top
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+    gsap.ticker.lagSmoothing(0);
+  }
+
   var mm = gsap.matchMedia();
   mm.add({ desk: '(min-width: 900px)', movil: '(max-width: 899px)' }, function (ctx) {
     var largo = ctx.conditions.desk ? 2 : 1.4; // menos recorrido en móvil; incluye la salida de la luna
@@ -731,7 +758,7 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
       .fromTo('.velo-texto', { opacity: 0 }, { opacity: 1, duration: 0.15 }, 0.95)
       .fromTo('.escena .copy > *', { opacity: 0, y: 20 }, { opacity: 1, y: 0, stagger: 0.03, duration: 0.18 }, 0.99);
     // con teclado: si el foco llega a la escena antes de que termine, se salta al final para que el botón se vea
-    function alFinal() { var st = tl.scrollTrigger; if (st && st.progress < 0.98) { window.scrollTo({ top: st.end, behavior: 'instant' }); tl.progress(1); } }
+    function alFinal() { var st = tl.scrollTrigger; if (st && st.progress < 0.98) { lenis ? lenis.scrollTo(st.end, { immediate: true }) : window.scrollTo({ top: st.end, behavior: 'instant' }); tl.progress(1); } }
     var btnEscena = document.querySelector('.escena .btn'); btnEscena.addEventListener('focus', alFinal);
     return function () { btnEscena.removeEventListener('focus', alFinal); tl.scrollTrigger && tl.scrollTrigger.kill(); tl.kill(); };
   });
@@ -751,7 +778,24 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
   gsap.timeline({ defaults: { ease: ease } })
     .from('.hero .foto img', { scale: 1.12, duration: 1.6, ease: 'power2.out' }, 0)
     .from(hl, { yPercent: 105, duration: 0.9, stagger: 0.05 }, 0.1)
-    .from('.hero .copy > :not(h1)', { opacity: 0, y: 14, duration: 0.6, stagger: 0.06 }, 0.35);
+    .from('.hero .copy > :not(h1)' + (window.SplitText ? ':not(.sub)' : ''), { opacity: 0, y: 14, duration: 0.6, stagger: 0.06 }, 0.45);
+
+  // párrafos: entran línea por línea con máscara. autoSplit vuelve a partir si cambia el ancho o cargan las fuentes
+  function porLineas(el, deCarga) {
+    SplitText.create(el, {
+      type: 'lines', mask: 'lines', linesClass: 'ln', autoSplit: true,
+      onSplit: function (self) {
+        return gsap.from(self.lines, deCarga
+          ? { yPercent: 100, duration: 0.8, stagger: 0.08, ease: ease, delay: 0.3 }
+          : { yPercent: 100, duration: 0.8, stagger: 0.08, ease: ease, scrollTrigger: { trigger: el, start: 'top 85%', once: true } });
+      }
+    });
+  }
+  if (window.SplitText) {
+    gsap.registerPlugin(SplitText);
+    porLineas(document.querySelector('.hero .sub'), true);
+    document.querySelectorAll('.seccion .lead, .capitulo .texto').forEach(function (el) { porLineas(el, false); });
+  }
   // hero: la foto se queda atrás al bajar
   gsap.to('.hero .foto img', { yPercent: 10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 
@@ -830,11 +874,28 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
 
   // capítulos: texto entra; números, foto e inserto se mueven a distinta velocidad (profundidad)
   document.querySelectorAll('.capitulo').forEach(function (c) {
-    gsap.from(c.querySelectorAll('.quien, .anfitrion, .texto, .falta'), { opacity: 0, y: 16, duration: 0.6, ease: ease, stagger: 0.06, scrollTrigger: { trigger: c, start: 'top 80%', once: true } });
+    gsap.from(c.querySelectorAll('.quien, .anfitrion, .falta' + (window.SplitText ? '' : ', .texto')), { opacity: 0, y: 16, duration: 0.6, ease: ease, stagger: 0.06, scrollTrigger: { trigger: c, start: 'top 80%', once: true } });
     var st = { trigger: c, start: 'top bottom', end: 'bottom top', scrub: true };
     gsap.fromTo(c.querySelector('.num'), { y: 40 }, { y: -40, ease: 'none', scrollTrigger: st });
     var m = c.querySelector('.medios'); if (m) gsap.fromTo(m, { y: 30 }, { y: -30, ease: 'none', scrollTrigger: st });
     var ins = c.querySelector('.inset'); if (ins) gsap.fromTo(ins, { y: 60 }, { y: -50, ease: 'none', scrollTrigger: st });
+  });
+
+  // fotos con cortina: se destapan atadas al scroll mientras el zoom se asienta (1.25 → 1).
+  // el clip compensa la escala: el marco visible nunca crece más allá de la foto
+  document.querySelectorAll('.revela').forEach(function (img) {
+    var desdeLado = img.classList.contains('inset'); // la pequeña entra de lado para no calcar a la grande
+    img.classList.add('cortina');
+    var v = { p: 0 };
+    function pintar() {
+      var s = 1.25 - 0.25 * v.p, b = (1 - 1 / s) * 50, abre = (100 - 2 * b) * (1 - v.p) + b; // b = borde que cubre la escala
+      gsap.set(img, { scale: s }); // GSAP la combina con el y del parallax del inserto
+      img.style.clipPath = desdeLado
+        ? 'inset(' + b + '% ' + b + '% ' + b + '% ' + abre + '% round 4px)'
+        : 'inset(' + abre + '% ' + b + '% ' + b + '% ' + b + '% round 4px)';
+    }
+    pintar();
+    gsap.to(v, { p: 1, ease: 'power2.out', onUpdate: pintar, scrollTrigger: { trigger: img, start: desdeLado ? 'top 82%' : 'top 92%', end: desdeLado ? 'top 35%' : 'top 45%', scrub: 0.6 } });
   });
 
   // fechas y aliados: entran escalonados; el zócalo de color se pinta
