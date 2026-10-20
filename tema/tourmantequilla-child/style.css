@@ -1,0 +1,33 @@
+/*
+Theme Name: Tour Mantequilla Child
+Template: hello-elementor
+Description: Child theme del Tour Armenia Mantequilla. Landing a código + motor de reservas multi-fecha heredado de Dalia Dorada (ADR-004 de Dalia).
+Version: 0.1.0
+Text Domain: tourmantequilla
+*/
+
+/* Estilos de las páginas WooCommerce (producto, checkout). La landing usa assets/css/landing.css. */
+:root{
+  --tm-montana:#1E2B45; --tm-bruma:#5E6F8C; --tm-corredor:#A3231B; --tm-corredor-hover:#8A1C15;
+  --tm-linea:#DCE0E6; --tm-gris:#F1F3F6; --tm-ok:#2F7D3A;
+}
+
+/* Selector de fechas en la página del producto (mismo markup que Dalia: .dd-tour-*) */
+.dd-tour-picker{margin:0 0 20px}
+.dd-tour-picker-head,.dd-tour-qty-head{display:flex;gap:10px;align-items:center;margin:0 0 10px}
+.dd-step-badge{width:28px;height:28px;border-radius:50%;background:var(--tm-montana);color:#fff;display:grid;place-items:center;font-weight:700;flex:none}
+.dd-step-text{display:grid}
+.dd-tour-picker-sub,.dd-tour-qty-sub{font-size:.875rem;color:var(--tm-bruma)}
+.dd-tour-dates-list{display:grid;gap:8px}
+.dd-tour-date-card{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1.5px solid var(--tm-linea);border-radius:8px;padding:12px 14px;cursor:pointer;background:#fff}
+.dd-tour-date-card:has(input:checked){border-color:var(--tm-montana);box-shadow:0 0 0 2px var(--tm-montana)}
+.dd-tour-date-card input{margin:0 8px 0 0}
+.dd-tour-date-card.is-agotado{background:var(--tm-gris);cursor:default;color:var(--tm-bruma)}
+.dd-tour-date-cupo{font-size:.875rem;font-weight:700}
+.dd-stock-ok{color:var(--tm-ok)}
+.dd-stock-bajo{color:var(--tm-corredor)}
+.dd-stock-agotado{color:var(--tm-bruma)}
+.dd-tour-subtotal{font-weight:700;margin:10px 0}
+.dd-tour-trust{list-style:none;margin:12px 0 0;padding:0;display:flex;gap:16px;font-size:.875rem;color:var(--tm-bruma)}
+form.cart.dd-tour-shop .single_add_to_cart_button{background:var(--tm-corredor);border-radius:999px;min-height:52px;padding:0 28px;font-weight:700}
+form.cart.dd-tour-shop .single_add_to_cart_button:hover{background:var(--tm-corredor-hover)}
