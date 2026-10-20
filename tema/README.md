@@ -26,6 +26,20 @@ Las fechas y los cupos se cargan en **Productos → Tour Mantequilla → pestañ
 - Copiar el tema después de cada cambio: `bash tema/sync-local.sh`.
 - Pago de prueba: «Cheque» renombrado como «Pago de prueba (solo local)». En producción va OnePay.
 
+## Sitio de validación en Hostinger (para Julio)
+
+- URL: `https://palevioletred-sardine-209107.hostingersite.com/`. Está oculto con el «Próximamente» de WooCommerce
+  y se ve con el enlace privado `?woo-share=<llave>` (la llave: `wp option get woocommerce_share_key`).
+- Primera vez (tema + configuración + producto): `bash tema/deploy-hostinger.sh`. Solo el tema: `bash tema/deploy-hostinger.sh --tema`.
+  Llave SSH `~/.ssh/tourmantequilla_deploy`. No sube la BD local; si se corre otra vez, no pisa los cupos reservados.
+- ⚠️ **La cuenta SSH es compartida con sitios de clientes en producción (daliadorada.com entre ellos).** Todo comando lleva
+  `--path` del tour. Nunca `wp cache flush` ni vaciar el memcached, porque puede ser compartido.
+- WP-CLI con `/opt/alt/php83/usr/bin/php` (el de la web). El PHP 8.1 por defecto no ve el memcached, y la web seguía
+  leyendo opciones viejas.
+- LiteSpeed Cache está **desactivado** a propósito: el CDN guardaba la respuesta del enlace privado sin la cookie
+  `woo-share`, y al reservar se caía en «coming soon».
+- Pago: «Pago de prueba (validación)», sin cobro. Los correos salen de verdad: probar con correos propios.
+
 ## Verificado el 2026-10-20 en local
 
 - 16 personas en una fecha de 15 → «Solo quedan 15 cupos para esa fecha».
