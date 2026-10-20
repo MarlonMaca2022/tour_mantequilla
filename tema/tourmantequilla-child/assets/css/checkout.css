@@ -1,0 +1,88 @@
+/* Checkout clásico + página de gracias (inc/checkout.php). Tokens de la landing (DIRECCION.md). */
+:root{
+  --cal:#FBFCFA; --montana:#1E2B45; --bruma:#5E6F8C; --corredor:#A3231B; --corredor-hover:#8A1C15;
+  --gris-fondo:#F1F3F6; --linea:#DCE0E6; --estado-ok:#2F7D3A; --atardecer:#E9A23B;
+  --serif:"Alegreya",Georgia,serif; --sans:"Alegreya Sans",system-ui,sans-serif;
+}
+body.woocommerce-checkout,body.woocommerce-account{background:var(--gris-fondo);color:var(--montana);font-family:var(--sans);font-size:1.0625rem;line-height:1.5}
+body.woocommerce-checkout a,body.woocommerce-account a{color:var(--montana)}
+:focus-visible{outline:3px solid var(--montana);outline-offset:2px;box-shadow:0 0 0 6px var(--atardecer)}
+
+/* cabecera de Hello Elementor: solo el nombre del tour, de vuelta a la landing */
+.woocommerce-checkout .site-header,.woocommerce-account .site-header{background:var(--montana);padding:0}
+.woocommerce-checkout .site-header .header-inner,.woocommerce-account .site-header .header-inner{min-height:60px;align-items:center}
+.woocommerce-checkout .site-title a,.woocommerce-account .site-title a{font-family:var(--serif);font-weight:800;font-size:1.25rem;color:#fff;text-decoration:none}
+.woocommerce-checkout .site-header .site-navigation,.woocommerce-checkout .site-description{display:none}
+.woocommerce-checkout .site-footer,.woocommerce-account .site-footer{display:none}
+
+/* página */
+.woocommerce-checkout .page-header .entry-title{font-family:var(--serif);font-weight:800;font-size:clamp(2rem,6vw,3rem);line-height:1.05;margin:32px 0 4px}
+.tm-paso{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 16px;margin:0 0 20px}
+.tm-paso-eyebrow{margin:0;color:var(--bruma);font-weight:700;font-size:.9375rem}
+.tm-paso-volver{display:inline-flex;align-items:center;min-height:44px;font-weight:700}
+
+/* rejilla: datos a la izquierda, reserva y pago a la derecha */
+.woocommerce-checkout form.checkout{display:grid;gap:20px}
+@media (min-width:900px){
+  .woocommerce-checkout form.checkout{grid-template-columns:7fr 5fr;column-gap:32px;align-items:start}
+  .woocommerce-checkout #customer_details{grid-column:1;grid-row:1 / span 2}
+  .woocommerce-checkout #order_review_heading{grid-column:2;grid-row:1;margin:0}
+  .woocommerce-checkout #order_review{grid-column:2;grid-row:2;position:sticky;top:20px}
+}
+.woocommerce-checkout #customer_details.col2-set{display:grid;gap:20px;width:100%}
+.woocommerce-checkout #customer_details .col-1,.woocommerce-checkout #customer_details .col-2{float:none;width:100%;max-width:none}
+.woocommerce-checkout .woocommerce-billing-fields,.woocommerce-checkout .woocommerce-additional-fields,.woocommerce-checkout #order_review{background:#fff;border-radius:8px;padding:20px;box-shadow:0 0 0 1px var(--linea)}
+.woocommerce-checkout h3{font-family:var(--serif);font-weight:800;font-size:1.5rem;margin:0 0 12px}
+
+/* campos */
+.woocommerce form .form-row{margin:0 0 14px;padding:0}
+.woocommerce form .form-row label{font-weight:700;margin-bottom:4px;display:block}
+.woocommerce form .form-row input.input-text,.woocommerce form .form-row textarea,.woocommerce form .form-row select,.woocommerce .select2-container .select2-selection--single{border:1.5px solid var(--linea);border-radius:8px;min-height:48px;padding:10px 12px;font:inherit;color:var(--montana);background:#fff;width:100%}
+.woocommerce .select2-container .select2-selection--single .select2-selection__rendered{line-height:26px;padding:0}
+.woocommerce .select2-container .select2-selection--single .select2-selection__arrow{height:46px}
+.woocommerce form .form-row textarea{min-height:88px}
+.woocommerce form .form-row input.input-text:focus,.woocommerce form .form-row textarea:focus{border-color:var(--montana);outline:0;box-shadow:0 0 0 2px var(--montana)}
+.woocommerce form .form-row .description{color:var(--bruma);font-size:.875rem;margin-top:4px}
+.woocommerce form .form-row .required{color:var(--corredor);text-decoration:none}
+.woocommerce form .form-row.woocommerce-invalid input.input-text{border-color:var(--corredor)}
+
+/* resumen */
+.woocommerce-checkout-review-order-table{border:0!important;margin:0 0 16px!important;font-size:1rem}
+.woocommerce-checkout-review-order-table th,.woocommerce-checkout-review-order-table td{border:0!important;border-bottom:1px solid var(--linea)!important;padding:10px 0!important;background:none!important}
+.woocommerce-checkout-review-order-table thead{display:none}
+.woocommerce-checkout-review-order-table .product-name{font-weight:700}
+.woocommerce-checkout-review-order-table .variation{display:block;font-weight:400;color:var(--bruma);margin:4px 0 0}
+.woocommerce-checkout-review-order-table .variation dt,.woocommerce-checkout-review-order-table .variation dd{display:inline;margin:0;float:none}
+.woocommerce-checkout-review-order-table .variation dd p{display:inline;margin:0}
+.woocommerce-checkout-review-order-table td:last-child,.woocommerce-checkout-review-order-table th:last-child{text-align:right}
+.woocommerce-checkout-review-order-table .order-total th,.woocommerce-checkout-review-order-table .order-total td{border-bottom:0!important;font-family:var(--serif);font-size:1.375rem;font-weight:800}
+
+/* pago */
+.woocommerce-checkout #payment{background:none!important;border-radius:0}
+.woocommerce-checkout #payment ul.payment_methods{padding:0!important;border:0!important}
+.woocommerce-checkout #payment ul.payment_methods li{list-style:none;border:1.5px solid var(--linea);border-radius:8px;padding:12px;margin:0 0 8px}
+.woocommerce-checkout #payment div.payment_box{background:var(--gris-fondo)!important;color:var(--montana)!important;border-radius:6px;font-size:.9375rem}
+.woocommerce-checkout #payment div.payment_box::before{display:none}
+.woocommerce-checkout #payment div.form-row{padding:0!important}
+.woocommerce-checkout .woocommerce-privacy-policy-text{font-size:.875rem;color:var(--bruma)}
+.woocommerce-checkout #place_order{display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;border:0;border-radius:999px;background:var(--corredor);color:#fff;font:700 1.125rem var(--sans);cursor:pointer;float:none;margin:8px 0 0}
+.woocommerce-checkout #place_order:hover{background:var(--corredor-hover)}
+.woocommerce-checkout #payment .place-order{display:flex;flex-direction:column}
+.tm-checkout-confianza{clear:both;width:100%;list-style:none;margin:12px 0 0;padding:0;display:grid;gap:4px;font-size:.9375rem;color:var(--bruma);text-align:center}
+
+/* avisos */
+.woocommerce-error,.woocommerce-message,.woocommerce-info{border-radius:8px;border-top:0!important;border-left:4px solid var(--corredor);background:#fff!important;color:var(--montana)!important}
+.woocommerce-message,.woocommerce-info{border-left-color:var(--estado-ok)}
+.woocommerce-error::before,.woocommerce-message::before,.woocommerce-info::before{display:none}
+
+/* gracias */
+.woocommerce-order .woocommerce-thankyou-order-received{font-family:var(--serif);font-weight:800;font-size:1.75rem;line-height:1.15;margin:8px 0 20px}
+.woocommerce-order ul.order_details{display:grid;gap:8px;padding:20px;margin:0 0 24px;background:#fff;border-radius:8px;box-shadow:0 0 0 1px var(--linea)}
+.woocommerce-order ul.order_details li{float:none;border:0;margin:0;padding:0;text-transform:none;font-size:.9375rem;color:var(--bruma)}
+.woocommerce-order ul.order_details li strong{display:inline;color:var(--montana);font-size:1rem}
+.woocommerce-order .woocommerce-order-details,.woocommerce-order .woocommerce-customer-details{background:#fff;border-radius:8px;padding:20px;box-shadow:0 0 0 1px var(--linea);margin-bottom:20px}
+.woocommerce-order h2{font-family:var(--serif);font-weight:800;font-size:1.5rem;margin:0 0 12px}
+.tm-gracias{background:#fff;border-radius:8px;padding:20px;box-shadow:0 0 0 1px var(--linea);border-top:6px solid var(--atardecer);margin:0 0 20px}
+.tm-gracias ul{list-style:none;margin:0 0 8px;padding:0;font-size:1.125rem}
+.tm-gracias a{display:inline-flex;align-items:center;min-height:44px;font-weight:700}
+.tm-falta{display:inline-block;background:#FFF4B8;color:#4A3B00;border:1.5px dashed #8A6D00;border-radius:3px;padding:4px 8px;font-size:.875rem;font-weight:700}

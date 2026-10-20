@@ -21,5 +21,6 @@ add_action('wp_enqueue_scripts', function () {
 
 if (class_exists('WooCommerce') || in_array('woocommerce/woocommerce.php', (array) get_option('active_plugins', array()), true)) {
     require_once get_stylesheet_directory() . '/inc/reservas.php';
+    require_once get_stylesheet_directory() . '/inc/checkout.php';
 }
 require_once get_stylesheet_directory() . '/inc/landing.php';

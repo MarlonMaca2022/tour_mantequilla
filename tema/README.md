@@ -41,3 +41,29 @@ python -I tema/build_landing.py .
 bash tema/sync-local.sh
 ```
 (desde la raíz del repo). Sobrescribe `templates/landing-tour.php`, `assets/css/landing.css` y `assets/js/landing.js`.
+
+## Checkout (clásico, igual que Dalia)
+
+`inc/checkout.php`: campos mínimos (nombre y apellido, celular, correo, país), sin cupones, botón
+«Confirmar reserva · $total», confianza bajo el botón, «← Cambiar fecha o personas», carrito que
+salta directo al checkout y página de gracias con fecha y personas. Estilo en `assets/css/checkout.css`.
+
+## Configuración que vive en la BD (no está en git; repetir en cada sitio nuevo)
+
+| Qué | Cómo |
+|---|---|
+| Idioma español (Colombia) para WP, WooCommerce y Hello | `wp language core install es_CO --activate` + `wp language plugin install woocommerce es_CO` + `wp language theme install hello-elementor es_CO` |
+| Checkout y carrito clásicos | Página Checkout = `[woocommerce_checkout]`, Carrito = `[woocommerce_cart]` (no bloques) |
+| Moneda | COP, 0 decimales, miles con «.», símbolo a la izquierda sin espacio (`woocommerce_currency_pos = left`) |
+| Formato de fecha | `j \d\e F \d\e Y` («20 de octubre de 2026») |
+| Zona horaria | `America/Bogota` |
+| Portada | Página «Inicio» con la plantilla «Landing del tour» |
+| Producto | Simple, virtual, slug `tour-mantequilla`, $440.000, fechas en la pestaña «Tour» |
+| Pago de prueba | «Cheque» habilitado como «Pago de prueba (solo local)». **Apagarlo en producción** |
+
+## Pendiente del checkout
+
+- Algunos textos del correo de confirmación salen en inglés (falta en la traducción es_CO de WooCommerce 11). Se pueden reemplazar con el mismo mapa de `gettext` o personalizar en WooCommerce → Ajustes → Correos.
+- ⛔ ¿Jhon necesita cédula o NIT para facturar? Si sí, se agrega el campo.
+- ⛔ Sitio y hora de recogida (#27) en la página de gracias y en el correo.
+- OnePay: medios de pago reales bajo el botón cuando esté conectado.

@@ -795,7 +795,3 @@ function dd_cart_is_tour_only()
     }
     return true;
 }
-
-add_filter('woocommerce_order_button_text', function ($text) {
-    return dd_cart_is_tour_only() ? __('Confirmar reserva', 'tourmantequilla') : $text;
-});
