@@ -182,9 +182,9 @@ add_action('woocommerce_thankyou', function ($order_id) {
         return;
     }
     echo '<section class="tm-gracias"><h2>' . esc_html__('Tu día en Armenia Mantequilla', 'tourmantequilla') . '</h2><ul>' . implode('', $filas) . '</ul>';
-    // ⛔ Sitio y hora de recogida (#27): cuando estén, van aquí y en el correo.
-    if (tm_ver_pendientes()) {
-        echo '<p class="tm-falta">' . esc_html__('Pendiente: sitio y hora de recogida en Medellín y qué llevar (#27).', 'tourmantequilla') . '</p>';
+    $recogida = tm_texto_recogida();
+    if ($recogida !== '') {
+        echo '<p>' . esc_html($recogida) . '</p>';
     }
     $wa = tm_whatsapp_url(sprintf('Hola, hice la reserva #%s del Tour Mantequilla.', $order->get_order_number()));
     if ($wa !== '') {
@@ -192,6 +192,44 @@ add_action('woocommerce_thankyou', function ($order_id) {
     }
     echo '</section>';
 }, 5);
+
+/**
+ * "Te recogemos en … entre … La ubicación exacta te la enviamos…" desde las metas del
+ * producto (_tour_punto / _tour_hora, pestaña Tour). Fuente: 04_Contenido/DATOS-DE-DALIA-DORADA.md.
+ */
+function tm_texto_recogida()
+{
+    $tour = tm_tour();
+    if (!$tour) {
+        return '';
+    }
+    $punto = trim((string) get_post_meta($tour->get_id(), '_tour_punto', true));
+    $hora = trim((string) get_post_meta($tour->get_id(), '_tour_hora', true));
+    if ($punto === '') {
+        return '';
+    }
+    $txt = rtrim(sprintf(__('Te recogemos en %s', 'tourmantequilla'), $punto) . ($hora !== '' ? ' ' . $hora : ''), '.') . '. ';
+    return $txt . __('La ubicación exacta del punto de encuentro te la enviamos antes del tour.', 'tourmantequilla');
+}
+
+/** Correo al cliente: la recogida debajo del detalle del pedido (solo pedidos con tour). */
+add_action('woocommerce_email_after_order_table', function ($order, $sent_to_admin, $plain_text) {
+    if ($sent_to_admin || !$order) {
+        return;
+    }
+    $tiene_tour = false;
+    foreach ($order->get_items() as $item) {
+        if ($item->get_meta('_dd_tour_date')) {
+            $tiene_tour = true;
+            break;
+        }
+    }
+    $txt = $tiene_tour ? tm_texto_recogida() : '';
+    if ($txt === '') {
+        return;
+    }
+    echo $plain_text ? "\n" . $txt . "\n" : '<p style="margin:16px 0">' . esc_html($txt) . '</p>';
+}, 10, 3);
 
 /** Assets del checkout y la página de gracias: misma tipografía y color que la landing. */
 add_action('wp_enqueue_scripts', function () {

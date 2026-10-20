@@ -30,7 +30,7 @@ Actualizado: 2026-10-19
 | 24 | Validar el prototipo (`05_Landing/diseno/prototipo.html`) y decidir dónde se elige la cantidad de personas | Julio | — | 05_Landing/diseno/DIRECCION.md |
 | 25 | **Bloqueante feria.** Foto auténtica de cada anfitrión (con permiso) y una frase suya: La Florida, Caterine y Fernando (Cabras), Luz Marina (Bonne Nature), Atardeceres | Jhon → los 4 | antes del 29 oct | Mesa de expertos 19 oct |
 | 26 | Elegir las fechas (fines de semana, según Julio 19 oct) y cargarlas en el motor de reservas heredado; las fechas no son limitante porque el motor define los días que se decidan | Jhon / Julio | antes del 29 oct | Julio 19 oct |
-| 27 | Transporte: ¿ida y vuelta incluidos? Sitio y hora de recogida en Medellín y hora de regreso | Jhon | antes del 29 oct | Transcripción 16 oct |
+| 27 | ~~Transporte, sitio y hora de recogida, hora de regreso~~ Tomados del tour de Atardeceres (20 oct, Julio): ida y vuelta, recogida en Medellín o San Antonio de Prado entre 7:00 y 8:00 a. m., regreso ~8:30 p. m. Falta: **dirección exacta** del punto de encuentro y que Jhon confirme que aplica igual a este tour | Jhon | antes del 29 oct | `04_Contenido/DATOS-DE-DALIA-DORADA.md` |
 | 28 | Política de cambio de fecha y cancelación (¿cambio sin costo si llueve?) | Jhon / Julio | antes del 29 oct | Mesa de expertos 19 oct |
 | 29 | Preguntas reales que hacen por WhatsApp los clientes del tour propio de Atardeceres (para la FAQ) | Jhon | — | Mesa de expertos 19 oct |
 | 30 | Reseñas verificables del tour de Atardeceres (con permiso); si no hay, la landing no lleva prueba social | Jhon | — | Mesa de expertos 19 oct |
