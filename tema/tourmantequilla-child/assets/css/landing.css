@@ -143,6 +143,12 @@ html.limpio .falta{display:none!important}
 .sol{position:absolute;left:50%;top:44%;width:min(34vw,220px);aspect-ratio:1;margin-left:calc(min(34vw,220px) / -2);border-radius:50%;background:radial-gradient(circle,#FFF3D6 0%,#FBD07A 55%,#F1A447 100%);box-shadow:0 0 80px 30px rgba(251,208,122,.45);transform:translateY(75%);will-change:transform}
 .cordillera{position:absolute;left:0;right:0;bottom:0;width:100%;height:62%}
 .cordillera path{vector-effect:non-scaling-stroke}
+/* cordillera elaborada (tema/gen_cordillera.py): troncos, luces que titilan de noche */
+.cordillera .tronco{fill:none;stroke-width:1.6;stroke-linecap:round}
+.cordillera .luces circle{animation:titila 3.2s ease-in-out infinite alternate}
+.cordillera .luces circle:nth-child(3n){animation-duration:2.3s}
+.cordillera .luces circle:nth-child(4n+1){animation-delay:-1.4s}
+@keyframes titila{to{opacity:.55}}
 .velo{position:absolute;inset:0;background:rgba(10,16,30,.35);pointer-events:none}
 .cordillera{z-index:1}.velo-texto{z-index:2}
 .escena .copy{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:0 var(--gutter) calc(48px + env(safe-area-inset-bottom));display:grid;gap:14px;justify-items:start;max-width:var(--ancho);margin:0 auto}

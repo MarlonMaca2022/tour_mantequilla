@@ -14,6 +14,14 @@ Lo pidió el equipo: transiciones más sorprendentes «como Dalia», con un sol 
 - **Móvil:** sin la capa de nubes lejanas. El botón del hero sigue en el primer pantallazo (termina en 548 px en 375×667).
 - **Contraste:** el texto que pasa sobre el sol o las nubes no baja de 4,85:1. Se midió cruzando la posición del texto con la del sol y las nubes cada 60 px de scroll; no es un muestreo de píxeles.
 - **Pendiente:** medir los fps en un celular real. En la pestaña de prueba el navegador frena las animaciones y la medida no sirvió.
+- **Cordillera elaborada (21 oct):** reemplaza las 4 capas de picos rectos. La genera `tema/gen_cordillera.py` con semilla fija, y siempre sale igual.
+  - 5 capas con crestas suaves y degradado, más claras a lo lejos por la bruma.
+  - Bandas de bruma entre capas, que se apagan al caer la noche.
+  - Árboles en silueta en las dos lomas cercanas.
+  - Hileras de cafetal en puntos en la loma de adelante, siguiendo su forma.
+  - De noche las capas lejanas se oscurecen y prenden las luces de un pueblo lejano y de algunas fincas, que titilan.
+  - Se ajusta recortando y no estirando (`xMidYMax slice`): en móvil recorta los lados y los árboles no se deforman.
+  - Es ilustración genérica: no pretende ser un lugar exacto.
 
 ## Borrador 5 · 2026-10-21 · titular nuevo
 El H1 del borrador 4 era largo, sonaba a lista y no emocionaba. El subtítulo de los «cuatro vecinos te abren su casa» sonaba mal (equipo, 21 oct). Se rehízo la mesa de los seis lentes con estas reglas:

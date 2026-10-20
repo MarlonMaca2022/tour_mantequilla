@@ -93,6 +93,10 @@
       .fromTo('.aves-escena', { x: function () { return esc.clientWidth * 1.05; }, y: function () { return esc.clientHeight * 0.18; }, opacity: 0 },
         { x: function () { return esc.clientWidth * 0.3; }, y: function () { return esc.clientHeight * 0.48; }, opacity: 1, duration: 0.45 }, 0.15)
       .to('.aves-escena', { opacity: 0, duration: 0.12 }, 0.55)
+      // la bruma se apaga con la luz y el pueblo y las fincas prenden sus luces
+      .fromTo('.cordillera .bruma', { opacity: 1 }, { opacity: 0.3, duration: 0.6 }, 0.4)
+      .fromTo('.cordillera .luces', { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0.72)
+      .fromTo('.cordillera .noche-lejos', { opacity: 0 }, { opacity: 0.55, duration: 0.5 }, 0.45)
       // y sale la luna desde detrás de la cordillera
       .fromTo('.escena .luna', { yPercent: 260, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.4 }, 0.68)
       .fromTo('.velo-texto', { opacity: 0 }, { opacity: 1, duration: 0.15 }, 0.95)

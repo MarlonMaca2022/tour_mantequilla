@@ -67,3 +67,13 @@ salta directo al checkout y página de gracias con fecha y personas. Estilo en `
 - ⛔ ¿Jhon necesita cédula o NIT para facturar? Si sí, se agrega el campo.
 - ⛔ Sitio y hora de recogida (#27) en la página de gracias y en el correo.
 - OnePay: medios de pago reales bajo el botón cuando esté conectado.
+
+## Cordillera de la escena del atardecer
+
+La genera `tema/gen_cordillera.py` (semilla fija, siempre sale igual) y la escribe en `prototipo.html`:
+```
+python -I tema/gen_cordillera.py .
+python -I tema/build_landing.py .
+bash tema/sync-local.sh
+```
+Para cambiar las montañas se ajustan las capas (`cresta(base, amplitud, ondulación, picos)`), los colores o la cantidad de árboles y luces en el script. No se edita el SVG a mano.
