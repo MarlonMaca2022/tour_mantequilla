@@ -57,7 +57,7 @@ Los logos de las **4 empresas** van en la landing (pedido de la reunión). Jhon 
 **QR:** Jhon pidió un código QR que lleve a la información del tour y a las fechas disponibles (para el estand de la feria, 29 a 31 oct). Hay que generarlo apuntando a la URL final y que funcione ya en esa fecha.
 
 ## 5. Reglas de contenido (no negociables)
-- **Fotos auténticas, sin IA.** Lo pidió Jhon en la reunión. Las fotos oficiales de la finca Atardeceres están en un álbum de iCloud: enlace en `../03_Fotos/atardeceres-dalia-dorada/FOTOS-OFICIALES.md`. Cada foto debe rastrearse a quién la tomó (`../03_Fotos/INVENTARIO.md`).
+- **Fotos auténticas, sin IA generativa.** Lo pidió Jhon en la reunión; Julio aclaró el 21 oct que la IA sí se puede usar para mejorar o reescalar fotos reales, nunca para generar imágenes. Las fotos oficiales de la finca Atardeceres están en un álbum de iCloud: enlace en `../03_Fotos/atardeceres-dalia-dorada/FOTOS-OFICIALES.md`. Cada foto debe rastrearse a quién la tomó (`../03_Fotos/INVENTARIO.md`).
 - **Una afirmación, una fuente.** Si un dato no tiene fuente en esta carpeta, no se publica. Esto aplica sobre todo a: «leche cruda», «sin conservantes, colorantes o espesantes», licor de café, «trazabilidad real», «más de 80 años». Ver las secciones «Por verificar» de cada ficha.
 - **Corregir antes de publicar:** «hace 10 años, en 2014» (Bonne Nature) → «desde 2014»; «San nicolás / citará / cerro bravo» → San Nicolás, Citará, Cerro Bravo; unificar «Armenia» y «Armenia Mantequilla».
 - **Nada de cupos o prueba social inventados** (contadores falsos, «+347 tazas», etc.): esa lección viene de Dalia Dorada.

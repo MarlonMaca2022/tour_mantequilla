@@ -91,3 +91,15 @@ python -I tema/build_landing.py .
 bash tema/sync-local.sh
 ```
 Para cambiar las montañas se ajustan las capas (`cresta(base, amplitud, ondulación, picos)`), los colores o la cantidad de árboles y luces en el script. No se edita el SVG a mano.
+
+## Recortes de fotos reales (borrador 8, propuesta)
+
+`tema/gen_recortes.py` saca de `03_Fotos/` la cordillera, el pueblo, la luna, los granos de café y las nubes, con transparencia, y los deja en `05_Landing/assets/recortes/`. Siempre da la misma salida y no usa IA. Los usa `05_Landing/diseno/prototipo-realismo.html`, que **todavía no pasa a la plantilla** (pendiente #36). Necesita Pillow y numpy en el Python base, porque `-I` ignora los paquetes instalados con `--user`:
+```
+python -m pip install --no-user pillow numpy
+python -I tema/gen_recortes.py .
+```
+**Copia para Julio en Hostinger (2026-10-21):** `https://palevioletred-sardine-209107.hostingersite.com/propuesta-realismo-bcae4bb9/`.
+Es una carpeta estática en `public_html/propuesta-realismo-bcae4bb9/` (`diseno/index.html` + solo los archivos de `assets/` que usa). No toca WordPress, el tema ni la BD, y no pasa por el «Próximamente»: cualquiera con el enlace la ve. Lleva `noindex` y no lista carpetas. Para actualizarla, se vuelve a subir la carpeta y se le da permisos `644`/`755`, porque el unzip deja los archivos privados y da 403. El HTML se cachea 7 días, así que hay que avisar que recarguen con `?v=2`. Para borrarla: `rm -rf` de esa carpeta, solo esa.
+
+Si Julio lo aprueba, hay que copiar `assets/recortes/` a `tourmantequilla-child/assets/img/recortes/` (igual que `fotos-web`) antes de `build_landing.py`.

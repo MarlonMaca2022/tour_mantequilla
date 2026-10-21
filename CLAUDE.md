@@ -95,8 +95,8 @@ prototipo, hay que regenerarlos. Si se toca la plantilla a mano, el prototipo de
 
 1. **Cada dato lleva fuente. Sin fuente no se publica.** Lo dudoso va con ⛔ (README §Reglas).
 2. **Lo original no se edita** (`00_Reuniones`, `01_WhatsApp`): el trabajo va en archivos aparte.
-3. **Nada inventado:** ni cupos, ni reseñas, ni prueba social. Fotos auténticas, sin IA, con permiso
-   (pendientes 19, 20 y 25). Las afirmaciones de salud o regulatorias se verifican antes de publicarse.
+3. **Nada inventado:** ni cupos, ni reseñas, ni prueba social. Fotos auténticas, con permiso
+   (pendientes 19, 20 y 25). IA solo para mejorar o reescalar fotos reales, nunca para generar imágenes (aclaración de Julio, 21 oct). Las afirmaciones de salud o regulatorias se verifican antes de publicarse.
 4. **Las 4 empresas tienen el mismo peso.** La landing no parece de Dalia Dorada.
 5. **Editar solo el child theme.** Nunca el tema padre ni el core de WP. El diseño de Elementor vive en la BD.
 6. **El contenido baja, el código sube.** Nunca subir la BD local a producción.

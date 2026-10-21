@@ -6,7 +6,7 @@ Landing independiente, con pasarela de pagos (OnePay) y dominio propio, para un 
 | Carpeta | Qué hay |
 |---|---|
 | `00_Reuniones/` | Notas de reunión |
-| `01_WhatsApp/` | Textos originales de Jhon, sin editar |
+| `01_WhatsApp/` | Textos originales de Jhon, sin editar, y audios de Julio con su transcripción literal |
 | `02_Empresas/` | Una carpeta por empresa: `FICHA.md`, logo, documentos |
 | `03_Fotos/` | Fotos por empresa + `INVENTARIO.md`. Atardeceres: enlace al álbum oficial en `atardeceres-dalia-dorada/FOTOS-OFICIALES.md` |
 | `04_Contenido/` | Textos del tour (nombre, fechas, precio, itinerario) |
@@ -25,7 +25,7 @@ Landing independiente, con pasarela de pagos (OnePay) y dominio propio, para un 
 - Lo original no se edita; el trabajo va en archivos aparte.
 - Cada dato lleva su fuente. Sin fuente, no se publica.
 - Las afirmaciones de salud o regulatorias (leche cruda, sin conservantes, registro INVIMA, licor) se verifican antes de salir en la web.
-- Fotos auténticas, sin IA.
+- Fotos auténticas. IA solo para mejorar o reescalar fotos reales, nunca para generar imágenes (aclaración de Julio, 21 oct).
 
 ## Entrada de material nuevo
 Lo que llegue por WhatsApp o correo se deja en `01_WhatsApp/` (texto) o se copia directo a `02_Empresas/<empresa>/` (logos, documentos) y `03_Fotos/<empresa>/` (fotos). No se crean carpetas de paso: cada archivo entra ya clasificado y registrado en la ficha o en `03_Fotos/INVENTARIO.md`.

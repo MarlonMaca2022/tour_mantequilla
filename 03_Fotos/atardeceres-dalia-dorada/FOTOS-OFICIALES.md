@@ -13,7 +13,7 @@ https://www.icloud.com/sharedalbum/#B1y5qXGF1cJkho
 ## Reglas
 - **Este archivo es el único lugar donde vive el enlace.** Si cambia o deja de funcionar, se corrige aquí y en ningún otro sitio. Los demás documentos apuntan a este archivo.
 - Un álbum compartido de iCloud puede cerrarlo quien lo creó. **Por eso se descargan las fotos y se guardan en esta carpeta** (ver «Qué falta»): el enlace no es el respaldo.
-- Fotos auténticas, sin IA. Cada foto que se use debe quedar en `../INVENTARIO.md` con su archivo y qué se ve.
+- Fotos auténticas. IA solo para mejorar o reescalar fotos reales, nunca para generar imágenes (aclaración de Julio, 21 oct). Cada foto que se use debe quedar en `../INVENTARIO.md` con su archivo y qué se ve.
 - Las fotos pesadas (> 100 MB) van a la NAS, no al Drive ni al repo. Para la web, comprimidas.
 
 ## Qué falta

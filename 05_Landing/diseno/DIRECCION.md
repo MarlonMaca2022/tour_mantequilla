@@ -1,5 +1,82 @@
 # Dirección de diseño — Landing Tour Mantequilla
 
+## Borrador 8 · 2026-10-21 · propuesta · realismo con recortes de fotos reales
+Lo pidió Julio: llevar la página al siguiente nivel cambiando las animaciones vectoriales de los pasos del tour por elementos reales sacados de nuestras fotos. **Es una propuesta y no está aprobada.** Vive en `prototipo-realismo.html`. `prototipo.html`, la plantilla y el tema no cambian hasta que Julio la apruebe (pendiente #36).
+
+**Decisiones (equipo, 21 oct):**
+- **Primera vuelta:** el análisis más una prueba con 4 recortes.
+- **Recorte por luz y color con un script reproducible** (`tema/gen_recortes.py`), sin IA (regla de Jhon, 16 oct). Ningún píxel se inventa ni se pinta. Lo complejo va a un diseñador (#38).
+- **Alcance: el cielo más objetos reales por parada.** Esto revierte la regla del borrador 6 («solo cielo, sin ilustraciones por parada, nunca fotos retocadas»).
+
+### Qué se puede sacar de cada foto (análisis)
+
+| Hoy (vector) | Real | Foto | Cómo | Estado |
+|---|---|---|---|---|
+| Cordillera SVG (5 capas) | 3 capas: la cresta con el pico, las lomas sobre el mar de nubes y la ladera cercana | La Florida 01 | Contorno por columna: la bruma ya separa las capas por tono | **En la prueba**. ⛔ Es la vista desde La Florida y la escena es de Atardeceres (#37) |
+| Loma con árboles y cafetal | El pueblo con la torre de la iglesia | La Florida 08, sin cielo y agrandada por Marlon (vuelta 3) | Quitarle el halo azul del cielo; tono de tarde y de noche con filtros | **En la prueba**. ⛔ Pasó por IA (#40). Primero se probó la silueta de la 04, que se veía pixelada |
+| Luna (degradado CSS) | La luna real | La Florida 08 | Canal rojo contra el azul del día, más niveles para pasarla a la noche | **En la prueba**. Foto de Alex Betancure (#19) |
+| Nubes SVG | Nubes blancas, doradas y violetas | La Florida 02 y 04 | Máscara suave por el color del cielo (azul en la 02, naranja en la 04), quitando el cielo mezclado en el borde | **En la prueba** (vuelta 2). El cúmulo de La Florida 01 no se separa por color: diseñador (#38) |
+| Sol (CSS) | Se queda | — | Ninguna foto tiene un disco de sol usable (en la 07 está detrás de la torre, en la 02 y la 04 quemado) | — |
+| Bandada | Se queda | — | No hay fotos de aves volando; a ese tamaño la silueta ya se ve real | — |
+| Parada 01 | Pareja de toritos posados | La Florida 03 | Diseñador: verde sobre bosque verde | #38 |
+| Parada 01 | Guayaba partida | La Florida 03 | Máscara por color | Fase 2 |
+| Parada 01 | Horno de barro | La Florida 05 | Descartado: es una captura de video | — |
+| Parada 02 | **Granos de café sueltos** | Cabras 05 y 06 | Elipse medida a mano | **En la prueba** |
+| Parada 02 | Bolsa de café azul | Cabras 09 | Máscara por color (celeste sobre rojo) | Fase 2 |
+| Parada 02 | Botella de licor | Cabras 05 | Diseñador. ⛔ No destacarla hasta resolver el #7 | #38 |
+| Parada 02 | Chemex | Cabras 03 | Diseñador: vidrio transparente | #38 |
+| Parada 03 | Queso con cuadrícula, queso naranja, romero | Bonne Nature 02 y 03 | Diseñador. Son las mejores fotos (cámara, en alta) | #38 |
+| Parada 03 | Cuña cenital, granos, manzanilla | Bonne Nature 01 | Diseñador: el mantel de cuadros impide la máscara | #38 |
+| 04 Atardeceres | La escena (cordillera, pueblo, luna) | — | ⛔ Las fotos de la finca siguen en el álbum de iCloud (#15) | — |
+
+### Cómo quedó la prueba (`prototipo-realismo.html`)
+- **Escena del atardecer:** la cordillera SVG se reemplaza por 4 `<img>`: lejos, medio, cerca y el pueblo encima.
+  - Cada capa tiene un ancho mínimo de 760 px y un punto focal (`--f`/`--x`). En móvil recorta los lados sin perder el pico ni la torre, y no abre scroll horizontal.
+  - Parallax 6/4/2 % como antes. Al caer la noche, cada capa baja su brillo (`filter: brightness` atado al scroll) hasta quedar en silueta.
+  - 14 luces titilan sobre las casas reales y el reloj de la torre se enciende.
+  - La bruma SVG y la capa `noche-lejos` desaparecen: la bruma ya está en la foto.
+- **Luna:** la escena y el cierre usan la foto. Su borde inferior se pierde en el azul de la foto: no se completa el disco (sería inventar); se desvanece en 28 px, como si la tapara la bruma.
+- **Parada 02:** 6 granos flotan sobre la foto como primer plano. Vienen desenfocados por la foto, y eso los hace leer como cercanos a la cámara. Cada uno lleva su propia velocidad (`data-prof`) y un giro leve. En móvil, los de arriba no se suben al texto.
+- **Peso:** los 16 recortes suman 172 KB. Las capas grandes no llevan `-w480`/`-w960`: en móvil se ven a 760 px CSS, así que la versión chica se vería blanda.
+
+**Vuelta 2 (21 oct): nitidez y nubes reales.** El equipo vio los recortes pixelados y pidió cambiar también las nubes vectoriales por nubes de las fotos.
+- **Por qué se pixelaban:** las fotos de La Florida llegaron por WhatsApp (912–1000 px, muy comprimidas). En escritorio se estiran 1,6 veces y en una pantalla retina unas 3; el borde duro de 1 px se volvía escalera.
+- **Arreglo sin IA:** las siluetas salen al doble (1824–2000 px) y el borde se calcula sobre el contorno interpolado (en curva) en vez del píxel. Además se mete 0,6 px hacia adentro para no arrastrar el hilo claro del cielo. El interior sigue blando: eso solo lo arreglan los originales en alta (#19) o agrandar con IA (#40).
+- **Nubes reales:**
+  - **Recorrido:** las 11 nubes SVG del cielo pasan a ser 2 nubes reales de la foto 02, repetidas con tamaños distintos y en espejo. De mañana y al mediodía van blancas: la misma nube con su relieve de luz, pasada a blanco con sombra fría, como la luna. En la tarde se funden con su versión dorada original (`--tarde`, atado al mismo scroll que el color del sol).
+  - **Escena:** las 3 nubes pasan de doradas (02) a violetas (04) al caer la noche (`--noche-e`). De noche se apagan con el brillo, porque su borde dorado es luz de atardecer.
+  - **Cómo se recortan:** máscara por el color del cielo detrás de la nube, sin la mezcla de cielo en el borde (matting estándar). Solo los lados donde la nube seguía fuera del encuadre se desvanecen.
+- **Lo que se nota:**
+  - de mañana, sobre el fondo crema, las nubes blancas apenas se ven, igual que las vectoriales (van al 50–75 % de opacidad);
+  - solo hay 2 nubes de día y 1 de noche, así que se repiten: hacen falta más fotos de cielo, y el álbum de Atardeceres (#15) puede traerlas;
+  - quedan unos puntos claros en valles muy angostos de la cresta.
+
+**Vuelta 3 (21 oct): el pueblo nítido al final.** Marlon montó una versión de La Florida 08 (la torre roja con el pueblo) sin cielo y agrandada 4× para cerrar la escena.
+- **Una sola imagen del pueblo** (`pueblo-iglesia.webp`, foto 08 nítida). Reemplaza del todo la silueta de la foto 04, que se veía pixelada: Marlon pidió no tener dos. De tarde va con tono cálido (sepia y brillo .82); al caer la noche se oscurece (brillo .45) y prende las luces en sus ventanas reales. La luna sale detrás de la aguja y termina justo sobre la cruz, como en la foto original de Alex.
+- **Tamaño:** `--wp` limita el ancho a 150 svh para que en pantallas anchas y bajas (1440×760) la torre no quede debajo de la cabecera; los lados se disuelven en las montañas. Las medidas van en `cqw` (la escena es contenedor) porque se usan en `left` y en `top`.
+- **Medido** (Chrome, 1440×900, 1440×760 y 375×667): la luna queda centrada sobre la cruz, 15 px arriba, y sin scroll horizontal. En móvil la torre queda casi toda detrás del velo del texto.
+- **Esta imagen pasó por IA** (remove.bg preview + Upscayl 4×). Está permitido: Julio aclaró el 21 oct que la IA sirve para mejorar y reescalar fotos reales, nunca para generar (#40).
+- **Firma y crédito:** la firma de Alex Betancure queda en la imagen (no se recorta) y la escena lleva un crédito «Foto del pueblo y de la luna: Alex Betancure» (#19).
+
+**Vuelta 4 (21 oct): nubes más limpias.** Julio aclaró (vía Marlon) que la IA sí se puede usar para mejorar y reescalar fotos reales, nunca para generar.
+- **Fotos de las nubes agrandadas:** La Florida 02 y 04 pasan por Upscayl 4× (`upscayl-standard-4x`, en `03_Fotos/finca-mirador-la-florida/mejoradas/`) y las nubes se recortan sobre esa versión. Se probaron tres modelos: `high-fidelity-4x` inventa grano y manchas (descartado) y `remacri-4x` casi no mejora.
+- **Resultado:** desaparecen los bloques de compresión de WhatsApp y el borde queda más fino. Salen al doble del tamaño original (2×). La mejora es moderada, porque las nubes ya venían desenfocadas en la foto.
+- **Hilo celeste:** en el borde semitransparente de las nubes de la 02 el azul se limita al mayor entre rojo y verde.
+- **Cielo de la mañana:** el fondo crema del recorrido no deja leer una nube blanca. Detrás de las nubes va un celeste suave (`.cielo-dia::before`) que se apaga hacia el mediodía (`--azul`, atado al mismo scroll que el color del sol). El texto azul oscuro sobre ese celeste supera de sobra 4,5:1.
+- **Foto de banco** (`dramatic-sunset-clouds…jpg`): no se usa hasta saber el sitio, la licencia y si es generada con IA (#41).
+- **Sin JS o con movimiento reducido:** la escena queda de noche, con las capas en silueta, las luces y la luna. Los granos quedan quietos.
+- **Verificado 21 oct** (Chrome con iframes de 1440×900 y 375×667):
+  - el recorrido completo de la escena (tarde → noche);
+  - sin scroll horizontal (`scrollWidth` 367 < 375);
+  - sin errores en consola;
+  - con movimiento reducido;
+  - el script corrido dos veces da los mismos hashes.
+  - El texto sigue sobre `.velo-texto` sin cambios y se lee bien en las capturas. **El contraste no se midió píxel a píxel**: queda pendiente repetir la medición del borrador 6 antes de aprobar.
+- **Lo que se nota:**
+  - las nubes vectoriales ahora desentonan al lado de lo real (fase 2);
+  - el pueblo se escala ~1,44× en escritorio y se ve algo blando (pedir originales, #19);
+  - la foto 01 ya sale en la franja de las cuatro casas, así que la cordillera se repite.
+
 ## Borrador 7 · 2026-10-20 · motion de nivel Awwwards
 Lo pidió Julio después de ver el sitio en Hostinger: inspirarse en Awwwards y sumar animaciones más profesionales.
 
@@ -31,6 +108,26 @@ El equipo eligió tres de las cuatro propuestas. Quedó fuera la «ruta que se d
   - Si se entra a mitad de página (por ejemplo, en `/#fechas`), ya están completos.
 - **Sin JS o con movimiento reducido:** nada de esto corre. Las fotos se ven completas y el texto sin partir.
 - **Medido:** el botón del hero termina en 540 px en 375×667 y 360×667, sin desborde horizontal. Los fps reales quedan pendientes en un equipo de verdad, porque el Chrome automatizado limita el rAF a 1 fps.
+
+## Borrador 8.1 · 2026-10-21 · vuelta de mobile (iPhone), solo en `prototipo-realismo.html`
+Julio (audio 2 y mensaje del 21 oct): en desktop está «una nota», pero en su iPhone las transiciones se sienten bruscas. Causas y cambios:
+- **Escena del atardecer:** en móvil ya no usa el pin de ScrollTrigger, que en Safari de iPhone tiembla y salta cuando la barra aparece o se esconde.
+  - La sección mide `max(100svh, 560px) + 140svh` y la escena queda fija con `position: sticky` (clase `.pegajosa`). El recorrido es el mismo y el escritorio sigue con pin.
+- **La noche, sin filtros animados:** cada capa de montaña y el pueblo tienen una copia oscura encima (`.nc`, con el filtro fijo) que se funde con opacidad.
+  - Animar `filter` repintaba fotos de 1824 a 2000 px en cada cuadro; la opacidad la mueve la GPU. Se ve igual en las dos versiones.
+- **Inercia en táctil:** las 7 animaciones con `scrub: true` pasan a `scrub: 0.5` cuando no hay Lenis, porque 1 a 1 cada tirón del dedo se veía como un salto. Con mouse no cambia nada.
+- **Barra de Safari:** `ScrollTrigger.config({ ignoreMobileResize: true })` evita que cuando la barra aparece o se esconde se recalcule todo.
+- **Nubes** en capa propia de GPU (`will-change: transform`) y las fotos de la escena con `decoding="async"`.
+- **Hero:** la foto pasa de una franja de `22svh` a `30svh` (199 px en un iPhone 14), para que se vea la gente.
+- **Medido en Chrome a 390×664 (iPhone 14 con barras):**
+  - La escena queda en `top: 0` al 0, 25, 50, 75 y 100 % del recorrido.
+  - La noche y la luna llegan al final y no hay pin-spacer.
+  - Sin errores ni desborde. El botón del hero termina en 647 px.
+- **Medido en 1440×800:** sigue con pin y con el mismo fundido.
+- ⛔ **Falta:**
+  - **Probarlo en el iPhone de Julio.** Desde aquí no se pueden medir los fps reales.
+  - **En un iPhone SE con las barras de Safari (375×548), el botón del hero queda en 609 px, fuera del primer pantallazo.** Antes también quedaba fuera. En la vista limpia, sin las notas amarillas, sube.
+  - **El cambio de color del fondo del recorrido repinta una sección grande.** Si en el iPhone se siente pesado, es lo siguiente a revisar.
 
 ## Borrador 6 · 2026-10-21 · el día en el cielo (motion)
 Lo pidió el equipo: transiciones más sorprendentes «como Dalia», con un sol que acompaña todo el recorrido, nubes, pájaros y que termine en luna. Decisiones: el hero no se fija, y solo hay cielo, sin ilustraciones por parada. Todo es ilustración SVG con GSAP: no hay video ni fotos retocadas, y el sol nunca va encima de una foto.
