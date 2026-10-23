@@ -7,7 +7,15 @@
 
 Marlon la generó con Gemini: `03_Fotos/_prueba-ia/gemini-2026-10-21.jpg`. Pasó la revisión de cerca: las manos y las tazas están bien, las caras son distintas entre sí y no trae marca de agua visible. El único detalle es un logo falso en una chaqueta.
 
-No se le corrigió el color: ya casa con el dorado de las demás fotos. Tampoco se agrandó: con 1696 px alcanza. La sirven `assets/fotos-web/prueba-ia/portada-ia{,-w960,-w480}.webp`. Se ve en `prototipo-realismo.html?portada=ia` con la etiqueta «Imagen generada con IA · prueba», que no se esconde ni en el modo limpio.
+No se le corrigió el color: ya casa con el dorado de las demás fotos. Tampoco se agrandó: con 1696 px alcanza. La sirven `assets/fotos-web/prueba-ia/portada-ia{,-w960,-w480}.webp`. Desde el cambio de Julio (abajo) se ve en `prototipo-realismo.html?portada=gemini`, con la etiqueta «Imagen hecha con IA · prueba», que no se esconde ni en el modo limpio.
+
+## Decisión (23 oct)
+
+Las empresas eligieron la portada de Julio. Ahora es la imagen fija de `prototipo.html`, sin `?portada=` y sin la etiqueta de IA (lo pidió Marlon). Se borraron el selector de portadas y las versiones web de la de Gemini (`portada-ia*.webp`). El original sigue en `03_Fotos/_prueba-ia/`.
+
+## Cambio de Julio (21 oct, 4:54 p. m.)
+
+Julio mandó otra imagen para reemplazar la de Gemini: `03_Fotos/_prueba-ia/julio-2026-10-21.jpeg`. Parece rehecha con IA a partir de la foto real del grupo frente al atardecer (La Florida 02). Se agrandó con Upscayl y ahora es la de `?portada=ia`, con el encuadre centrado en el sol y el grupo (`object-position: 50% 75%`). La de Gemini sigue disponible en `?portada=gemini`.
 
 ## Dónde se genera
 
