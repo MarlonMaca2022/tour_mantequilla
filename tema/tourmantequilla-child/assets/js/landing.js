@@ -75,17 +75,23 @@
     gsap.ticker.lagSmoothing(0);
   }
 
+  // en táctil no hay Lenis: con scrub 1 a 1 cada tirón del dedo se ve como un salto. Un poco de inercia lo suaviza
+  var suave = lenis ? true : 0.5;
+  ScrollTrigger.config({ ignoreMobileResize: true }); // la barra de Safari que aparece y se esconde no recalcula todo
   var mm = gsap.matchMedia();
   mm.add({ desk: '(min-width: 900px)', movil: '(max-width: 899px)' }, function (ctx) {
     var largo = ctx.conditions.desk ? 2 : 1.4; // menos recorrido en móvil; incluye la salida de la luna
     var esc = document.querySelector('.escena'), solE = esc.querySelector('.sol');
+    // móvil: la escena se queda quieta con position:sticky (la mueve el navegador, sin el temblor ni los saltos del pin de JS
+    // en Safari de iPhone); la sección mide 1 + largo pantallas, así que el recorrido es el mismo que con pin
+    var atd = document.querySelector('.atardecer'); atd.classList.toggle('pegajosa', !ctx.conditions.desk);
     var tl = gsap.timeline({
       defaults: { ease: 'none' },
-      scrollTrigger: {
+      scrollTrigger: ctx.conditions.desk ? {
         trigger: '.atardecer', start: 'top top',
         end: function () { return '+=' + Math.round(window.innerHeight * largo); },
         scrub: 0.6, pin: true, anticipatePin: 1, invalidateOnRefresh: true
-      }
+      } : { trigger: '.atardecer', start: 'top top', end: 'bottom bottom', scrub: 0.6, invalidateOnRefresh: true }
     });
     // se anima el contenido de la escena, nunca la sección fijada.
     // fromTo con valores finales explícitos: el estado final coincide con el CSS (sin JS se ve así)
@@ -95,19 +101,20 @@
       .fromTo('.escena .estrellas', { opacity: 0 }, { opacity: 0.85, duration: 0.25 }, 0.7)
       .fromTo(solE, { y: function () { return -(esc.offsetHeight * 0.44) - solE.offsetHeight / 2; }, yPercent: 0 }, { y: 0, yPercent: 75, duration: 0.85 }, 0)
       .fromTo('.velo', { opacity: 0 }, { opacity: 1, duration: 0.6 }, 0.35)
-      .fromTo('.cordillera .c4', { yPercent: 6 }, { yPercent: 0, duration: 1 }, 0)
-      .fromTo('.cordillera .c3', { yPercent: 4 }, { yPercent: 0, duration: 1 }, 0)
-      .fromTo('.cordillera .c2', { yPercent: 2 }, { yPercent: 0, duration: 1 }, 0)
+      .fromTo('.cordillera .c-lejos', { yPercent: 6 }, { yPercent: 0, duration: 1 }, 0)
+      .fromTo('.cordillera .c-medio', { yPercent: 4 }, { yPercent: 0, duration: 1 }, 0)
+      .fromTo('.cordillera .c-cerca', { yPercent: 2 }, { yPercent: 0, duration: 1 }, 0)
+      // capas recortadas de fotos: la luz baja con el sol (valores finales = CSS)
+      // y el pueblo (foto 08, de día, con luz cálida de atardecer) se oscurece con la noche: se funde su copia oscura
+      .fromTo('.cordillera .nc', { opacity: 0 }, { opacity: 1, duration: 0.6 }, 0.35)
       // nubes: del durazno de la tarde al violeta de la noche, derivando despacio
-      .fromTo('.nubes-escena', { xPercent: -4, '--nube-e': '#F3B98A' }, { xPercent: 6, '--nube-e': '#3B3A5C', duration: 1.05 }, 0)
+      .fromTo('.nubes-escena', { xPercent: -4, '--noche-e': 0 }, { xPercent: 6, '--noche-e': 1, duration: 1.05 }, 0)
       // una bandada vuelve hacia la montaña mientras cae el sol
       .fromTo('.aves-escena', { x: function () { return esc.clientWidth * 1.05; }, y: function () { return esc.clientHeight * 0.18; }, opacity: 0 },
         { x: function () { return esc.clientWidth * 0.3; }, y: function () { return esc.clientHeight * 0.48; }, opacity: 1, duration: 0.45 }, 0.15)
       .to('.aves-escena', { opacity: 0, duration: 0.12 }, 0.55)
-      // la bruma se apaga con la luz y el pueblo y las fincas prenden sus luces
-      .fromTo('.cordillera .bruma', { opacity: 1 }, { opacity: 0.3, duration: 0.6 }, 0.4)
+      // el pueblo prende sus luces
       .fromTo('.cordillera .luces', { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0.72)
-      .fromTo('.cordillera .noche-lejos', { opacity: 0 }, { opacity: 0.55, duration: 0.5 }, 0.45)
       // y sale la luna desde detrás de la cordillera
       .fromTo('.escena .luna', { yPercent: 260, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.4 }, 0.68)
       .fromTo('.velo-texto', { opacity: 0 }, { opacity: 1, duration: 0.15 }, 0.95)
@@ -115,7 +122,7 @@
     // con teclado: si el foco llega a la escena antes de que termine, se salta al final para que el botón se vea
     function alFinal() { var st = tl.scrollTrigger; if (st && st.progress < 0.98) { lenis ? lenis.scrollTo(st.end, { immediate: true }) : window.scrollTo({ top: st.end, behavior: 'instant' }); tl.progress(1); } }
     var btnEscena = document.querySelector('.escena .btn'); btnEscena.addEventListener('focus', alFinal);
-    return function () { btnEscena.removeEventListener('focus', alFinal); tl.scrollTrigger && tl.scrollTrigger.kill(); tl.kill(); };
+    return function () { btnEscena.removeEventListener('focus', alFinal); atd.classList.remove('pegajosa'); tl.scrollTrigger && tl.scrollTrigger.kill(); tl.kill(); };
   });
 
   // ---------- motion elevated: entradas, profundidad y feedback ----------
@@ -152,7 +159,7 @@
     document.querySelectorAll('.seccion .lead, .capitulo .texto').forEach(function (el) { porLineas(el, false); });
   }
   // hero: la foto se queda atrás al bajar
-  gsap.to('.hero .foto img', { yPercent: 10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  gsap.to('.hero .foto img', { yPercent: 10, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: suave } });
 
   // franja de las cuatro casas: avanza con el scroll (no se mueve sola)
   gsap.fromTo('.franja .pista', { xPercent: 0 }, { xPercent: -33.333, ease: 'none', scrollTrigger: { trigger: '.franja', start: 'top bottom', end: 'bottom top', scrub: 0.5 } });
@@ -161,7 +168,7 @@
   // recorrido: el fondo baja de la mañana a la tarde mientras avanzas (color atado al scroll)
   var rec = document.querySelector('.recorrido'); rec.classList.add('dinamico');
   var tonos = [
-    { bg: '#F6F1EE', tx: '#1E2B45' },   // 01 mañana en La Florida
+    { bg: '#F6F1EE', tx: '#1E2B45' },   // 01 mañana en Finca Atardeceres
     { bg: '#F1D9A6', tx: '#1E2B45' },   // 02 mediodía en Café Cabras
     { bg: '#8E4728', tx: '#FBFCFA' }    // 03 tarde en la quesería; empalma con el cielo del atardecer
   ];
@@ -170,7 +177,7 @@
   var capsRec = rec.querySelectorAll('.capitulo');
   capsRec.forEach(function (c, i) {
     if (i === 0) return;
-    var t = gsap.timeline({ scrollTrigger: { trigger: c, start: 'top 85%', end: 'top 35%', scrub: true } });
+    var t = gsap.timeline({ scrollTrigger: { trigger: c, start: 'top 85%', end: 'top 35%', scrub: suave } });
     if (tonos[i].tx === tonos[i - 1].tx) {
       t.fromTo(rec, { backgroundColor: tonos[i - 1].bg }, { backgroundColor: tonos[i].bg, ease: 'none', duration: 1, immediateRender: false }, 0);
     } else {
@@ -194,23 +201,23 @@
   ScrollTrigger.addEventListener('refresh', pintarSol);
   // color de la hora: mañana (al cargar) → mediodía (parada 2) → tarde (parada 3, igual al sol de la escena)
   var horas = [
-    { '--sol-a': '#FFF8E6', '--sol-b': '#FFDF8A', '--sol-c': '#FFC266', '--sol-glow': 'rgba(255,196,110,.55)', '--nube': '#FFFFFF', '--ave': '#1E2B45' },
-    { '--sol-a': '#FFFBEA', '--sol-b': '#FFE066', '--sol-c': '#FFC93C', '--sol-glow': 'rgba(255,205,70,.6)', '--nube': '#FFFFFF', '--ave': '#1E2B45' },
-    { '--sol-a': '#FFF3D6', '--sol-b': '#FBD07A', '--sol-c': '#F1A447', '--sol-glow': 'rgba(251,208,122,.45)', '--nube': '#A65C38', '--ave': '#2A140C' }
+    { '--sol-a': '#FFF8E6', '--sol-b': '#FFDF8A', '--sol-c': '#FFC266', '--sol-glow': 'rgba(255,196,110,.55)', '--tarde': 0, '--azul': 1, '--ave': '#1E2B45' },
+    { '--sol-a': '#FFFBEA', '--sol-b': '#FFE066', '--sol-c': '#FFC93C', '--sol-glow': 'rgba(255,205,70,.6)', '--tarde': 0, '--azul': 0.35, '--ave': '#1E2B45' },
+    { '--sol-a': '#FFF3D6', '--sol-b': '#FBD07A', '--sol-c': '#F1A447', '--sol-glow': 'rgba(251,208,122,.45)', '--tarde': 1, '--azul': 0, '--ave': '#2A140C' }
   ];
   gsap.set(cielo, horas[0]);
   [1, 2].forEach(function (i) {
     if (!capsRec[i]) return;
-    gsap.fromTo(cielo, horas[i - 1], Object.assign({}, horas[i], { ease: 'none', immediateRender: false, scrollTrigger: { trigger: capsRec[i], start: 'top 85%', end: 'top 35%', scrub: true } }));
+    gsap.fromTo(cielo, horas[i - 1], Object.assign({}, horas[i], { ease: 'none', immediateRender: false, scrollTrigger: { trigger: capsRec[i], start: 'top 85%', end: 'top 35%', scrub: suave } }));
   });
   // nubes: cada profundidad sube a su velocidad (lejos lento, cerca rápido) y deriva un poco
   [['lejos', 4, -9, -4], ['medio', 10, -22, 5], ['cerca', 20, -48, -9]].forEach(function (c) {
     gsap.fromTo(cielo.querySelector('.nubes.' + c[0]), { yPercent: c[1], xPercent: 0 },
-      { yPercent: c[2], xPercent: c[3], ease: 'none', scrollTrigger: { trigger: rec, start: 'top bottom', end: 'bottom top', scrub: true } });
+      { yPercent: c[2], xPercent: c[3], ease: 'none', scrollTrigger: { trigger: rec, start: 'top bottom', end: 'bottom top', scrub: suave } });
   });
   // las nubes de adelante van saliendo según avanzas
-  gsap.fromTo(cielo.querySelectorAll('.nubes.cerca svg'), { scale: 1.25, opacity: 0 },
-    { scale: 1, opacity: 1, ease: 'none', stagger: 0.3, scrollTrigger: { trigger: rec, start: 'top 60%', end: 'center center', scrub: true } });
+  gsap.fromTo(cielo.querySelectorAll('.nubes.cerca .nube'), { scale: 1.25, opacity: 0 },
+    { scale: 1, opacity: 1, ease: 'none', stagger: 0.3, scrollTrigger: { trigger: rec, start: 'top 60%', end: 'center center', scrub: suave } });
   // pájaros: una bandada cruza en cada cambio de parada (01→02 de izquierda a derecha, 02→03 de vuelta)
   var bandadas = cielo.querySelectorAll('.bandada');
   [[1, -0.3, 0.6, 1.1, 0.22], [2, 1.1, 0.35, -0.35, 0.55]].forEach(function (b, i) {
@@ -230,10 +237,14 @@
   // capítulos: texto entra; números, foto e inserto se mueven a distinta velocidad (profundidad)
   document.querySelectorAll('.capitulo').forEach(function (c) {
     gsap.from(c.querySelectorAll('.quien, .anfitrion, .falta' + (window.SplitText ? '' : ', .texto')), { opacity: 0, y: 16, duration: 0.6, ease: ease, stagger: 0.06, scrollTrigger: { trigger: c, start: 'top 80%', once: true } });
-    var st = { trigger: c, start: 'top bottom', end: 'bottom top', scrub: true };
+    var st = { trigger: c, start: 'top bottom', end: 'bottom top', scrub: suave };
     gsap.fromTo(c.querySelector('.num'), { y: 40 }, { y: -40, ease: 'none', scrollTrigger: st });
     var m = c.querySelector('.medios'); if (m) gsap.fromTo(m, { y: 30 }, { y: -30, ease: 'none', scrollTrigger: st });
     var ins = c.querySelector('.inset'); if (ins) gsap.fromTo(ins, { y: 60 }, { y: -50, ease: 'none', scrollTrigger: st });
+    c.querySelectorAll('.grano').forEach(function (g, i) { // más cerca (data-prof alto) = más rápido
+      var v = +g.dataset.prof, r = (i % 2 ? -1 : 1) * (8 + v / 6);
+      gsap.fromTo(g, { y: v, rotation: -r }, { y: -v, rotation: r, ease: 'none', scrollTrigger: st });
+    });
   });
 
   // datos clave: cada tarjeta se arma con el scroll (ícono que se dibuja, tarjeta, etiqueta, valor y divisor).
@@ -281,7 +292,7 @@
   });
 
   // cierre: el resplandor sube detrás del título
-  gsap.fromTo('.cierre .resplandor', { yPercent: 30, opacity: 0.4 }, { yPercent: -10, opacity: 1, ease: 'none', scrollTrigger: { trigger: '.cierre', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+  gsap.fromTo('.cierre .resplandor', { yPercent: 30, opacity: 0.4 }, { yPercent: -10, opacity: 1, ease: 'none', scrollTrigger: { trigger: '.cierre', start: 'top bottom', end: 'bottom bottom', scrub: suave } });
 
   // botones magnéticos (solo con mouse): responden al puntero, sin cambiar de lugar al tocar
   if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {

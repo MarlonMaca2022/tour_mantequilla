@@ -34,10 +34,10 @@ body, n = re.subn(r'(      <button class="toggle-falta".*?</button>\n)',
 assert n == 1, 'toggle'
 
 msgs = {
-    'whatsapp_recibir_info': 'Hola, quiero recibir la información del Tour Mantequilla.',
-    'whatsapp_grupo': 'Hola, somos un grupo de 6 o más personas y queremos reservar el Tour Mantequilla.',
-    'whatsapp_dudas': 'Hola, tengo una duda sobre el Tour Mantequilla.',
-    'whatsapp_cierre': 'Hola, tengo una pregunta sobre el Tour Mantequilla.',
+    'whatsapp_recibir_info': 'Hola, quiero recibir la información del Tour de la Mantequilla.',
+    'whatsapp_grupo': 'Hola, somos un grupo de 6 o más personas y queremos reservar el Tour de la Mantequilla.',
+    'whatsapp_dudas': 'Hola, tengo una duda sobre el Tour de la Mantequilla.',
+    'whatsapp_cierre': 'Hola, tengo una pregunta sobre el Tour de la Mantequilla.',
 }
 def wa(m):
     cls, ev = m.group(1) or '', m.group(2)
@@ -61,7 +61,7 @@ $precio = tm_precio();
 <head>
 <meta charset="<?php bloginfo('charset'); ?>">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Café, queso y atardecer en Armenia Mantequilla: un día con cuatro casas del pueblo, con recogida en Medellín.">
+<meta name="description" content="Tour de la Mantequilla: montaña, tradición, café y quesos. Un día en Armenia Mantequilla con cuatro casas del pueblo, con recogida en Medellín.">
 <script>document.documentElement.classList.add('js')</script>
 <?php wp_head(); ?>
 </head>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Tour Mantequilla: realismo</title>
-<meta name="description" content="Prototipo de la landing del Tour Mantequilla: café, queso y atardecer en Armenia Mantequilla.">
+<title>Tour de la Mantequilla: Montaña, tradición, café y quesos</title>
+<meta name="description" content="Prototipo de la landing del Tour de la Mantequilla: montaña, tradición, café y quesos en Armenia Mantequilla.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,700;0,800;1,700&family=Alegreya+Sans:wght@400;500;700&display=swap" rel="stylesheet">
@@ -78,6 +78,7 @@ html.limpio .falta{display:none!important}
 .hero .copy{position:relative;z-index:1;padding:0 var(--gutter) 22px;margin-top:-28px;display:grid;gap:8px}
 .hero h1{font-size:clamp(1.75rem,7.4vw,4rem);font-weight:800;letter-spacing:-.01em}
 .hero .sub{font-size:var(--t-s);color:#E3E8F0;max-width:46ch}
+.hero .lema{font-family:var(--serif);font-weight:700;font-size:var(--t-m);line-height:1.25;color:var(--atardecer);max-width:30ch}
 .hero .fechas-linea{font-weight:700}
 .hero .precio{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
 .hero .precio strong{font-family:var(--serif);font-weight:800;font-size:var(--t-l)}
@@ -169,7 +170,7 @@ html.limpio .falta{display:none!important}
 .escena .num{font-family:var(--serif);font-weight:800;font-size:4.5rem;line-height:.8;color:rgba(255,255,255,.22)}
 .escena h2{font-size:clamp(2.6rem,10vw,6.5rem);font-weight:800;letter-spacing:-.015em;max-width:12ch;text-shadow:0 2px 24px rgba(10,16,30,.35)}
 .escena .quien{font-weight:700;font-size:var(--t-xs);display:flex;align-items:center;gap:8px}
-.escena .quien i{width:18px;height:6px;border-radius:2px;background:var(--atardeceres)}
+.escena .quien i{width:18px;height:6px;border-radius:2px;background:var(--florida)}
 .escena p.texto{max-width:44ch;color:#E3E8F0}
 .escena .falta{max-width:100%}
 
@@ -417,7 +418,7 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
 
 <header class="cab">
   <div class="contenedor">
-    <a class="marca" href="#inicio">Tour Mantequilla <span class="falta">nombre oficial</span></a>
+    <a class="marca" href="#inicio">Tour de la Mantequilla</a>
     <nav aria-label="Principal">
       <button class="toggle-falta" type="button" aria-pressed="false" title="Ocultar o mostrar los pendientes marcados en amarillo">Pendientes</button>
       <a class="solo-desk" href="#recorrido">El recorrido</a>
@@ -434,11 +435,12 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
       <img src="../assets/fotos-web/prueba-ia/portada-julio.webp" srcset="../assets/fotos-web/prueba-ia/portada-julio-w480.webp 480w, ../assets/fotos-web/prueba-ia/portada-julio-w960.webp 960w, ../assets/fotos-web/prueba-ia/portada-julio.webp 1800w" sizes="(min-width: 900px) 45vw, 100vw" width="1800" height="1800" fetchpriority="high" alt="Un grupo de amigos con café en el prado de un mirador, frente al atardecer y al pueblo con su iglesia">
     </div>
     <div class="copy">
-      <h1 id="h1">Pausa tu semana en el balcón de la montaña antioqueña</h1>
-      <p class="sub">Te recogemos en Medellín. Un día en Armenia Mantequilla probando café, haciendo quesos y viendo el atardecer. Grupos de 15 personas.</p>
-      <p class="valor">Incluye almuerzo, taller de café y taller de quesos <span class="falta">confirmar qué cubre el precio</span></p>
+      <h1 id="h1">Tour de la Mantequilla: Montaña, tradición, café y quesos</h1>
+      <p class="lema">Pausa tu semana en el balcón de la montaña antioqueña</p>
+      <p class="sub">Te recogemos en Medellín para un día de café de origen, quesos artesanales, pizza de masa madre en horno de barro y una casa tradicional campesina frente al atardecer.</p>
+      <p class="valor">Incluye almuerzo, talleres de café y quesos, y tu propia pizza en horno de barro <span class="falta">confirmar qué cubre el precio</span></p>
       <p class="precio"><strong>$440.000</strong><span>por persona <span class="falta">¿impuestos incluidos?</span></span></p>
-      <p class="fechas-linea">Salidas en fines de semana de diciembre <span class="falta">las fechas se definen en el motor de reservas (#26)</span></p>
+      <p class="fechas-linea">Salidas en fines de semana de diciembre · grupos de 15 personas <span class="falta">las fechas se definen en el motor de reservas (#26)</span></p>
       <div class="acciones">
         <a class="btn" href="#fechas" data-evento="hero_reservar_fecha">Reservar mi fecha</a>
         <p class="seguro">Pago en línea · confirmación al correo</p>
@@ -488,22 +490,19 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
     </div></div>
     <div class="contenedor">
       <h2 id="rec-t">Lo que vas a vivir</h2>
-      <p class="lead">Llegar a un pueblo no es lo mismo que conocerlo. Este día lo arman quienes viven ahí: de la mañana en el mirador a la tarde que cae en una finca cafetera. <span class="falta">Orden de paradas según Julio; la transcripción dice otro (pendiente #23)</span></p>
+      <p class="lead">Llegar a un pueblo no es lo mismo que conocerlo. Este día lo arman quienes viven ahí: de la mañana entre cafetales al atardecer en el mirador.</p>
       <ol class="capitulos" role="list">
-        <li class="capitulo" style="--c:var(--florida)" data-hora="Mañana">
+        <li class="capitulo" style="--c:var(--atardeceres)" data-hora="Mañana">
           <div>
             <span class="num" aria-hidden="true">01</span>
-            <h3>El mirador de la mañana</h3>
-            <p class="quien"><i aria-hidden="true"></i>Finca Mirador La Florida</p>
+            <h3>La mañana entre cafetales</h3>
+            <p class="quien"><i aria-hidden="true"></i>Finca Atardeceres</p>
             <div class="anfitrion"><span class="retrato" aria-hidden="true"></span><div><p class="nombre"><span class="falta">Nombre de quien recibe</span></p></div></div>
             <span class="falta">Foto del anfitrión y una frase suya (pendiente #25)</span>
-            <p class="texto">Una casa antioqueña con huerta de hierbas aromáticas, bosque nativo sembrado y un mirador hacia las montañas del Suroeste y el Occidente, el mismo desde donde se ve salir el sol sobre el pueblo. Del horno de barro y leña salen arepas de yuca, pan de masa madre y pizza.</p>
-            <span class="falta bloque">Hora de llegada y qué se come aquí en este tour (pendiente #3)</span>
+            <p class="texto">El día empieza en una finca cafetera a 1.750 metros sobre el nivel del mar, recorriendo sus cultivos de café.</p>
+            <span class="falta bloque">Verificar altura. «Taller de tu…»: ¿turismo o tueste? Qué incluye y cuánto dura (pendiente #3)</span>
           </div>
-          <div class="medios">
-            <img class="revela" src="../assets/fotos-web/finca-mirador-la-florida/la-florida-03-10-44-36.webp" srcset="../assets/fotos-web/finca-mirador-la-florida/la-florida-03-10-44-36-w480.webp 480w, ../assets/fotos-web/finca-mirador-la-florida/la-florida-03-10-44-36-w960.webp 960w, ../assets/fotos-web/finca-mirador-la-florida/la-florida-03-10-44-36.webp 1033w" sizes="(min-width: 900px) 45vw, 100vw" width="1033" height="1251" loading="lazy" alt="Dos aves en un comedero con fruta en el bosque de La Florida">
-            <img class="inset revela" src="../assets/fotos-web/finca-mirador-la-florida/la-florida-05-10-46-04.webp" srcset="../assets/fotos-web/finca-mirador-la-florida/la-florida-05-10-46-04-w480.webp 480w, ../assets/fotos-web/finca-mirador-la-florida/la-florida-05-10-46-04-w960.webp 960w, ../assets/fotos-web/finca-mirador-la-florida/la-florida-05-10-46-04.webp 1067w" sizes="(min-width: 900px) 30vw, 40vw" width="1067" height="1600" loading="lazy" alt="Horno de barro encendido con leña">
-          </div>
+          <div class="medios"><div class="sin-foto">Foto de la finca y sus cultivos: falta descargar el álbum oficial de Atardeceres (#15)</div></div>
         </li>
         <li class="capitulo" style="--c:var(--cabras)" data-hora="Mediodía">
           <div>
@@ -529,12 +528,11 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
         <li class="capitulo" style="--c:var(--bonne)" data-hora="Tarde">
           <div>
             <span class="num" aria-hidden="true">03</span>
-            <h3>La quesera que aprendió el oficio en Francia</h3>
+            <h3>Quesería artesanal colombo-francesa</h3>
             <p class="quien"><i aria-hidden="true"></i>Bonne Nature</p>
-            <div class="anfitrion"><span class="retrato" aria-hidden="true"></span><div><p class="nombre">Luz Marina Mejía</p></div></div>
-            <span class="falta">Foto de Luz Marina y una frase suya (pendiente #25)</span>
-            <p class="texto">Su familia vivió 30 años en Francia. Desde 2014 hace en su pueblo quesos de receta francesa con ají, achiote, pimientas y hierbas de la cocina colombiana. Aquí haces el taller de quesos.</p>
-            <span class="falta bloque">Confirmar que «la quesería» del audio es Bonne Nature (pendiente #3)</span>
+            <span class="falta">Foto del equipo de la quesería (pendiente #25)</span>
+            <p class="texto">Quesos de receta francesa con ají, achiote, pimientas y hierbas de la cocina colombiana, hechos en el pueblo desde 2014 por mujeres del municipio. La familia Mejía Mejía vivió 30 años en Francia, donde Luz Marina aprendió el oficio. Aquí haces el taller de quesos.</p>
+            <span class="falta bloque">Confirmar que el equipo son mujeres del municipio y el año 2014 (pendiente #6). Confirmar que «la quesería» del audio es Bonne Nature (pendiente #3)</span>
           </div>
           <div class="medios"><img class="revela" src="../assets/fotos-web/bonne-nature/bonne-nature-02-foto-general-quesos.webp" srcset="../assets/fotos-web/bonne-nature/bonne-nature-02-foto-general-quesos-w480.webp 480w, ../assets/fotos-web/bonne-nature/bonne-nature-02-foto-general-quesos-w960.webp 960w, ../assets/fotos-web/bonne-nature/bonne-nature-02-foto-general-quesos.webp 2000w" sizes="(min-width: 900px) 45vw, 100vw" width="2000" height="1333" loading="lazy" alt="Quesos artesanales de Bonne Nature sobre tablas de madera"></div>
         </li>
@@ -563,10 +561,10 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
       <div class="copy">
         <span class="num" aria-hidden="true">04</span>
         <h2 id="atd-t">Y el día se va con el sol</h2>
-        <p class="quien"><i aria-hidden="true"></i>Finca Atardeceres</p>
+        <p class="quien"><i aria-hidden="true"></i>Finca Mirador La Florida</p>
         <div class="anfitrion"><span class="retrato" aria-hidden="true"></span><div><p class="nombre"><span class="falta">Nombre de quien recibe</span></p></div></div>
-        <p class="texto">Recorres los cultivos de café de la finca y ves caer la tarde.</p>
-        <span class="falta">Foto real del atardecer en la finca (#15) reemplaza este cielo ilustrado. Foto y frase del anfitrión (#25). «Taller de tu…»: ¿turismo o tueste?</span>
+        <p class="texto">Cierras en La Florida, una casa tradicional campesina con mirador: armas tu propia pizza de masa madre, la horneas en el horno de barro y leña y ves caer el sol sobre Armenia Mantequilla, el Bello Balcón de Antioquia.</p>
+        <span class="falta">Foto y frase del anfitrión (#25). Una foto real de la vista desde el mirador puede ir aquí (#46)</span>
         <a class="btn" href="#fechas" data-evento="atardecer_reservar_fecha">Reservar mi fecha</a>
         <p class="credito">Foto del pueblo y de la luna: Alex Betancure (@alex_betancure) <span class="falta">permiso pendiente (#19). Esta versión pasó por IA (#40)</span></p>
       </div>
@@ -615,7 +613,7 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
       <ul class="aliados">
         <li class="aliado" style="--c:var(--atardeceres)">
           <div class="placa"><img src="../assets/logos/atardeceres-w288.webp" width="288" height="99" loading="lazy" alt=""></div>
-          <div><h3>Finca Atardeceres</h3><p>Finca cafetera en Armenia Mantequilla, a 1.750 m.s.n.m. <span class="falta">verificar altura</span> Aquí recorres los cultivos de café y termina el día.</p></div>
+          <div><h3>Finca Atardeceres</h3><p>Finca cafetera en Armenia Mantequilla, a 1.750 m.s.n.m. <span class="falta">verificar altura</span> Aquí empieza el día, entre los cultivos de café.</p></div>
         </li>
         <li class="aliado" style="--c:var(--cabras)">
           <div class="placa"><img src="../assets/logos/cafe-cabras-cafe-w192.webp" width="192" height="192" loading="lazy" alt=""></div>
@@ -623,11 +621,11 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
         </li>
         <li class="aliado" style="--c:var(--bonne)">
           <div class="placa"><img src="../assets/logos/bonne-nature-w192.webp" width="192" height="192" loading="lazy" alt=""></div>
-          <div><h3>Bonne Nature</h3><p>Quesería de la familia Mejía Mejía. Luz Marina aprendió el oficio en queserías del campo francés, cerca de Grenoble, y desde 2014 hace quesos colombo-franceses en su pueblo.</p></div>
+          <div><h3>Bonne Nature</h3><p>Quesería artesanal colombo-francesa de la familia Mejía Mejía, que vivió 30 años en Francia. Desde 2014 hacen sus quesos en el pueblo.</p></div>
         </li>
         <li class="aliado" style="--c:var(--florida)">
           <div class="placa"><img src="../assets/logos/la-florida-w192.webp" width="192" height="192" loading="lazy" alt=""></div>
-          <div><h3>Finca Mirador La Florida</h3><p>Casa antioqueña con vista a las montañas del Suroeste y el Occidente, huerta de aromáticas, bosque nativo sembrado y horno de barro.</p></div>
+          <div><h3>Finca Mirador La Florida</h3><p>Casa tradicional campesina con vista a las montañas del Suroeste y el Occidente, huerta de aromáticas, bosque nativo sembrado y horno de barro. Aquí termina el día: armas y horneas tu propia pizza mientras cae el sol.</p></div>
         </li>
       </ul>
     </div>
@@ -641,12 +639,12 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
       <div class="listas">
         <div class="si"><h3>Incluye</h3><ul>
           <li>Transporte ida y vuelta desde Medellín o San Antonio de Prado</li>
-          <li>Mañana en el mirador de La Florida</li>
+          <li>Recorrido por los cultivos de café en Finca Atardeceres</li>
           <li>Copa de bienvenida, almuerzo de fiambres y digestivo en Café Cabras</li>
           <li>Taller de métodos de preparación de café</li>
           <li>Taller de quesos</li>
-          <li>Recorrido por los cultivos de café y atardecer en Finca Atardeceres</li>
-          <li><span class="falta">¿Comida del horno de leña?</span></li>
+          <li>Armar y hornear tu propia pizza de masa madre en horno de barro</li>
+          <li>Atardecer en el mirador de La Florida</li>
         </ul></div>
         <div class="no"><h3>No incluye</h3><ul>
           <li>Hospedaje: es un tour de un día</li>
@@ -668,7 +666,7 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
           <span class="falta bloque">Qué llevar. Sugerencia por validar: abrigo para el atardecer y zapatos para caminar</span>
         </div>
       </div>
-      <div style="position:relative"><img class="revela" src="../assets/fotos-web/finca-mirador-la-florida/la-florida-04-10-45-52.webp" srcset="../assets/fotos-web/finca-mirador-la-florida/la-florida-04-10-45-52-w480.webp 480w, ../assets/fotos-web/finca-mirador-la-florida/la-florida-04-10-45-52-w960.webp 960w, ../assets/fotos-web/finca-mirador-la-florida/la-florida-04-10-45-52.webp 1000w" sizes="(min-width: 900px) 45vw, 100vw" width="1000" height="1407" loading="lazy" alt="La torre de la iglesia de Armenia Mantequilla contra un cielo rojo y morado"><span class="credito doc-pendiente">Foto: <span class="falta">autor</span></span></div>
+      <div style="position:relative"><img class="revela" src="../assets/fotos-web/finca-mirador-la-florida/la-florida-01-10-43-18-hd.webp" srcset="../assets/fotos-web/finca-mirador-la-florida/la-florida-01-10-43-18-hd-w480.webp 480w, ../assets/fotos-web/finca-mirador-la-florida/la-florida-01-10-43-18-hd-w960.webp 960w, ../assets/fotos-web/finca-mirador-la-florida/la-florida-01-10-43-18-hd.webp 1824w" sizes="(min-width: 900px) 45vw, 100vw" width="1824" height="2736" loading="lazy" style="object-position:50% 40%" alt="Capas de montañas azules entre la bruma en el suroeste antioqueño, vistas desde el mirador de La Florida"><span class="credito doc-pendiente">Foto: <span class="falta">autor</span></span></div>
     </div>
   </section>
 
@@ -881,7 +879,7 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
   // recorrido: el fondo baja de la mañana a la tarde mientras avanzas (color atado al scroll)
   var rec = document.querySelector('.recorrido'); rec.classList.add('dinamico');
   var tonos = [
-    { bg: '#F6F1EE', tx: '#1E2B45' },   // 01 mañana en La Florida
+    { bg: '#F6F1EE', tx: '#1E2B45' },   // 01 mañana en Finca Atardeceres
     { bg: '#F1D9A6', tx: '#1E2B45' },   // 02 mediodía en Café Cabras
     { bg: '#8E4728', tx: '#FBFCFA' }    // 03 tarde en la quesería; empalma con el cielo del atardecer
   ];

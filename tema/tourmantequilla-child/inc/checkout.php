@@ -186,7 +186,7 @@ add_action('woocommerce_thankyou', function ($order_id) {
     if ($recogida !== '') {
         echo '<p>' . esc_html($recogida) . '</p>';
     }
-    $wa = tm_whatsapp_url(sprintf('Hola, hice la reserva #%s del Tour Mantequilla.', $order->get_order_number()));
+    $wa = tm_whatsapp_url(sprintf('Hola, hice la reserva #%s del Tour de la Mantequilla.', $order->get_order_number()));
     if ($wa !== '') {
         echo '<p><a href="' . esc_url($wa) . '" target="_blank" rel="noopener nofollow">' . esc_html__('¿Dudas? Escríbenos por WhatsApp', 'tourmantequilla') . '</a></p>';
     }

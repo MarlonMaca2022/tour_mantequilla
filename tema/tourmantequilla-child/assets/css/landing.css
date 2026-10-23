@@ -61,11 +61,12 @@ html.limpio .falta{display:none!important}
 /* hero */
 .hero{background:var(--montana);color:#fff;position:relative}
 .hero .foto{position:relative}
-.hero .foto img{width:100%;aspect-ratio:16/10;max-height:22svh;object-fit:cover;object-position:50% 40%}
+.hero .foto img{width:100%;aspect-ratio:16/10;max-height:30svh;object-fit:cover;object-position:50% 40%}
 .hero .foto::after{content:"";position:absolute;inset:auto 0 0 0;height:40%;background:linear-gradient(180deg,rgba(30,43,69,0),var(--montana))}
 .hero .copy{position:relative;z-index:1;padding:0 var(--gutter) 22px;margin-top:-28px;display:grid;gap:8px}
 .hero h1{font-size:clamp(1.75rem,7.4vw,4rem);font-weight:800;letter-spacing:-.01em}
 .hero .sub{font-size:var(--t-s);color:#E3E8F0;max-width:46ch}
+.hero .lema{font-family:var(--serif);font-weight:700;font-size:var(--t-m);line-height:1.25;color:var(--atardecer);max-width:30ch}
 .hero .fechas-linea{font-weight:700}
 .hero .precio{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
 .hero .precio strong{font-family:var(--serif);font-weight:800;font-size:var(--t-l)}
@@ -135,6 +136,8 @@ html.limpio .falta{display:none!important}
 /* atardecer (el momento cinematográfico) */
 .atardecer{position:relative;color:#fff;background:var(--montana)}
 .escena{position:relative;height:100svh;min-height:560px;overflow:hidden}
+.atardecer.pegajosa{height:calc(max(100svh,560px) + 140svh)}
+.atardecer.pegajosa .escena{position:sticky;top:0}
 .cielo{position:absolute;inset:0}
 .cielo--tarde{background:linear-gradient(180deg,#8E4728 0%,#C9733A 50%,#E9A23B 100%)}
 .cielo--ocaso{background:linear-gradient(180deg,#5B4366 0%,#C77E5A 55%,#E9A23B 90%)}
@@ -155,7 +158,7 @@ html.limpio .falta{display:none!important}
 .escena .num{font-family:var(--serif);font-weight:800;font-size:4.5rem;line-height:.8;color:rgba(255,255,255,.22)}
 .escena h2{font-size:clamp(2.6rem,10vw,6.5rem);font-weight:800;letter-spacing:-.015em;max-width:12ch;text-shadow:0 2px 24px rgba(10,16,30,.35)}
 .escena .quien{font-weight:700;font-size:var(--t-xs);display:flex;align-items:center;gap:8px}
-.escena .quien i{width:18px;height:6px;border-radius:2px;background:var(--atardeceres)}
+.escena .quien i{width:18px;height:6px;border-radius:2px;background:var(--florida)}
 .escena p.texto{max-width:44ch;color:#E3E8F0}
 .escena .falta{max-width:100%}
 
@@ -248,6 +251,7 @@ html.limpio .falta{display:none!important}
 .w>span{display:inline-block;will-change:transform}
 .hero .foto{overflow:hidden}
 .hero .foto img{will-change:transform;transform-origin:50% 70%}
+.hero .foto img{object-position:50% 75%}
 /* franja con las cuatro casas: avanza con el scroll */
 .franja{overflow:hidden;border-bottom:1px solid var(--linea);background:var(--cal);padding:22px 0}
 .franja .pista{display:flex;width:max-content;gap:0;will-change:transform}
@@ -334,6 +338,67 @@ html.limpio .sin-respuesta,html.limpio .doc-pendiente,html.limpio .retrato{displ
 .cierre .resplandor{right:-18vw;top:-34vw;bottom:auto;background:radial-gradient(circle,rgba(214,226,255,.30) 0%,rgba(150,170,230,.12) 40%,rgba(30,43,69,0) 70%)}
 .cierre .luna{right:8%;top:16%;width:clamp(44px,6vw,72px)}
 .cierre .estrellas{opacity:.55}
+/* ---------- borrador 8: realismo con recortes de fotos reales (tema/gen_recortes.py; fuentes en 03_Fotos/INVENTARIO.md) ---------- */
+/* cordillera y pueblo: capas recortadas. --w = ancho mínimo para que en móvil no se vuelvan diminutas;
+   --x/--f = punto de la foto (f) que queda en la posición x de la pantalla (el pico, la torre) */
+.cordillera{--w:max(100%,760px)}
+.cordillera .capa{position:absolute;left:clamp(calc(100% - var(--w)),calc(var(--x,50%) - var(--w) * var(--f,.5)),0px);width:var(--w);max-width:none;height:auto;will-change:transform}
+.cordillera .c-lejos{top:0;--f:.71;--x:62%}
+.cordillera .c-medio{top:34%}
+.cordillera .c-cerca{top:50%;--f:.3;--x:30%}
+/* la noche: cada capa tiene una copia oscura encima que se funde con opacidad (en iPhone, animar filter repinta
+   la foto entera en cada cuadro; la opacidad la mueve la GPU). El filtro de la copia es fijo y sin JS queda puesta */
+.cordillera .nc{will-change:transform,opacity}
+.cordillera .c-lejos.nc,.cordillera .c-medio.nc{filter:brightness(.3)}
+.cordillera .c-cerca.nc{filter:brightness(.28)}
+/* pueblo: la-florida-08 sin cielo y agrandada (remove.bg + Upscayl, ver #40). Una sola imagen en toda la escena:
+   de tarde con tono cálido, de noche oscura, y la luna termina sobre la cruz como en la foto de Alex Betancure. --wp limita el ancho para que en
+   pantallas anchas y bajas la torre no quede tapada por la cabecera; los lados se disuelven en las montañas */
+/* cqw (ancho de la escena) y no %: estas medidas se usan tanto en left como en top, y en top el % sería el alto */
+.escena{container-type:inline-size;--wp:clamp(760px,100cqw,150svh);--lw:clamp(56px,9vw,96px);
+  --wp-left:min(calc((100cqw - var(--wp)) / 2),clamp(calc(100cqw - var(--wp)),calc(62cqw - var(--wp) * .665),0px))}
+.cordillera .c-pueblo{bottom:0;width:var(--wp);left:var(--wp-left);
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent)}
+.cordillera .c-pueblo img{display:block;width:100%;height:auto;filter:brightness(.82) saturate(1.05) sepia(.35)}
+.cordillera .c-pueblo img.nc{position:absolute;left:0;top:0;filter:brightness(.45) saturate(.7);will-change:opacity}
+.escena .luna{right:auto;width:var(--lw);left:calc(var(--wp-left) + var(--wp) * .665 - var(--lw) / 2);
+  top:max(80px,calc(100% - var(--wp) / 1.951 + var(--wp) * .012 - var(--lw) * .76 - 14px))}
+.escena .credito{font-size:.75rem;color:rgba(227,232,240,.7);margin:0}
+/* luces del pueblo al anochecer: sobre las casas reales */
+.cordillera .luces{position:absolute;inset:0}
+.cordillera .luces i{position:absolute;width:3px;height:3px;margin:-1.5px;border-radius:50%;background:#FFD27A;box-shadow:0 0 6px 2px rgba(255,210,122,.55);animation:titila 3.2s ease-in-out infinite alternate}
+.cordillera .luces i:nth-child(3n){animation-duration:2.3s}
+.cordillera .luces i:nth-child(4n+1){animation-delay:-1.4s}
+.cordillera .luces i.reloj{width:7px;height:7px;margin:-3.5px;box-shadow:0 0 10px 4px rgba(255,210,122,.5)}
+/* luna: la foto, no un degradado */
+.luna{aspect-ratio:auto;height:auto;border-radius:0;background:none;box-shadow:none;filter:drop-shadow(0 0 26px rgba(205,218,255,.35))}
+/* nubes: recortes de la-florida-02 (blancas de día, doradas en la tarde) y -04 (violetas de noche).
+   Las versiones se funden con --tarde (recorrido) y --noche-e (escena); sin JS: blancas en el recorrido, violetas en la escena */
+.nubes .nube,.nubes-escena .nube{position:absolute;display:block;height:auto}
+.nube img{display:block;width:100%;height:auto}
+.nube.espejo img{transform:scaleX(-1)}
+.nube .tarde{position:absolute;inset:0;opacity:var(--tarde,0)}
+/* cielo de la mañana: celeste suave arriba para que las nubes blancas reales se vean (blanco sobre crema no se lee).
+   Se apaga hacia el mediodía (--azul); sin JS queda el estado del mediodía */
+.cielo-dia{--azul:.35}
+.cielo-dia::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#C6DAF0 0%,rgba(198,218,240,.75) 45%,rgba(198,218,240,.45) 100%);opacity:var(--azul)}
+.nubes .nube{filter:drop-shadow(0 6px 10px rgba(30,43,69,.12))}
+.nubes,.nubes-escena{will-change:transform}
+.nubes-escena{--noche-e:1}
+.nubes-escena .nube > img:first-child{opacity:calc(1 - var(--noche-e))}
+.nubes-escena .nube .noche{position:absolute;left:-10%;top:50%;width:120%;transform:translateY(-50%);opacity:var(--noche-e);filter:brightness(.55) saturate(.85)}
+/* de noche el borde dorado de la foto (luz de atardecer) se apaga con el brillo */
+.nube.espejo .noche{transform:translateY(-50%) scaleX(-1)}
+/* granos de café de la parada 02: primer plano desenfocado que flota sobre la foto */
+.capitulo .medios img.grano{position:absolute;z-index:2;width:var(--g);aspect-ratio:auto;height:auto;object-fit:fill;border-radius:0;pointer-events:none;filter:drop-shadow(0 8px 10px rgba(42,20,12,.28))}
+.grano.g1{--g:clamp(44px,6vw,76px);left:-3%;top:-9%}
+.grano.g2{--g:clamp(40px,5vw,64px);left:-2%;top:58%}
+.grano.g3{--g:clamp(26px,3vw,38px);left:80%;top:-7%}
+.grano.g4{--g:clamp(22px,2.6vw,32px);left:18%;top:93%}
+.grano.g5{--g:clamp(26px,3vw,38px);left:52%;top:97%}
+.grano.g6{--g:clamp(22px,2.6vw,32px);left:12%;top:4%}
+/* en móvil la foto va debajo del texto: los granos de arriba no se suben a él */
+@media (max-width:899px){.grano.g1{top:3%;left:-2%}.grano.g3{top:3%}}
 
 /* ---------- sitio WordPress ---------- */
 .admin-bar .cab{top:32px}
