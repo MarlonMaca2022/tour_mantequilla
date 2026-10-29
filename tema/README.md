@@ -36,7 +36,7 @@ Hostinger. La carpeta del staging (`palevioletred-sardine-209107.hostingersite.c
   cambio esté en el repo (`--forzar` lo pisa, y queda en el respaldo). Revisa la sintaxis PHP, respalda el tema en
   `~/tmp-tourmantequilla/respaldos/` y, si la portada no responde 200, vuelve solo al tema anterior.
   Llave SSH `~/.ssh/tourmantequilla_deploy`. Nunca sube la BD.
-- Primero hay que hacer **commit**: el script compara contra `HEAD`, y un archivo ya subido pero sin commit sale como
+- Primero hay que hacer **commit**: el script acepta las versiones que estén en algún commit; un archivo subido sin commit sale como
   «editado en el servidor».
 - La configuración inicial del staging (idioma, WooCommerce, páginas y producto) ya **no está** en el script (ver el
   commit `2d55c3a`). En producción ocultaba el sitio, lo marcaba noindex y activaba el pago de prueba.

@@ -6,9 +6,9 @@
 #   bash tema/deploy-hostinger.sh --subir --forzar  → sube aunque haya archivos editados en el servidor
 #
 # Qué hace al subir:
-#   1. Compara cada archivo del servidor con el último commit. Si uno se editó allá (no coincide ni con
-#      HEAD ni con tu copia), se detiene: primero hay que traer ese cambio al repo. Pasó el 2026-10-28
-#      con templates/landing-tour.php.
+#   1. Compara cada archivo del servidor con el historial de git. Si uno no coincide con ninguna versión
+#      que haya pasado por un commit, alguien lo editó allá y se detiene: primero hay que traer ese cambio
+#      al repo. Pasó el 2026-10-28 con templates/landing-tour.php.
 #   2. Revisa la sintaxis de cada PHP con el PHP de la web (8.3) antes de tocar el sitio.
 #   3. Respalda el tema del servidor en ~/tmp-tourmantequilla/respaldos/tema-FECHA.tar.gz.
 #   4. Cambia la carpeta del tema de una vez (mv) y, si la portada no responde 200, vuelve a la anterior.
@@ -49,8 +49,9 @@ trap 'rm -rf "$TRABAJO"' EXIT
 echo "== comparando el tema de $SITIO con el repo"
 "${SSH[@]}" "cd $TEMAS/tourmantequilla-child && find . -type f -exec md5sum {} +" > "$TRABAJO/remoto.txt"
 
-# Por archivo: R = servidor, L = tu copia, H = último commit.
-#   R = L → igual · R = H ≠ L → cambio tuyo (sube) · R ≠ L y R ≠ H → editado en el servidor (frena)
+# Por archivo: R = servidor, L = tu copia.
+#   R = L → igual · R ≠ L pero R está en algún commit → cambio tuyo (sube)
+#   R no está en ningún commit → alguien lo editó en el servidor (frena)
 python -I - "$REPO" "$TRABAJO/remoto.txt" "$TRABAJO/plan.txt" <<'PY'
 import hashlib, pathlib, subprocess, sys
 repo, remoto_txt, plan_txt = pathlib.Path(sys.argv[1]), sys.argv[2], sys.argv[3]
@@ -65,29 +66,35 @@ for linea in open(remoto_txt, encoding='utf-8'):
 local = {p.relative_to(repo / base).as_posix(): md5(p.read_bytes())
          for p in (repo / base).rglob('*') if p.is_file()}
 
-# blobs del último commit en una sola llamada a git
-rutas = sorted(set(remoto) | set(local))
-pedido = ''.join(f'HEAD:{base}/{r}\n' for r in rutas).encode('utf-8')
-salida = subprocess.run(['git', '-C', str(repo), 'cat-file', '--batch'], input=pedido, capture_output=True, check=True).stdout
-head, i = {}, 0
-for r in rutas:
-    fin = salida.index(b'\n', i)
-    cab = salida[i:fin].split()
-    if cab[-1] == b'missing':
-        i = fin + 1
+# Todas las versiones que cada archivo tuvo en algún commit (no solo HEAD): lo normal es
+# que el servidor tenga la del commit anterior al que se está subiendo.
+log = subprocess.run(['git', '-C', str(repo), 'log', '--all', '--format=', '--raw', '--no-abbrev', '--no-renames', '--', base],
+                     capture_output=True, check=True, text=True).stdout
+blobs = {}  # sha → ruta relativa
+for linea in log.splitlines():
+    if not linea.startswith(':'):
         continue
-    n = int(cab[2])
-    head[r] = md5(salida[fin + 1:fin + 1 + n])
-    i = fin + 1 + n + 1
+    meta, ruta = linea.split('\t', 1)
+    for sha in meta.split()[2:4]:
+        if set(sha) != {'0'}:
+            blobs[sha] = ruta[len(base) + 1:]
+pedido = ''.join(f'{sha}\n' for sha in blobs).encode()
+salida = subprocess.run(['git', '-C', str(repo), 'cat-file', '--batch'], input=pedido, capture_output=True, check=True).stdout
+historia, i = {}, 0  # ruta → {md5 de cada versión}
+for sha, ruta in blobs.items():
+    fin_cab = salida.index(b'\n', i)
+    n = int(salida[i:fin_cab].split()[2])
+    historia.setdefault(ruta, set()).add(md5(salida[fin_cab + 1:fin_cab + 1 + n]))
+    i = fin_cab + 1 + n + 1
 
 filas = []
-for r in rutas:
-    R, L, H = remoto.get(r), local.get(r), head.get(r)
+for r in sorted(set(remoto) | set(local)):
+    R, L = remoto.get(r), local.get(r)
     if R == L:
         continue
     if R is None:
         filas.append(('nuevo', r))
-    elif R == H:
+    elif R in historia.get(r, ()):
         filas.append(('se borra' if L is None else 'cambia', r))
     else:
         filas.append(('EDITADO EN EL SERVIDOR', r))
