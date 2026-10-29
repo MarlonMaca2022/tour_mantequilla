@@ -24,21 +24,30 @@ Las fechas y los cupos se cargan en **Productos → Tour Mantequilla → pestañ
 
 - Local: `tourmantequilla.local` (PHP 8.2, WooCommerce 11.2, Hello Elementor 3.5).
 - Copiar el tema después de cada cambio: `bash tema/sync-local.sh`.
-- Pago de prueba: «Cheque» renombrado como «Pago de prueba (solo local)». En producción va OnePay.
+- Pago de prueba: «Cheque» renombrado como «Pago de prueba (solo local)». En producción va Wompi.
 
-## Sitio de validación en Hostinger (para Julio)
+## Producción en Hostinger: tourmantequilla.com
 
-- URL: `https://palevioletred-sardine-209107.hostingersite.com/`. Está oculto con el «Próximamente» de WooCommerce
-  y se ve con el enlace privado `?woo-share=<llave>` (la llave: `wp option get woocommerce_share_key`).
-- Primera vez (tema + configuración + producto): `bash tema/deploy-hostinger.sh`. Solo el tema: `bash tema/deploy-hostinger.sh --tema`.
-  Llave SSH `~/.ssh/tourmantequilla_deploy`. No sube la BD local; si se corre otra vez, no pisa los cupos reservados.
+Desde el 2026-10-29 (feria) el sitio está en producción en `https://tourmantequilla.com`, en la misma cuenta de
+Hostinger. La carpeta del staging (`palevioletred-sardine-209107.hostingersite.com`) ya no existe.
+
+- **Subir el tema:** `bash tema/deploy-hostinger.sh` muestra qué cambiaría sin subir nada. `--subir` lo sube.
+  Antes compara cada archivo del servidor con el último commit. Si alguien editó algo allá, se detiene hasta que ese
+  cambio esté en el repo (`--forzar` lo pisa, y queda en el respaldo). Revisa la sintaxis PHP, respalda el tema en
+  `~/tmp-tourmantequilla/respaldos/` y, si la portada no responde 200, vuelve solo al tema anterior.
+  Llave SSH `~/.ssh/tourmantequilla_deploy`. Nunca sube la BD.
+- Primero hay que hacer **commit**: el script compara contra `HEAD`, y un archivo ya subido pero sin commit sale como
+  «editado en el servidor».
+- La configuración inicial del staging (idioma, WooCommerce, páginas y producto) ya **no está** en el script (ver el
+  commit `2d55c3a`). En producción ocultaba el sitio, lo marcaba noindex y activaba el pago de prueba.
+- Pago: **Wompi** (plugin `wompi-portal-de-pagos`). Wompi devuelve a la página de gracias con el pedido todavía
+  «pendiente» y lo cancela si el banco lo rechaza, así que la página de gracias habla según el estado del pedido.
+- LiteSpeed Cache está **activo** en producción. Si un cambio de la landing no se ve: WordPress → LiteSpeed Cache →
+  Purgar todo (es solo de este sitio).
 - ⚠️ **La cuenta SSH es compartida con sitios de clientes en producción (daliadorada.com entre ellos).** Todo comando lleva
-  `--path` del tour. Nunca `wp cache flush` ni vaciar el memcached, porque puede ser compartido.
+  la ruta del tour. Nunca `wp cache flush` ni vaciar el memcached, porque puede ser compartido.
 - WP-CLI con `/opt/alt/php83/usr/bin/php` (el de la web). El PHP 8.1 por defecto no ve el memcached, y la web seguía
   leyendo opciones viejas.
-- LiteSpeed Cache está **desactivado** a propósito: el CDN guardaba la respuesta del enlace privado sin la cookie
-  `woo-share`, y al reservar se caía en «coming soon».
-- Pago: «Pago de prueba (validación)», sin cobro. Los correos salen de verdad: probar con correos propios.
 
 ## Verificado el 2026-10-20 en local
 
@@ -77,10 +86,10 @@ salta directo al checkout y página de gracias con fecha y personas. Estilo en `
 
 ## Pendiente del checkout
 
-- Algunos textos del correo de confirmación salen en inglés (falta en la traducción es_CO de WooCommerce 11). Se pueden reemplazar con el mismo mapa de `gettext` o personalizar en WooCommerce → Ajustes → Correos.
+- Correos (2026-10-29): `inc/correos.php` les pone los colores de la marca, el encabezado (`tema/gen_correo_encabezado.py`) y los textos de «reserva». Asuntos, títulos y cierres van en código, así que lo que se cambie en WooCommerce → Ajustes → Correos no se aplica a esos campos.
 - ⛔ ¿Jhon necesita cédula o NIT para facturar? Si sí, se agrega el campo.
 - ⛔ Sitio y hora de recogida (#27) en la página de gracias y en el correo.
-- OnePay: medios de pago reales bajo el botón cuando esté conectado.
+- ⛔ El tour no tiene número de WhatsApp cargado (pestaña «Tour»): sin él no sale el botón en los correos ni en la página de gracias.
 
 ## Cordillera de la escena del atardecer
 

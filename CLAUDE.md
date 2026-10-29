@@ -14,6 +14,7 @@
 |---|---|---|
 | **Contenido y decisiones** (esta carpeta): reuniones, fichas, fotos, brief, diseño | `tour_mantequilla/` | `MarlonMaca2022/tour_mantequilla` |
 | **Código** (child theme WordPress) | `tema/tourmantequilla-child/` en este repo, **provisional** hasta que Julio defina el repo de código. El `softux-co/tourmantequilla` que cita el README **no existe**. Detalle: `tema/README.md` | este repo |
+| **Producción** (desde el 29 oct) | `https://tourmantequilla.com` en Hostinger. Subir: `bash tema/deploy-hostinger.sh` (vista previa) y `--subir`. Detalle: `tema/README.md` | — |
 | **Sitio local de pruebas** | Local (Windows): `tourmantequilla.local` → `C:\Users\Marlon Hoyos\Local Sites\tourmantequilla`. Copiar el tema: `bash tema/sync-local.sh` | — |
 | **Referencia del motor de reservas** (solo lectura) | `C:\Users\Marlon Hoyos\Documents\DaliaDorada\Template-Dalia-Dorada-Coffee` | `softux-co/Template-Dalia-Dorada-Coffee` |
 
@@ -73,7 +74,7 @@ custom multi-fecha (ADR-004 de Dalia, que reemplaza a ADR-002). Esto **reemplaza
 | Momentos (elegir una experiencia) | No aplica salvo que Jhon lo pida → dejar `_tour_momentos` vacío |
 | Escasez «¡Solo quedan N!» | Se permite **solo** si sale del `booked` real. Nada de contadores inventados |
 | Strings EN con TranslatePress | Solo español por ahora (⛔ pendiente 35: ¿se atiende en inglés?) |
-| Pasarela Wompi | **OnePay** ⛔ confirmar que tenga plugin de WooCommerce (pendiente 10) |
+| Pasarela Wompi | **Wompi** también: es la que está en producción desde el 29 oct (plugin `wompi-portal-de-pagos`) |
 
 ### Criterios de aceptación de hoy
 

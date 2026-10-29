@@ -13,7 +13,7 @@ Actualizado: 2026-10-23
 | 7 | Verificar licor de café de Cabras (registro y venta) y trazabilidad | Julio | antes de publicar | FICHA Café Cabras |
 | 8 | ~~Logo~~ (llegó entre las fotos) y contacto de Finca Mirador La Florida. Falta logo en alta/vectorial con fondo transparente | Jhon | — | FICHA La Florida |
 | 9 | ~~Catalogar las 10 fotos de La Florida~~ Hecho 19 oct (9 fotos + logo) | Julio | 2026-10-19 | INVENTARIO |
-| 10 | Confirmar pasarela OnePay («OneP» en la transcripción), que funcione con WooCommerce, y cómo factura Jhon | Julio | — | Transcripción 16 oct |
+| 10 | ~~Confirmar pasarela OnePay~~ Quedó **Wompi**, en producción desde el 2026-10-29. Falta saber cómo factura Jhon | Julio | — | Transcripción 16 oct; sitio 29 oct |
 | 11 | Enviar archivo de cuentas AIA y otros | Julio | — | Reunión Informe FyGP, 16 oct |
 | 12 | Atender el correo de Carolina / María Fernanda | Julio | — | Reunión Informe FyGP, 16 oct |
 | 13 | Definir cómo se relaciona el tour propio de Dalia Dorada con este (Atardeceres es la parada 1, no anfitrión) | Jhon / Julio | — | FICHA Atardeceres |
