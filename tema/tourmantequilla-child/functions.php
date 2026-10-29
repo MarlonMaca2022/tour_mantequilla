@@ -25,3 +25,4 @@ if (class_exists('WooCommerce') || in_array('woocommerce/woocommerce.php', (arra
     require_once get_stylesheet_directory() . '/inc/correos.php';
 }
 require_once get_stylesheet_directory() . '/inc/landing.php';
+require_once get_stylesheet_directory() . '/inc/analitica.php';
