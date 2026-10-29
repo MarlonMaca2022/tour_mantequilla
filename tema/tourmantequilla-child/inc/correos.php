@@ -15,7 +15,20 @@ if (!defined('ABSPATH')) {
 
 /* ── Diseño ────────────────────────────────────────────────────────────── */
 
+/**
+ * Remitente del tour (no de Softux ni de una sola casa). Sale por SMTP de Hostinger con
+ * FluentSMTP; tourmantequilla.com tiene SPF y DKIM de Hostinger. Las respuestas de los
+ * clientes van a quien atiende las reservas.
+ */
+define('TM_CORREO_REMITENTE', 'reservas@tourmantequilla.com');
+define('TM_CORREO_RESPUESTA', 'julio@softux.co');
+
 $tm_correo_opciones = array(
+    'woocommerce_email_from_name' => 'Tour de la Mantequilla',
+    'woocommerce_email_from_address' => TM_CORREO_REMITENTE,
+    'woocommerce_email_reply_to_enabled' => 'yes',
+    'woocommerce_email_reply_to_name' => 'Tour de la Mantequilla',
+    'woocommerce_email_reply_to_address' => TM_CORREO_RESPUESTA,
     'woocommerce_email_base_color' => '#A3231B',            // --corredor: enlaces y botones
     'woocommerce_email_background_color' => '#F1F3F6',      // --gris-fondo
     'woocommerce_email_body_background_color' => '#FFFFFF',
@@ -211,7 +224,7 @@ foreach (array_keys(tm_correo_textos()) as $tm_id) {
         if (!$email || !$email->is_customer_email()) {
             return '';
         }
-        return sprintf(__('¿Tienes dudas sobre tu reserva? Escríbenos a %s.', 'tourmantequilla'), $email->get_from_address());
+        return sprintf(__('¿Tienes dudas sobre tu reserva? Responde este correo o escríbenos a %s.', 'tourmantequilla'), TM_CORREO_RESPUESTA);
     }, 20, 3);
 }
 
