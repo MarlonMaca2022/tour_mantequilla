@@ -572,6 +572,31 @@ function dd_tour_qty_in_cart($product_id, $date)
     return $qty;
 }
 
+/**
+ * Una reserva por carrito: volver a reservar (otra fecha u otras personas) reemplaza la
+ * anterior en vez de sumar líneas. Si la nueva no pasa el cupo, se restaura la anterior.
+ */
+add_filter('woocommerce_add_to_cart_validation', function ($passed, $product_id) {
+    if ($passed && dd_tour_is_tour($product_id) && WC()->cart) {
+        foreach (WC()->cart->get_cart() as $key => $item) {
+            if (dd_tour_is_tour($item['product_id'])) {
+                WC()->cart->remove_cart_item($key);
+                $GLOBALS['tm_reserva_anterior'][] = $key;
+            }
+        }
+    }
+    return $passed;
+}, 5, 2);
+add_filter('woocommerce_add_to_cart_validation', function ($passed) {
+    if (!$passed && !empty($GLOBALS['tm_reserva_anterior'])) {
+        foreach ($GLOBALS['tm_reserva_anterior'] as $key) {
+            WC()->cart->restore_cart_item($key);
+        }
+    }
+    unset($GLOBALS['tm_reserva_anterior']);
+    return $passed;
+}, 99);
+
 add_filter('woocommerce_add_to_cart_validation', function ($passed, $product_id, $quantity) {
     if (!dd_tour_is_tour($product_id)) {
         return $passed;

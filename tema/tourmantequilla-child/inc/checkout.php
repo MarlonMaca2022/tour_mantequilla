@@ -110,9 +110,6 @@ add_filter('woocommerce_get_privacy_policy_text', function ($text) {
     );
 }, 20);
 
-// Sin cupones: el tour tiene un solo precio y el aviso "¿Tienes un cupón?" solo distrae.
-add_filter('woocommerce_coupons_enabled', '__return_false');
-
 /** Confianza bajo el botón: solo cosas verdaderas del flujo (sin nombrar medios de pago aún). */
 add_action('woocommerce_review_order_after_submit', function () {
     echo '<ul class="tm-checkout-confianza">'
@@ -128,6 +125,17 @@ add_action('woocommerce_before_checkout_form', function () {
         . '<a class="tm-paso-volver" href="' . esc_url(home_url('/#fechas')) . '">' . esc_html__('← Cambiar fecha o personas', 'tourmantequilla') . '</a>'
         . '</header>';
 }, 1);
+
+/**
+ * Quitar la reserva desde el checkout: como no hay paso de carrito, sin esto no había
+ * forma de borrarla. WooCommerce la quita y vuelve al checkout; vacío → a las fechas.
+ */
+add_filter('woocommerce_cart_item_name', function ($name, $cart_item, $cart_item_key) {
+    if (!function_exists('is_checkout') || !is_checkout()) {
+        return $name;
+    }
+    return $name . ' <a class="tm-quitar" href="' . esc_url(wc_get_cart_remove_url($cart_item_key)) . '">' . esc_html__('Quitar', 'tourmantequilla') . '</a>';
+}, 10, 3);
 
 /**
  * El carrito no es un paso del tour (reservar va directo al checkout). Si alguien
@@ -156,17 +164,42 @@ add_action('template_redirect', function () {
     }
 });
 
-/** Página de gracias: confirma QUÉ se reservó (fecha y personas) antes del detalle de Woo. */
+/**
+ * Página de gracias según el estado del pago. Wompi devuelve aquí ANTES de saber si el
+ * banco aprobó (el pedido sigue "pendiente"), así que no se puede decir "reserva hecha"
+ * hasta que el pedido esté pagado. Pagado = processing/completed; on-hold = cupo apartado.
+ */
 add_filter('woocommerce_thankyou_order_received_text', function ($text, $order) {
     if (!$order) {
         return $text;
     }
-    return sprintf(__('Listo, tu reserva está hecha. Te enviamos la confirmación a %s.', 'tourmantequilla'), esc_html($order->get_billing_email()));
-}, 10, 2);
+    $correo = esc_html($order->get_billing_email());
+    if ($order->has_status(array('processing', 'completed'))) {
+        return sprintf(__('Listo, tu reserva está hecha. Te enviamos la confirmación a %s.', 'tourmantequilla'), $correo);
+    }
+    if ($order->has_status('on-hold')) {
+        return sprintf(__('Recibimos tu reserva y apartamos tu cupo. Te confirmamos a %s apenas se acredite el pago.', 'tourmantequilla'), $correo);
+    }
+    if ($order->has_status('pending')) {
+        return sprintf(__('Estamos esperando la respuesta de tu banco. Apenas se apruebe el pago te escribimos a %s. Si el pago no pasó, la reserva no queda hecha y puedes volver a intentarlo.', 'tourmantequilla'), $correo);
+    }
+    return __('El pago no se completó, así que la reserva no quedó hecha.', 'tourmantequilla')
+        . ' <a href="' . esc_url(home_url('/#fechas')) . '">' . esc_html__('Elegir la fecha de nuevo', 'tourmantequilla') . '</a>';
+}, 20, 2); // después del de Wompi (10), que pone su propio aviso en inglés
 
 add_action('woocommerce_thankyou', function ($order_id) {
     $order = wc_get_order($order_id);
     if (!$order) {
+        return;
+    }
+    // Pendiente: la página se recarga sola un minuto para mostrar la respuesta del banco.
+    if ($order->has_status('pending')) {
+        echo '<p class="tm-gracias-espera">' . esc_html__('Esta página se actualiza sola.', 'tourmantequilla') . '</p>'
+            . '<script>(function(){var k="tm-espera-' . (int) $order_id . '",n=+(sessionStorage.getItem(k)||0);'
+            . 'if(n<12){sessionStorage.setItem(k,n+1);setTimeout(function(){location.reload();},5000);}})();</script>';
+        return;
+    }
+    if (!$order->has_status(array('processing', 'completed', 'on-hold'))) {
         return;
     }
     $filas = array();
@@ -211,25 +244,6 @@ function tm_texto_recogida()
     $txt = rtrim(sprintf(__('Te recogemos en %s', 'tourmantequilla'), $punto) . ($hora !== '' ? ' ' . $hora : ''), '.') . '. ';
     return $txt . __('La ubicación exacta del punto de encuentro te la enviamos antes del tour.', 'tourmantequilla');
 }
-
-/** Correo al cliente: la recogida debajo del detalle del pedido (solo pedidos con tour). */
-add_action('woocommerce_email_after_order_table', function ($order, $sent_to_admin, $plain_text) {
-    if ($sent_to_admin || !$order) {
-        return;
-    }
-    $tiene_tour = false;
-    foreach ($order->get_items() as $item) {
-        if ($item->get_meta('_dd_tour_date')) {
-            $tiene_tour = true;
-            break;
-        }
-    }
-    $txt = $tiene_tour ? tm_texto_recogida() : '';
-    if ($txt === '') {
-        return;
-    }
-    echo $plain_text ? "\n" . $txt . "\n" : '<p style="margin:16px 0">' . esc_html($txt) . '</p>';
-}, 10, 3);
 
 /** Assets del checkout y la página de gracias: misma tipografía y color que la landing. */
 add_action('wp_enqueue_scripts', function () {
