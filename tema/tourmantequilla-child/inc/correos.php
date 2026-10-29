@@ -25,17 +25,23 @@ $tm_correo_opciones = array(
     'woocommerce_email_header_image_width' => '600',
     'woocommerce_email_auto_sync_with_theme' => 'no',
 );
+// pre_transient_: la vista previa de Ajustes → Correos lee transients antes que las opciones.
 foreach ($tm_correo_opciones as $opcion => $valor) {
-    add_filter('pre_option_' . $opcion, function () use ($valor) {
-        return $valor;
-    });
+    foreach (array('pre_option_', 'pre_transient_') as $tm_filtro) {
+        add_filter($tm_filtro . $opcion, function () use ($valor) {
+            return $valor;
+        });
+    }
 }
 
-add_filter('pre_option_woocommerce_email_header_image', function () {
+function tm_correo_encabezado()
+{
     $ruta = '/assets/img/correo/encabezado.png';
     $archivo = get_stylesheet_directory() . $ruta;
     return file_exists($archivo) ? get_stylesheet_directory_uri() . $ruta . '?v=' . filemtime($archivo) : false;
-});
+}
+add_filter('pre_option_woocommerce_email_header_image', 'tm_correo_encabezado');
+add_filter('pre_transient_woocommerce_email_header_image', 'tm_correo_encabezado');
 
 /** Pie: el tour, las 4 casas con el mismo peso (orden de la landing) y WhatsApp. */
 add_filter('woocommerce_email_footer_text', function () {
@@ -95,32 +101,52 @@ function tm_correo_reserva($order)
 }
 
 /**
- * Asunto y título por correo. %1$s = número, %2$s = fecha ("sábado 5 de diciembre"),
- * %3$s = personas. Si el pedido no trae fecha de tour, se deja el de WooCommerce.
+ * Por correo: asunto con fecha, asunto sin fecha y título. %1$s = número,
+ * %2$s = fecha ("sábado 5 de diciembre"), %3$s = personas. El asunto sin fecha cubre los
+ * pedidos sin tour y la vista previa de WooCommerce (pedido de ejemplo): así nunca cae al
+ * texto por defecto, que en WooCommerce 11 a veces viene en inglés.
  */
 function tm_correo_textos()
 {
     return array(
-        'customer_processing_order' => array('Reserva confirmada: %2$s · Tour de la Mantequilla', '¡Tu reserva está confirmada!'),
-        'customer_on_hold_order' => array('Recibimos tu reserva para el %2$s', 'Recibimos tu reserva'),
-        'customer_completed_order' => array('Tu reserva del %2$s está completa', 'Tu reserva está completa'),
-        'customer_cancelled_order' => array('Tu reserva #%1$s fue cancelada', 'Tu reserva fue cancelada'),
-        'customer_failed_order' => array('Tu pago no se completó (reserva #%1$s)', 'Tu pago no se completó'),
-        'customer_refunded_order' => array('Reembolso de tu reserva #%1$s', 'Reembolso de tu reserva'),
-        'customer_note' => array('Una nota sobre tu reserva #%1$s', 'Una nota sobre tu reserva'),
-        'new_order' => array('Nueva reserva #%1$s: %3$s · %2$s', 'Nueva reserva #%1$s'),
-        'cancelled_order' => array('Reserva cancelada #%1$s: %3$s · %2$s', 'Reserva cancelada #%1$s'),
-        'failed_order' => array('Pago fallido #%1$s: %3$s · %2$s', 'Pago fallido #%1$s'),
+        'customer_processing_order' => array('Reserva confirmada: %2$s · Tour de la Mantequilla', 'Reserva confirmada · Tour de la Mantequilla', '¡Tu reserva está confirmada!'),
+        'customer_on_hold_order' => array('Recibimos tu reserva para el %2$s', 'Recibimos tu reserva · Tour de la Mantequilla', 'Recibimos tu reserva'),
+        'customer_completed_order' => array('Tu reserva del %2$s está completa', 'Tu reserva del Tour de la Mantequilla está completa', 'Tu reserva está completa'),
+        'customer_cancelled_order' => array('Tu reserva #%1$s fue cancelada', 'Tu reserva #%1$s fue cancelada', 'Tu reserva fue cancelada'),
+        'customer_failed_order' => array('Tu pago no se completó (reserva #%1$s)', 'Tu pago no se completó (reserva #%1$s)', 'Tu pago no se completó'),
+        'customer_refunded_order' => array('Reembolso de tu reserva #%1$s', 'Reembolso de tu reserva #%1$s', 'Reembolso de tu reserva'),
+        'customer_note' => array('Una nota sobre tu reserva #%1$s', 'Una nota sobre tu reserva #%1$s', 'Una nota sobre tu reserva'),
+        'new_order' => array('Nueva reserva #%1$s: %3$s · %2$s', 'Nueva reserva #%1$s', 'Nueva reserva #%1$s'),
+        'cancelled_order' => array('Reserva cancelada #%1$s: %3$s · %2$s', 'Reserva cancelada #%1$s', 'Reserva cancelada #%1$s'),
+        'failed_order' => array('Pago fallido #%1$s: %3$s · %2$s', 'Pago fallido #%1$s', 'Pago fallido #%1$s'),
     );
 }
 
-foreach (tm_correo_textos() as $tm_id => $tm_par) {
-    foreach (array('subject' => 0, 'heading' => 1) as $tm_tipo => $tm_i) {
-        add_filter('woocommerce_email_' . $tm_tipo . '_' . $tm_id, function ($texto, $order) use ($tm_par, $tm_i) {
-            $r = tm_correo_reserva($order);
-            return $r ? sprintf($tm_par[$tm_i], $order->get_order_number(), $r['fecha_min'], $r['personas']) : $texto;
-        }, 20, 2);
-    }
+foreach (tm_correo_textos() as $tm_id => $tm_t) {
+    add_filter('woocommerce_email_subject_' . $tm_id, function ($texto, $order) use ($tm_t) {
+        if (!$order instanceof WC_Order) {
+            return $texto;
+        }
+        $r = tm_correo_reserva($order);
+        return $r ? sprintf($tm_t[0], $order->get_order_number(), $r['fecha_min'], $r['personas']) : sprintf($tm_t[1], $order->get_order_number());
+    }, 20, 2);
+    add_filter('woocommerce_email_heading_' . $tm_id, function ($texto, $order) use ($tm_t) {
+        return $order instanceof WC_Order ? sprintf($tm_t[2], $order->get_order_number()) : $texto;
+    }, 20, 2);
+}
+
+// Correos de cuenta (no dependen de un pedido): asunto y título fijos.
+$tm_correo_cuenta = array(
+    'customer_reset_password' => array('Restablece tu contraseña · Tour de la Mantequilla', 'Restablece tu contraseña'),
+    'customer_new_account' => array('Tu cuenta en el Tour de la Mantequilla', 'Tu cuenta quedó creada'),
+);
+foreach ($tm_correo_cuenta as $tm_id => $tm_t) {
+    add_filter('woocommerce_email_subject_' . $tm_id, function () use ($tm_t) {
+        return $tm_t[0];
+    }, 20);
+    add_filter('woocommerce_email_heading_' . $tm_id, function () use ($tm_t) {
+        return $tm_t[1];
+    }, 20);
 }
 
 /** Introducciones: string original de WooCommerce 11 → texto del tour. */
@@ -149,6 +175,10 @@ function tm_correo_gettext($traducido, $texto, $dominio)
         // nota
         'The following note has been added to your order:' => 'Te dejamos esta nota sobre tu reserva:',
         'As a reminder, here are your order details:' => 'Y este es el resumen de tu reserva:',
+        // cuenta
+        'If you didn’t make this request, just ignore this email. If you’d like to proceed, reset your password via the link below:' => 'Si no lo pediste tú, ignora este correo. Si quieres seguir, restablece tu contraseña con este enlace:',
+        'Thanks for creating an account on %s. Here’s a copy of your user details.' => 'Gracias por crear tu cuenta en %s. Estos son tus datos de usuario.',
+        'You can access your account area to view orders, change your password, and more via the link below:' => 'En tu cuenta puedes ver tus reservas, cambiar tu contraseña y más:',
         // admin
         'You’ve received a new order from %s:' => 'Nueva reserva a nombre de %s',
         'We’re getting in touch to let you know that order #%1$s from %2$s has been cancelled.' => 'La reserva #%1$s de %2$s fue cancelada.',
